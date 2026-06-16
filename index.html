@@ -523,12 +523,20 @@ function loadHero() {
 
 function spinPowerWheel() {
 
-    let count = getPowerCount();
+    let wheel = document.getElementById("powerWheelResult");
 
-    document.getElementById("powerWheelResult").innerText =
-        count + " Power(s)";
+    wheel.innerText = "Spinning...";
+
+    setTimeout(() => {
+
+        let count = getPowerCount();
+
+        wheel.innerText =
+            count + " Power(s)";
+
+    }, 2000);
 }
-    
+
 function generateHero(){
 
     document.getElementById("name").innerText=
