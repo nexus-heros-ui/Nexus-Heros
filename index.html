@@ -218,6 +218,23 @@ function statRoll(){
     return Math.floor(Math.random()*14)+1;
 
 }
+const strengthLevels = [
+"",
+"Below Average Human",
+"Average Human",
+"Athletic Human",
+"Peak Human",
+"Enhanced Human Strength",
+"Superhuman Strength",
+"Building Level",
+"City Block Level",
+"City Level",
+"Mountain Level",
+"Planetary Level",
+"Cosmic Strength",
+"Universal Strength",
+"Omnipotent Potential"
+];
     
 function generateHero(){
 
@@ -245,7 +262,8 @@ let combat = statRoll();
 let stamina = statRoll();
 let powerControl = statRoll();
 
-document.getElementById("strength").innerText = strength;
+document.getElementById("strength").innerText =
+strength + " - " + strengthLevels[strength];
 document.getElementById("speed").innerText = speed;
 document.getElementById("durability").innerText = durability;
 document.getElementById("intelligence").innerText = intelligence;
