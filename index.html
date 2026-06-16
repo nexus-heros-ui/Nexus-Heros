@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nexus Heroes Alpha</title>
+
+<style>
+
+body{
+    background:#111827;
+    color:white;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    padding:20px;
+}
+
+h1{
+    color:#3B82F6;
+}
+
+button{
+    background:#1F2937;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    margin:5px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#3B82F6;
+}
+
+.card{
+    background:#1F2937;
+    max-width:600px;
+    margin:auto;
+    margin-top:20px;
+    padding:20px;
+    border-radius:15px;
+}
+
+.section{
+    margin-top:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>NEXUS HEROES</h1>
+
+<p>Create Heroes. Build Teams. Shape the Universe.</p>
+
+<button onclick="generateHero()">
+⚡ Generate Entire Hero
+</button>
+
+<div class="card">
+
+<h2>Hero Sheet</h2>
+
+<p><strong>Name:</strong> <span id="name">--</span></p>
+
+<p><strong>Species:</strong> <span id="species">--</span></p>
+
+<p><strong>Origin:</strong> <span id="origin">--</span></p>
+
+<p><strong>Alignment:</strong> <span id="alignment">--</span></p>
+
+<p><strong>Power Count:</strong> <span id="powerCount">--</span></p>
+
+<p><strong>Rank:</strong> <span id="rank">--</span></p>
+
+<div class="section">
+
+<h3>Powers</h3>
+
+<div id="powers">
+--
+</div>
+
+</div>
+
+<div class="section">
+
+<h3>Weaknesses</h3>
+
+<div id="weaknesses">
+--
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function pick(array){
+    return array[Math.floor(Math.random()*array.length)];
+}
+
+const names=[
+"Nova Strike",
+"Void Hunter",
+"Solar Sentinel",
+"Titan Blade",
+"Shadow Pulse",
+"Iron Phantom",
+"Quantum Knight",
+"Starbreaker",
+"Nexus Reaper",
+"Eclipse Guardian"
+];
+
+const species=[
+"Human",
+"Mutant",
+"Enhanced Human",
+"Inhuman",
+"Alien",
+"Synthetic",
+"Ascended Being"
+];
+
+const origins=[
+"Natural Birth",
+"Scientific Accident",
+"Artificial Enhancement",
+"Technology",
+"Magic",
+"Cosmic Energy",
+"Elite Training"
+];
+
+const alignments=[
+"Pure Hero",
+"Idealistic Hero",
+"Traditional Hero",
+"Reluctant Hero",
+"Anti-Hero",
+"Independent Hero",
+"Neutral",
+"Mercenary",
+"Morally Gray",
+"Anti-Villain",
+"Villain With Code",
+"Opportunistic Villain",
+"Pure Villain",
+"Cosmic Evil"
+];
+
+const powers=[
+"Super Strength",
+"Super Speed",
+"Flight",
+"Invulnerability",
+"Regeneration",
+"Telepathy",
+"Telekinesis",
+"Force Fields",
+"Fire Manipulation",
+"Ice Manipulation",
+"Energy Projection",
+"Reality Warping",
+"Technopathy",
+"Shapeshifting",
+"Gravity Manipulation",
+"Teleportation"
+];
+
+const weaknesses=[
+"Power Instability",
+"Energy Drain",
+"Public Distrust",
+"Fear",
+"Overconfidence",
+"Secret Identity",
+"Power Overload",
+"Unstable Mutation"
+];
+
+function getPowerCount(){
+
+    let roll=Math.random()*100;
+
+    if(roll<37) return 1;
+    if(roll<72) return 2;
+    if(roll<82) return 3;
+    if(roll<90) return 4;
+    if(roll<95) return 5;
+    if(roll<97) return 6;
+    return 7;
+}
+
+function generateHero(){
+
+    document.getElementById("name").innerText=
+        pick(names);
+
+    document.getElementById("species").innerText=
+        pick(species);
+
+    document.getElementById("origin").innerText=
+        pick(origins);
+
+    document.getElementById("alignment").innerText=
+        pick(alignments);
+
+    let count=getPowerCount();
+
+    document.getElementById("powerCount").innerText=
+        count;
+
+    let chosenPowers=[];
+
+    while(chosenPowers.length<count){
+
+        let p=pick(powers);
+
+        if(!chosenPowers.includes(p)){
+            chosenPowers.push(p);
+        }
+    }
+
+    document.getElementById("powers").innerHTML=
+        chosenPowers.join("<br>");
+
+    let weakness=
+        pick(weaknesses);
+
+    document.getElementById("weaknesses").innerHTML=
+        weakness;
+
+    let score=
+        Math.floor(Math.random()*100);
+
+    let rank="Street Hero";
+
+    if(score>20) rank="Enhanced Hero";
+    if(score>35) rank="Super Hero";
+    if(score>50) rank="Champion";
+    if(score>65) rank="Omega Hero";
+    if(score>80) rank="Cosmic Hero";
+    if(score>95) rank="Nexus Ascendant";
+
+    document.getElementById("rank").innerText=
+        rank;
+}
+
+</script>
+
+</body>
+</html>
