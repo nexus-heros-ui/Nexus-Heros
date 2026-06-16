@@ -67,6 +67,16 @@ button:hover{
 <button onclick="loadHero()">
 📂 Load Hero
 </button>
+
+<h3>Power Count Wheel</h3>
+
+<div id="powerWheelResult">
+--
+</div>
+
+<button onclick="spinPowerWheel()">
+🎡 Spin Power Count
+</button>
     
 <div class="card">
 
@@ -509,6 +519,14 @@ function loadHero() {
         hero.weakness;
 
     alert("Hero Loaded!");
+}
+
+function spinPowerWheel() {
+
+    let count = getPowerCount();
+
+    document.getElementById("powerWheelResult").innerText =
+        count + " Power(s)";
 }
     
 function generateHero(){
