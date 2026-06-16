@@ -235,6 +235,114 @@ const strengthLevels = [
 "Universal Strength",
 "Omnipotent Potential"
 ];
+
+const speedLevels = [
+"",
+"Below Average Human",
+"Average Human",
+"Athletic Human",
+"Peak Human",
+"Enhanced Human Speed",
+"Superhuman Speed",
+"Bullet Timer",
+"Hypersonic Movement",
+"Lightning Speed",
+"Mach Speed",
+"Relativistic Speed",
+"Lightspeed Travel",
+"Faster Than Light",
+"Instant Movement"
+];
+
+const durabilityLevels = [
+"",
+"Fragile Human",
+"Average Human",
+"Trained Human",
+"Peak Human Durability",
+"Enhanced Human Durability",
+"Bullet Resistant",
+"Explosion Resistant",
+"Superhuman Toughness",
+"Tank Level Durability",
+"High Superhuman",
+"Hulk Level Durability",
+"Planetary Durability",
+"Cosmic Durability",
+"Abstract God Tier Durability"
+];
+
+const intelligenceLevels = [
+"",
+"Below Average",
+"Average Intelligence",
+"Educated",
+"Highly Educated",
+"Specialist",
+"Tactical Mind",
+"Genius",
+"Super Genius",
+"Master Scientist",
+"Global Mastermind",
+"Alien Genius",
+"Cosmic Intelligence",
+"Universal Intellect",
+"Abstract Intelligence"
+];
+
+const combatLevels = [
+"",
+"No Fighting Skill",
+"Basic Self Defense",
+"Street Fighter",
+"Trained Fighter",
+"Martial Artist",
+"Expert Fighter",
+"Elite Fighter",
+"Master Combatant",
+"Grandmaster Fighter",
+"Legendary Fighter",
+"Superhuman Combat Skill",
+"Tactical War Master",
+"Cosmic Warrior",
+"Perfect Combat Master"
+];
+
+const staminaLevels = [
+"",
+"Low Stamina",
+"Average Stamina",
+"Athletic Stamina",
+"Peak Human Endurance",
+"Enhanced Stamina",
+"Can Fight For Hours",
+"Superhuman Endurance",
+"Days Without Rest",
+"Weeks Without Fatigue",
+"Hulk Level Endurance",
+"Self Sustaining Biology",
+"Cosmic Energy Powered",
+"Never Tires",
+"Infinite Endurance"
+];
+
+const powerControlLevels = [
+"",
+"Cannot Control Powers",
+"Powers Activate Randomly",
+"Beginner Control",
+"Basic Control",
+"Reliable Use",
+"Skilled User",
+"Creative Applications",
+"Tactical Usage",
+"Expert Control",
+"Mastery",
+"Perfect Precision",
+"Legendary Mastery",
+"Reality Level Control",
+"Absolute Control"
+];
     
 function generateHero(){
 
@@ -264,12 +372,24 @@ let powerControl = statRoll();
 
 document.getElementById("strength").innerText =
 strength + " - " + strengthLevels[strength];
-document.getElementById("speed").innerText = speed;
-document.getElementById("durability").innerText = durability;
-document.getElementById("intelligence").innerText = intelligence;
-document.getElementById("combat").innerText = combat;
-document.getElementById("stamina").innerText = stamina;
-document.getElementById("powerControl").innerText = powerControl;
+
+document.getElementById("speed").innerText =
+speed + " - " + speedLevels[speed];
+
+document.getElementById("durability").innerText =
+durability + " - " + durabilityLevels[durability];
+
+document.getElementById("intelligence").innerText =
+intelligence + " - " + intelligenceLevels[intelligence];
+
+document.getElementById("combat").innerText =
+combat + " - " + combatLevels[combat];
+
+document.getElementById("stamina").innerText =
+stamina + " - " + staminaLevels[stamina];
+
+document.getElementById("powerControl").innerText =
+powerControl + " - " + powerControlLevels[powerControl];
 
 let score =
 strength +
