@@ -73,7 +73,24 @@ button:hover{
 <p><strong>Alignment:</strong> <span id="alignment">--</span></p>
 
 <p><strong>Power Count:</strong> <span id="powerCount">--</span></p>
+<h3>Stats</h3>
 
+<p><strong>Strength:</strong> <span id="strength">--</span></p>
+
+<p><strong>Speed:</strong> <span id="speed">--</span></p>
+
+<p><strong>Durability:</strong> <span id="durability">--</span></p>
+
+<p><strong>Intelligence:</strong> <span id="intelligence">--</span></p>
+
+<p><strong>Combat:</strong> <span id="combat">--</span></p>
+
+<p><strong>Stamina:</strong> <span id="stamina">--</span></p>
+
+<p><strong>Power Control:</strong> <span id="powerControl">--</span></p>
+
+<p><strong>Power Score:</strong> <span id="powerScore">--</span></p>
+    
 <p><strong>Rank:</strong> <span id="rank">--</span></p>
 
 <div class="section">
@@ -196,7 +213,12 @@ function getPowerCount(){
     if(roll<97) return 6;
     return 7;
 }
+function statRoll(){
 
+    return Math.floor(Math.random()*14)+1;
+
+}
+    
 function generateHero(){
 
     document.getElementById("name").innerText=
@@ -215,7 +237,50 @@ function generateHero(){
 
     document.getElementById("powerCount").innerText=
         count;
+let strength = statRoll();
+let speed = statRoll();
+let durability = statRoll();
+let intelligence = statRoll();
+let combat = statRoll();
+let stamina = statRoll();
+let powerControl = statRoll();
 
+document.getElementById("strength").innerText = strength;
+document.getElementById("speed").innerText = speed;
+document.getElementById("durability").innerText = durability;
+document.getElementById("intelligence").innerText = intelligence;
+document.getElementById("combat").innerText = combat;
+document.getElementById("stamina").innerText = stamina;
+document.getElementById("powerControl").innerText = powerControl;
+
+let score =
+strength +
+speed +
+durability +
+intelligence +
+combat +
+stamina +
+powerControl;
+
+document.getElementById("powerScore").innerText =
+score;
+    let rank = "Street Hero";
+
+if(score > 20) rank = "Enhanced Hero";
+
+if(score > 35) rank = "Super Hero";
+
+if(score > 50) rank = "Champion";
+
+if(score > 65) rank = "Omega Hero";
+
+if(score > 80) rank = "Cosmic Hero";
+
+if(score > 95) rank = "Nexus Ascendant";
+
+document.getElementById("rank").innerText =
+rank;
+    
     let chosenPowers=[];
 
     while(chosenPowers.length<count){
@@ -236,18 +301,8 @@ function generateHero(){
     document.getElementById("weaknesses").innerHTML=
         weakness;
 
-    let score=
-        Math.floor(Math.random()*100);
-
-    let rank="Street Hero";
-
-    if(score>20) rank="Enhanced Hero";
-    if(score>35) rank="Super Hero";
-    if(score>50) rank="Champion";
-    if(score>65) rank="Omega Hero";
-    if(score>80) rank="Cosmic Hero";
-    if(score>95) rank="Nexus Ascendant";
-
+    
+    
     document.getElementById("rank").innerText=
         rank;
 }
