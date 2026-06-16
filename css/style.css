@@ -55,3 +55,24 @@ p {
   background: #3B82F6;
   transform: scale(1.05);
 }
+
+.hero-sheet {
+  background: #1F2937;
+
+  padding: 20px;
+
+  border-radius: 12px;
+
+  max-width: 500px;
+
+  margin: auto;
+}
+
+.hero-sheet h2 {
+  margin-bottom: 15px;
+  color: #3B82F6;
+}
+
+.hero-sheet p {
+  margin-bottom: 10px;
+}
