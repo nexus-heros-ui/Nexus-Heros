@@ -90,7 +90,9 @@ button:hover{
 <p><strong>Power Control:</strong> <span id="powerControl">--</span></p>
 
 <p><strong>Power Score:</strong> <span id="powerScore">--</span></p>
-    
+
+<p><strong>Archetype:</strong> <span id="archetype">--</span></p>
+
 <p><strong>Rank:</strong> <span id="rank">--</span></p>
 
 <div class="section">
@@ -213,9 +215,27 @@ function getPowerCount(){
     if(roll<97) return 6;
     return 7;
 }
-function statRoll(){
+function statRoll() {
 
-    return Math.floor(Math.random()*14)+1;
+    let roll = Math.random() * 100;
+
+    if (roll < 13.607) return 1;
+    if (roll < 26.214) return 2;
+    if (roll < 37.821) return 3;
+    if (roll < 48.428) return 4;
+    if (roll < 58.035) return 5;
+    if (roll < 66.642) return 6;
+    if (roll < 74.249) return 7;
+    if (roll < 80.856) return 8;
+    if (roll < 86.463) return 9;
+    if (roll < 91.070) return 10;
+    if (roll < 94.677) return 11;
+    if (roll < 97.284) return 12;
+    if (roll < 98.891) return 13;
+
+    return 14;
+}
+}
 
 }
 const strengthLevels = [
@@ -343,6 +363,50 @@ const powerControlLevels = [
 "Reality Level Control",
 "Absolute Control"
 ];
+
+function getArchetype(
+    strength,
+    speed,
+    durability,
+    intelligence,
+    combat,
+    stamina,
+    powerControl
+){
+
+    let highest = Math.max(
+        strength,
+        speed,
+        durability,
+        intelligence,
+        combat,
+        stamina,
+        powerControl
+    );
+
+    if(speed === highest)
+        return "Speedster";
+
+    if(strength === highest)
+        return "Powerhouse";
+
+    if(durability === highest)
+        return "Tank";
+
+    if(intelligence === highest)
+        return "Genius";
+
+    if(combat === highest)
+        return "Martial Master";
+
+    if(stamina === highest)
+        return "Endurance Hero";
+
+    if(powerControl === highest)
+        return "Energy Master";
+
+    return "Balanced Hero";
+}
     
 function generateHero(){
 
@@ -402,6 +466,20 @@ powerControl;
 
 document.getElementById("powerScore").innerText =
 score;
+
+    let archetype = getArchetype(
+    strength,
+    speed,
+    durability,
+    intelligence,
+    combat,
+    stamina,
+    powerControl
+);
+
+document.getElementById("archetype").innerText =
+archetype;
+    
     let rank = "Street Hero";
 
 if(score > 20) rank = "Enhanced Hero";
