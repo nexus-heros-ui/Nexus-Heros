@@ -60,6 +60,79 @@ button:hover{
 ⚡ Generate Entire Hero
 </button>
 
+<button onclick="saveHero()">
+💾 Save Hero
+</button>
+
+function loadHero() {
+
+    const hero = JSON.parse(
+        localStorage.getItem("savedHero")
+    );
+
+    if (!hero) {
+        alert("No saved hero found.");
+        return;
+    }
+
+    document.getElementById("name").innerText =
+        hero.name;
+
+    document.getElementById("species").innerText =
+        hero.species;
+
+    document.getElementById("origin").innerText =
+        hero.origin;
+
+    document.getElementById("alignment").innerText =
+        hero.alignment;
+
+    document.getElementById("powerCount").innerText =
+        hero.powerCount;
+
+    document.getElementById("strength").innerText =
+        hero.strength;
+
+    document.getElementById("speed").innerText =
+        hero.speed;
+
+    document.getElementById("durability").innerText =
+        hero.durability;
+
+    document.getElementById("intelligence").innerText =
+        hero.intelligence;
+
+    document.getElementById("combat").innerText =
+        hero.combat;
+
+    document.getElementById("stamina").innerText =
+        hero.stamina;
+
+    document.getElementById("powerControl").innerText =
+        hero.powerControl;
+
+    document.getElementById("powerScore").innerText =
+        hero.powerScore;
+
+    document.getElementById("archetype").innerText =
+        hero.archetype;
+
+    document.getElementById("rank").innerText =
+        hero.rank;
+
+    document.getElementById("powers").innerHTML =
+        hero.powers;
+
+    document.getElementById("weaknesses").innerHTML =
+        hero.weakness;
+
+    alert("Hero Loaded!");
+}
+    
+<button onclick="loadHero()">
+📂 Load Hero
+</button>
+    
 <div class="card">
 
 <h2>Hero Sheet</h2>
@@ -403,6 +476,39 @@ function getArchetype(
         return "Energy Master";
 
     return "Balanced Hero";
+}
+
+function saveHero() {
+
+    const hero = {
+        name: document.getElementById("name").innerText,
+        species: document.getElementById("species").innerText,
+        origin: document.getElementById("origin").innerText,
+        alignment: document.getElementById("alignment").innerText,
+        powerCount: document.getElementById("powerCount").innerText,
+
+        strength: document.getElementById("strength").innerText,
+        speed: document.getElementById("speed").innerText,
+        durability: document.getElementById("durability").innerText,
+        intelligence: document.getElementById("intelligence").innerText,
+        combat: document.getElementById("combat").innerText,
+        stamina: document.getElementById("stamina").innerText,
+        powerControl: document.getElementById("powerControl").innerText,
+
+        powerScore: document.getElementById("powerScore").innerText,
+        archetype: document.getElementById("archetype").innerText,
+        rank: document.getElementById("rank").innerText,
+
+        powers: document.getElementById("powers").innerHTML,
+        weakness: document.getElementById("weaknesses").innerHTML
+    };
+
+    localStorage.setItem(
+        "savedHero",
+        JSON.stringify(hero)
+    );
+
+    alert("Hero Saved!");
 }
     
 function generateHero(){
