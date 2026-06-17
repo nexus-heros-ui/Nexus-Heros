@@ -77,6 +77,18 @@ button:hover{
 <button onclick="spinPowerWheel()">
 🎡 Spin Power Count
 </button>
+
+<h3>Power Count Wheel</h3>
+
+<div id="powerWheelResult">
+--
+</div>
+
+<button onclick="spinPowerWheel()">
+🎡 Spin Power Count
+</button>
+
+<div class="card">
     
 <div class="card">
 
@@ -574,43 +586,6 @@ wheel.innerText =
 
 function getHeroClass(powers, archetype) {
 
-    if (powers.includes("Telepathy") ||
-        powers.includes("Telekinesis"))
-        return "Psychic";
-
-    if (powers.includes("Fire Manipulation") ||
-        powers.includes("Ice Manipulation"))
-        return "Elementalist";
-
-    if (powers.includes("Reality Warping"))
-        return "Reality Warper";
-
-    if (powers.includes("Energy Projection"))
-        return "Energy Controller";
-
-    if (powers.includes("Technopathy"))
-        return "Gadgeteer";
-
-    if (archetype === "Speedster")
-        return "Speedster";
-
-    if (archetype === "Tank")
-        return "Tank";
-
-    if (archetype === "Powerhouse")
-        return "Brute";
-
-    if (archetype === "Martial Master")
-        return "Martial Artist";
-
-    if (archetype === "Genius")
-        return "Mastermind";
-
-    return "Hero";
-}
-
-function getHeroClass(powers, archetype) {
-
     if (powers.includes("Reality Warping"))
         return "Reality Warper";
 
@@ -733,7 +708,45 @@ function clearTeam() {
     updateTeamDisplay();
 }
 
+function spinStatWheel(statName, levels, storageName, resultId) {
+
+    let wheel =
+        document.getElementById(resultId);
+
+    wheel.innerText =
+        statName + ": Spinning...";
+
+    let interval = setInterval(() => {
+
+        let temp =
+            Math.floor(Math.random() * 14) + 1;
+
+        wheel.innerText =
+            statName +
+            ": " +
+            temp;
+
+    }, 100);
+
+    setTimeout(() => {
+
+        clearInterval(interval);
+
+        let result = statRoll();
+
+        window[storageName] = result;
+
+        wheel.innerText =
+            statName +
+            ": " +
+            result +
+            " - " +
+            levels[result];
+
+    }, 2000);
 }
+
+function generateHero(){
     
 function generateHero(){
 
