@@ -137,6 +137,34 @@ button:hover{
 
 </div>
 
+<div class="card">
+
+<h2>Team Builder</h2>
+
+<p><strong>Team Name:</strong></p>
+
+<input
+id="teamName"
+placeholder="Enter Team Name">
+
+<br><br>
+
+<button onclick="addToTeam()">
+➕ Add Current Hero
+</button>
+
+<button onclick="clearTeam()">
+🗑 Clear Team
+</button>
+
+<h3>Team Members</h3>
+
+<div id="teamMembers">
+No Members
+</div>
+
+</div>
+
 <script>
 
 function pick(array){
@@ -515,7 +543,13 @@ function loadHero() {
         hero.rank;
 
     document.getElementById("powers").innerHTML =
-        hero.powers;
+        hero.powers.join("<br>");
+
+    let heroClass =
+    getHeroClass(chosenPowers, archetype);
+
+document.getElementById("heroClass").innerText =
+    heroClass;
 
     document.getElementById("weaknesses").innerHTML =
         hero.weakness;
@@ -540,6 +574,176 @@ wheel.innerText =
     }, 2000);
 }
 
+function getHeroClass(powers, archetype) {
+
+    if (powers.includes("Telepathy") ||
+        powers.includes("Telekinesis"))
+        return "Psychic";
+
+    if (powers.includes("Fire Manipulation") ||
+        powers.includes("Ice Manipulation"))
+        return "Elementalist";
+
+    if (powers.includes("Reality Warping"))
+        return "Reality Warper";
+
+    if (powers.includes("Energy Projection"))
+        return "Energy Controller";
+
+    if (powers.includes("Technopathy"))
+        return "Gadgeteer";
+
+    if (archetype === "Speedster")
+        return "Speedster";
+
+    if (archetype === "Tank")
+        return "Tank";
+
+    if (archetype === "Powerhouse")
+        return "Brute";
+
+    if (archetype === "Martial Master")
+        return "Martial Artist";
+
+    if (archetype === "Genius")
+        return "Mastermind";
+
+    return "Hero";
+}
+
+function getHeroClass(powers, archetype) {
+
+    if (powers.includes("Reality Warping"))
+        return "Reality Warper";
+
+    if (powers.includes("Telepathy") &&
+        powers.includes("Telekinesis"))
+        return "Psychic Master";
+
+    if (powers.includes("Telepathy"))
+        return "Telepath";
+
+    if (powers.includes("Telekinesis"))
+        return "Telekinetic";
+
+    if (powers.includes("Fire Manipulation") ||
+        powers.includes("Ice Manipulation"))
+        return "Elementalist";
+
+    if (powers.includes("Gravity Manipulation"))
+        return "Gravity Lord";
+
+    if (powers.includes("Teleportation"))
+        return "Teleporter";
+
+    if (powers.includes("Shapeshifting"))
+        return "Shapeshifter";
+
+    if (powers.includes("Regeneration"))
+        return "Immortal";
+
+    if (powers.includes("Flight"))
+        return "Sky Guardian";
+
+    if (powers.includes("Technopathy"))
+        return "Gadgeteer";
+
+    if (powers.includes("Energy Projection"))
+        return "Energy Controller";
+
+    if (powers.includes("Invulnerability"))
+        return "Juggernaut";
+
+    if (archetype === "Speedster")
+        return "Speedster";
+
+    if (archetype === "Tank")
+        return "Tank";
+
+    if (archetype === "Powerhouse")
+        return "Brute";
+
+    if (archetype === "Martial Master")
+        return "Martial Artist";
+
+    if (archetype === "Genius")
+        return "Mastermind";
+
+    if (archetype === "Energy Master")
+        return "Cosmic Entity";
+
+    if (archetype === "Endurance Hero")
+        return "Warlord";
+
+    return "Hero";
+}
+
+function spinPowerWheel(){
+
+   ...
+}
+
+let team = [];
+
+function addToTeam() {
+
+    let heroName =
+        document.getElementById("name").innerText;
+
+    let heroClass =
+        document.getElementById("heroClass").innerText;
+
+    let heroRank =
+        document.getElementById("rank").innerText;
+
+    if(heroName === "--"){
+        alert("Generate a hero first!");
+        return;
+    }
+
+    if(team.length >= 5){
+        alert("Team is full!");
+        return;
+    }
+
+    let member =
+        heroName +
+        " | " +
+        heroClass +
+        " | " +
+        heroRank;
+
+    team.push(member);
+
+    updateTeamDisplay();
+}
+
+function updateTeamDisplay() {
+
+    let display =
+        document.getElementById("teamMembers");
+
+    if(team.length === 0){
+        display.innerHTML = "No Members";
+        return;
+    }
+
+    display.innerHTML =
+        team.join("<br><br>");
+}
+
+function clearTeam() {
+
+    team = [];
+
+    updateTeamDisplay();
+}
+
+function generateHero(){
+
+   ...
+}
+    
 function generateHero(){
 
     document.getElementById("name").innerText=
