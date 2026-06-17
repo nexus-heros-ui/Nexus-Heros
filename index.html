@@ -531,9 +531,10 @@ function spinPowerWheel() {
 
         let count = getPowerCount();
 
-        wheel.innerText =
-            count + " Power(s)";
+window.currentPowerCount = count;
 
+wheel.innerText =
+    count + " Power(s)";
     }, 2000);
 }
 
@@ -551,7 +552,7 @@ function generateHero(){
     document.getElementById("alignment").innerText=
         pick(alignments);
 
-    let count=getPowerCount();
+    let count = window.currentPowerCount || getPowerCount();
 
     document.getElementById("powerCount").innerText=
         count;
