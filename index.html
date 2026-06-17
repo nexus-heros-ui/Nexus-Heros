@@ -472,6 +472,7 @@ function saveHero() {
 
         powerScore: document.getElementById("powerScore").innerText,
         archetype: document.getElementById("archetype").innerText,
+        heroClass: document.getElementById("heroClass").innerText,
         rank: document.getElementById("rank").innerText,
 
         powers: document.getElementById("powers").innerHTML,
@@ -539,17 +540,14 @@ function loadHero() {
     document.getElementById("archetype").innerText =
         hero.archetype;
 
+    document.getElementById("heroClass").innerText =
+    hero.heroClass;
+    
     document.getElementById("rank").innerText =
         hero.rank;
 
     document.getElementById("powers").innerHTML =
-        hero.powers.join("<br>");
-
-    let heroClass =
-    getHeroClass(chosenPowers, archetype);
-
-document.getElementById("heroClass").innerText =
-    heroClass;
+        hero.powers;
 
     document.getElementById("weaknesses").innerHTML =
         hero.weakness;
@@ -676,11 +674,7 @@ function getHeroClass(powers, archetype) {
         return "Warlord";
 
     return "Hero";
-}
 
-function spinPowerWheel(){
-
-   ...
 }
 
 let team = [];
@@ -739,9 +733,6 @@ function clearTeam() {
     updateTeamDisplay();
 }
 
-function generateHero(){
-
-   ...
 }
     
 function generateHero(){
@@ -846,6 +837,12 @@ rank;
 
     document.getElementById("powers").innerHTML=
         chosenPowers.join("<br>");
+
+    let heroClass =
+    getHeroClass(chosenPowers, archetype);
+
+document.getElementById("heroClass").innerText =
+    heroClass;
 
     let weakness=
         pick(weaknesses);
