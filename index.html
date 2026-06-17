@@ -78,16 +78,76 @@ button:hover{
 🎡 Spin Power Count
 </button>
 
-<h3>Power Count Wheel</h3>
+<h2>Stat Wheels</h2>
 
-<div id="powerWheelResult">
---
+<div id="strengthWheelResult">
+Strength: --
 </div>
 
-<button onclick="spinPowerWheel()">
-🎡 Spin Power Count
+<button onclick="spinStatWheel('Strength', strengthLevels, 'currentStrength', 'strengthWheelResult')">
+🎡 Spin Strength
 </button>
 
+<br><br>
+
+<div id="speedWheelResult">
+Speed: --
+</div>
+
+<button onclick="spinStatWheel('Speed', speedLevels, 'currentSpeed', 'speedWheelResult')">
+🎡 Spin Speed
+</button>
+
+<br><br>
+
+<div id="durabilityWheelResult">
+Durability: --
+</div>
+
+<button onclick="spinStatWheel('Durability', durabilityLevels, 'currentDurability', 'durabilityWheelResult')">
+🎡 Spin Durability
+</button>
+
+<br><br>
+
+<div id="intelligenceWheelResult">
+Intelligence: --
+</div>
+
+<button onclick="spinStatWheel('Intelligence', intelligenceLevels, 'currentIntelligence', 'intelligenceWheelResult')">
+🎡 Spin Intelligence
+</button>
+
+<br><br>
+
+<div id="combatWheelResult">
+Combat: --
+</div>
+
+<button onclick="spinStatWheel('Combat', combatLevels, 'currentCombat', 'combatWheelResult')">
+🎡 Spin Combat
+</button>
+
+<br><br>
+
+<div id="staminaWheelResult">
+Stamina: --
+</div>
+
+<button onclick="spinStatWheel('Stamina', staminaLevels, 'currentStamina', 'staminaWheelResult')">
+🎡 Spin Stamina
+</button>
+
+<br><br>
+
+<div id="powerControlWheelResult">
+Power Control: --
+</div>
+
+<button onclick="spinStatWheel('Power Control', powerControlLevels, 'currentPowerControl', 'powerControlWheelResult')">
+🎡 Spin Power Control
+</button>
+    
 <div class="card">
     
 <div class="card">
@@ -766,13 +826,26 @@ function generateHero(){
 
     document.getElementById("powerCount").innerText=
         count;
-let strength = statRoll();
-let speed = statRoll();
-let durability = statRoll();
-let intelligence = statRoll();
-let combat = statRoll();
-let stamina = statRoll();
-let powerControl = statRoll();
+let strength =
+    window.currentStrength || statRoll();
+
+let speed =
+    window.currentSpeed || statRoll();
+
+let durability =
+    window.currentDurability || statRoll();
+
+let intelligence =
+    window.currentIntelligence || statRoll();
+
+let combat =
+    window.currentCombat || statRoll();
+
+let stamina =
+    window.currentStamina || statRoll();
+
+let powerControl =
+    window.currentPowerControl || statRoll();
 
 document.getElementById("strength").innerText =
 strength + " - " + strengthLevels[strength];
