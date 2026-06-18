@@ -1001,25 +1001,16 @@ rank;
     
  let chosenPowers = [...selectedPowers];
 
-if(chosenPowers.length === 0){
+let chosenPowers = [...selectedPowers];
 
-    while(chosenPowers.length < count){
+while(chosenPowers.length < count){
 
-        let p = pick(powers);
+    let p = pick(powers);
 
-        if(!chosenPowers.includes(p)){
-            chosenPowers.push(p);
-        }
+    if(!chosenPowers.includes(p)){
+        chosenPowers.push(p);
     }
 }
-    while(chosenPowers.length<count){
-
-        let p=pick(powers);
-
-        if(!chosenPowers.includes(p)){
-            chosenPowers.push(p);
-        }
-    }
 
     document.getElementById("powers").innerHTML=
         chosenPowers.join("<br>");
