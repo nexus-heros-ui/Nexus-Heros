@@ -202,9 +202,10 @@ Power Control: --
 <p><strong>Archetype:</strong> <span id="archetype">--</span></p>
 
 <p><strong>Class:</strong> <span id="heroClass">--</span></p>
-    
-<p><strong>Rank:</strong> <span id="rank">--</span></p>
 
+<p><strong>Weapon:</strong> <span id="weapon">--</span></p>
+
+<p><strong>Rank:</strong> <span id="rank">--</span></p>
 <div class="section">
 
 <h3>Powers</h3>
@@ -330,6 +331,8 @@ const powers=[
 "Teleportation"
 ];
 
+const weapons = [...]
+    
 const weaknesses=[
 "Power Instability",
 "Energy Drain",
@@ -341,6 +344,16 @@ const weaknesses=[
 "Unstable Mutation"
 ];
 
+function getWeaponChance(){
+
+    let roll = Math.random() * 100;
+
+    if(roll < 75)
+        return "No Weapon";
+
+    return "Weapon";
+}
+    
 function getPowerCount(){
 
     let roll=Math.random()*100;
@@ -563,6 +576,7 @@ function saveHero() {
         powerScore: document.getElementById("powerScore").innerText,
         archetype: document.getElementById("archetype").innerText,
         heroClass: document.getElementById("heroClass").innerText,
+        weapon: document.getElementById("weapon").innerText,
         rank: document.getElementById("rank").innerText,
 
         powers: document.getElementById("powers").innerHTML,
@@ -632,6 +646,9 @@ function loadHero() {
 
     document.getElementById("heroClass").innerText =
     hero.heroClass;
+
+    document.getElementById("weapon").innerText =
+    hero.weapon;
     
     document.getElementById("rank").innerText =
         hero.rank;
@@ -999,6 +1016,22 @@ if(score > 65) rank = "Omega Hero";
 if(score > 80) rank = "Cosmic Hero";
 
 if(score > 95) rank = "Nexus Ascendant";
+
+let weaponResult =
+    getWeaponChance();
+
+if(weaponResult === "No Weapon"){
+
+    document.getElementById("weapon").innerText =
+        "None";
+
+}
+else{
+
+    document.getElementById("weapon").innerText =
+        pick(weapons);
+
+}
 
 document.getElementById("rank").innerText =
 rank;
