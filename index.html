@@ -56,6 +56,16 @@ button:hover{
 
 <p>Create Heroes. Build Teams. Shape the Universe.</p>
 
+<h3>Hero Name</h3>
+
+<input
+id="customName"
+placeholder="Enter Hero Name">
+
+<button onclick="generateRandomName()">
+🎲 Random Name
+</button>
+    
 <button onclick="generateHero()">
 ⚡ Generate Entire Hero
 </button>
@@ -803,11 +813,29 @@ function spinStatWheel(statName, levels, storageName, resultId) {
 
     }, 2000);
 }
+
+function generateRandomName() {
+
+    document.getElementById("customName").value =
+        pick(names);
+}
     
 function generateHero(){
 
-    document.getElementById("name").innerText=
+ let customName =
+    document.getElementById("customName").value;
+
+if(customName.trim() === ""){
+
+    document.getElementById("name").innerText =
         pick(names);
+
+}
+else{
+
+    document.getElementById("name").innerText =
+        customName;
+} 
 
     document.getElementById("species").innerText=
         pick(species);
