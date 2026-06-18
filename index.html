@@ -203,8 +203,8 @@ Power Control: --
 
 <p><strong>Class:</strong> <span id="heroClass">--</span></p>
 
-<p><strong>Weapon:</strong> <span id="weapon">--</span></p>
-
+<p><strong>Equipment:</strong> <span id="equipment">--</span></p>
+    
 <p><strong>Rank:</strong> <span id="rank">--</span></p>
 <div class="section">
 
@@ -331,7 +331,89 @@ const powers=[
 "Teleportation"
 ];
 
-const weapons = [...]
+const equipment = [
+
+"Energy Sword",
+"Plasma Blade",
+"Photon Saber",
+"Gravity Hammer",
+"War Hammer",
+"Battle Axe",
+"Combat Axe",
+"Energy Axe",
+"Shock Mace",
+"Power Mace",
+
+"Combat Spear",
+"Photon Lance",
+"Halberd",
+"Glaive",
+"Trident",
+"Combat Staff",
+"Energy Staff",
+"Rune Staff",
+"Storm Staff",
+"Celestial Staff",
+
+"Twin Daggers",
+"Energy Daggers",
+"Void Daggers",
+"Crystal Daggers",
+"Combat Knives",
+"Hunter Bow",
+"Photon Bow",
+"War Crossbow",
+"Combat Rifle",
+"Pulse Rifle",
+
+"Particle Rifle",
+"Gravity Rifle",
+"Heavy Cannon",
+"Plasma Cannon",
+"Void Cannon",
+"Energy Shield",
+"Combat Shield",
+"Tower Shield",
+"Rune Shield",
+"Celestial Shield",
+
+"Power Armor",
+"Titan Armor",
+"Battle Armor",
+"Assault Armor",
+"Shock Armor",
+"Guardian Armor",
+"Void Armor",
+"Celestial Armor",
+"Adaptive Armor",
+"Warplate Armor",
+
+"Mystic Orb",
+"Power Crystal",
+"Soul Crystal",
+"Energy Core",
+"Reality Core",
+"Void Core",
+"Rune Stone",
+"Ancient Totem",
+"Cosmic Prism",
+"Eternal Shard",
+
+"Celestial Relic",
+"Ancient Relic",
+"Forgotten Relic",
+"Void Relic",
+"Titan Relic",
+"Storm Relic",
+"Dragon Relic",
+"Sun Relic",
+"Moon Relic",
+"World Relic"
+
+];
+
+
+
     
 const weaknesses=[
 "Power Instability",
@@ -344,14 +426,25 @@ const weaknesses=[
 "Unstable Mutation"
 ];
 
-function getWeaponChance(){
+function getEquipmentChance(){
 
     let roll = Math.random() * 100;
 
     if(roll < 75)
-        return "No Weapon";
+        return false;
 
-    return "Weapon";
+    return true;
+}
+
+function getEquipmentCount(){
+
+    let roll = Math.random() * 100;
+
+    if(roll < 70) return 1;
+    if(roll < 90) return 2;
+    if(roll < 98) return 3;
+
+    return 4;
 }
     
 function getPowerCount(){
@@ -576,7 +669,7 @@ function saveHero() {
         powerScore: document.getElementById("powerScore").innerText,
         archetype: document.getElementById("archetype").innerText,
         heroClass: document.getElementById("heroClass").innerText,
-        weapon: document.getElementById("weapon").innerText,
+       equipment: document.getElementById("equipment").innerHTML,
         rank: document.getElementById("rank").innerText,
 
         powers: document.getElementById("powers").innerHTML,
@@ -647,8 +740,8 @@ function loadHero() {
     document.getElementById("heroClass").innerText =
     hero.heroClass;
 
-    document.getElementById("weapon").innerText =
-    hero.weapon;
+   document.getElementById("equipment").innerHTML =
+    hero.equipment;
     
     document.getElementById("rank").innerText =
         hero.rank;
@@ -1017,20 +1110,33 @@ if(score > 80) rank = "Cosmic Hero";
 
 if(score > 95) rank = "Nexus Ascendant";
 
-let weaponResult =
-    getWeaponChance();
+if(!getEquipmentChance()){
 
-if(weaponResult === "No Weapon"){
-
-    document.getElementById("weapon").innerText =
+    document.getElementById("equipment").innerHTML =
         "None";
 
 }
 else{
 
-    document.getElementById("weapon").innerText =
-        pick(weapons);
+    let equipmentCount =
+        getEquipmentCount();
 
+    let chosenEquipment = [];
+
+    while(chosenEquipment.length < equipmentCount){
+
+        let item =
+            pick(equipment);
+
+        if(!chosenEquipment.includes(item)){
+
+            chosenEquipment.push(item);
+
+        }
+    }
+
+    document.getElementById("equipment").innerHTML =
+        chosenEquipment.join("<br>");
 }
 
 document.getElementById("rank").innerText =
