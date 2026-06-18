@@ -80,13 +80,19 @@ placeholder="Enter Hero Name">
 
 <h3>Power Count Wheel</h3>
 
-<div id="powerWheelResult">
---
-</div>
-
 <button onclick="spinPowerWheel()">
 🎡 Spin Power Count
 </button>
+
+<h3>Power Wheel</h3>
+
+<div id="powerResult">
+--
+</div>
+
+<button onclick="spinPowerWheel2()">
+🎡 Spin Power
+</button>    
 
 <h2>Stat Wheels</h2>
 
@@ -635,6 +641,36 @@ function loadHero() {
     alert("Hero Loaded!");
 }
 
+function spinPowerWheel2() {
+
+    let display =
+        document.getElementById("powerResult");
+
+    display.innerText = "Spinning...";
+
+    let interval = setInterval(() => {
+
+        display.innerText =
+            pick(powers);
+
+    }, 100);
+
+    setTimeout(() => {
+
+        clearInterval(interval);
+
+        let power =
+            pick(powers);
+
+        window.currentPower =
+            power;
+
+        display.innerText =
+            power;
+
+    }, 2000);
+}
+    
 function spinPowerWheel() {
 
     let wheel = document.getElementById("powerWheelResult");
@@ -935,6 +971,13 @@ document.getElementById("rank").innerText =
 rank;
     
     let chosenPowers=[];
+
+if(window.currentPower){
+
+    chosenPowers.push(
+        window.currentPower
+    );
+}
 
     while(chosenPowers.length<count){
 
