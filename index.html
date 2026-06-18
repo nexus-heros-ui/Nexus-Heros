@@ -80,6 +80,10 @@ placeholder="Enter Hero Name">
 
 <h3>Power Count Wheel</h3>
 
+<div id="powerWheelResult">
+--
+</div>
+    
 <button onclick="spinPowerWheel()">
 🎡 Spin Power Count
 </button>
@@ -1021,11 +1025,40 @@ while(chosenPowers.length < count){
 document.getElementById("heroClass").innerText =
     heroClass;
 
-    let weakness=
-        pick(weaknesses);
+   let weakness=
+    pick(weaknesses);
 
-    document.getElementById("weaknesses").innerHTML=
-        weakness;
+document.getElementById("weaknesses").innerHTML=
+    weakness;
+
+// Reset power system
+
+selectedPowers = [];
+
+powerSpinsRemaining = 0;
+
+window.currentPowerCount = null;
+
+// Clear wheel displays
+
+document.getElementById("powerResult").innerHTML =
+    "--";
+
+document.getElementById("powerCount").innerText =
+    "--";
+
+document.getElementById("powerWheelResult").innerText =
+    "--";
+}
+
+// Reset power wheel for next hero
+
+selectedPowers = [];
+
+powerSpinsRemaining = 0;
+
+document.getElementById("powerResult").innerHTML =
+    "--";
 }
 
 </script>
