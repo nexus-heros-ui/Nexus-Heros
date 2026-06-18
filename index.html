@@ -643,6 +643,15 @@ function loadHero() {
 
 function spinPowerWheel2() {
 
+    if(powerSpinsRemaining <= 0){
+
+        alert(
+            "No power spins remaining! Spin Power Count again."
+        );
+
+        return;
+    }
+
     let display =
         document.getElementById("powerResult");
 
@@ -659,17 +668,27 @@ function spinPowerWheel2() {
 
         clearInterval(interval);
 
-        let power =
-            pick(powers);
+        let power;
 
-        window.currentPower =
-            power;
+        do{
+            power = pick(powers);
+        }
+        while(selectedPowers.includes(power));
 
-        display.innerText =
-            power;
+        selectedPowers.push(power);
+
+        powerSpinsRemaining--;
+
+        display.innerHTML =
+            selectedPowers.join("<br>") +
+            "<br><br>" +
+            "Spins Remaining: " +
+            powerSpinsRemaining;
 
     }, 2000);
 }
+
+ 
     
 function spinPowerWheel() {
 
@@ -683,6 +702,13 @@ function spinPowerWheel() {
 
 window.currentPowerCount = count;
 
+selectedPowers = [];
+
+powerSpinsRemaining = count;
+
+document.getElementById("powerResult").innerHTML =
+    "--";
+        
 wheel.innerText =
     count + " Power(s)";
     }, 2000);
@@ -756,6 +782,9 @@ function getHeroClass(powers, archetype) {
 
 }
 
+let selectedPowers = [];
+let powerSpinsRemaining = 0;
+    
 let team = [];
 
 function addToTeam() {
@@ -970,15 +999,19 @@ if(score > 95) rank = "Nexus Ascendant";
 document.getElementById("rank").innerText =
 rank;
     
-    let chosenPowers=[];
+ let chosenPowers = [...selectedPowers];
 
-if(window.currentPower){
+if(chosenPowers.length === 0){
 
-    chosenPowers.push(
-        window.currentPower
-    );
+    while(chosenPowers.length < count){
+
+        let p = pick(powers);
+
+        if(!chosenPowers.includes(p)){
+            chosenPowers.push(p);
+        }
+    }
 }
-
     while(chosenPowers.length<count){
 
         let p=pick(powers);
