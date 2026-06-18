@@ -1005,8 +1005,6 @@ rank;
     
  let chosenPowers = [...selectedPowers];
 
-let chosenPowers = [...selectedPowers];
-
 while(chosenPowers.length < count){
 
     let p = pick(powers);
@@ -1049,16 +1047,7 @@ document.getElementById("powerCount").innerText =
 
 document.getElementById("powerWheelResult").innerText =
     "--";
-}
 
-// Reset power wheel for next hero
-
-selectedPowers = [];
-
-powerSpinsRemaining = 0;
-
-document.getElementById("powerResult").innerHTML =
-    "--";
 }
 
 </script>
