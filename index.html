@@ -842,7 +842,9 @@ function spinPowerWheel2() {
     }, 2000);
 }
 
- 
+    
+function spinPowerWheel() {
+
 if(!powersUnlocked){
 
     alert(
@@ -852,8 +854,6 @@ if(!powersUnlocked){
     return;
 }
     
-function spinPowerWheel() {
-
     let wheel = document.getElementById("powerWheelResult");
 
     wheel.innerText = "Spinning...";
