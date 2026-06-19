@@ -357,16 +357,6 @@ No Members
 
 <div class="card">
 
-<h2>Villain Sheet</h2>
-
-<p><strong>Name:</strong> <span id="villainName">--</span></p>
-
-<p><strong>Threat:</strong> <span id="threatLevel">--</span></p>
-
-<p><strong>Class:</strong> <span id="villainClass">--</span></p>
-
-<p><strong>Power Score:</strong> <span id="villainScore">--</span></p>
-
 </div>
 
 <div class="card">
@@ -395,21 +385,9 @@ No Members
     
 <div class="card">
 
-<h2>Mission</h2>
-
-<div id="missionResult">
---
-</div>
-
 </div>
 
 <div class="card">
-
-<h2>Battle Result</h2>
-
-<div id="battleResult">
---
-</div>
 
 </div>
 
@@ -1612,8 +1590,8 @@ if(score > 80) rank = "Cosmic Hero";
 
 if(score > 95) rank = "Nexus Ascendant";
 
-if(!getEquipmentChance()){
-
+if(!equipmentUnlocked){
+    
     document.getElementById("equipment").innerHTML =
         "None";
 
