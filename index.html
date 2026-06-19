@@ -54,6 +54,14 @@ button:hover{
 
 <h1>NEXUS HEROES</h1>
 
+<button onclick="showPlayer()">
+Player Portal
+</button>
+
+<button onclick="showGM()">
+GM Portal
+</button>
+    
 <div id="playerPortal">
     
 <p>Create Heroes. Build Teams. Shape the Universe.</p>
@@ -1190,6 +1198,24 @@ function spinPowerChanceWheel() {
 
     }, 2000);
 }
+
+function showPlayer(){
+
+    document.getElementById("playerPortal").style.display =
+        "block";
+
+    document.getElementById("gmPortal").style.display =
+        "none";
+}
+
+function showGM(){
+
+    document.getElementById("playerPortal").style.display =
+        "none";
+
+    document.getElementById("gmPortal").style.display =
+        "block";
+}
     
 function generateHero(){
 
@@ -1390,6 +1416,18 @@ document.getElementById("powerWheelResult").innerText =
     "--";
 
 }
+
+</div>
+
+<div id="gmPortal" style="display:none;">
+
+<h2>GM Portal</h2>
+
+<p>Villain Generator Coming Soon</p>
+
+<p>Mission Generator Coming Soon</p>
+
+<p>Battle Simulator Coming Soon</p>
 
 </div>
     
