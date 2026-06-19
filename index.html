@@ -78,6 +78,16 @@ placeholder="Enter Hero Name">
 📂 Load Hero
 </button>
 
+<h3>Power Chance Wheel</h3>
+
+<div id="powerChanceResult">
+--
+</div>
+
+<button onclick="spinPowerChanceWheel()">
+🎡 Spin Power Chance
+</button>
+    
 <h3>Power Count Wheel</h3>
 
 <div id="powerWheelResult">
@@ -166,6 +176,36 @@ Power Control: --
 
 <button onclick="spinStatWheel('Power Control', powerControlLevels, 'currentPowerControl', 'powerControlWheelResult')">
 🎡 Spin Power Control
+</button>
+
+<h3>Equipment Chance Wheel</h3>
+
+<div id="equipmentChanceResult">
+--
+</div>
+
+<button onclick="spinEquipmentChanceWheel()">
+🎡 Spin Equipment Chance
+</button>
+
+   <h3>Equipment Count Wheel</h3>
+
+<div id="equipmentCountResult">
+--
+</div>
+
+<button onclick="spinEquipmentCountWheel()">
+🎡 Spin Equipment Count
+</button>
+
+<h3>Equipment Wheel</h3>
+
+<div id="equipmentWheelResult">
+--
+</div>
+
+<button onclick="spinEquipmentWheel()">
+🎡 Spin Equipment
 </button>
     
 <div class="card">
@@ -803,6 +843,14 @@ function spinPowerWheel2() {
 }
 
  
+if(!powersUnlocked){
+
+    alert(
+        "This hero has no powers!"
+    );
+
+    return;
+}
     
 function spinPowerWheel() {
 
@@ -898,6 +946,12 @@ function getHeroClass(powers, archetype) {
 
 let selectedPowers = [];
 let powerSpinsRemaining = 0;
+
+let selectedEquipment = [];
+let equipmentSpinsRemaining = 0;
+let equipmentUnlocked = false;
+
+let powersUnlocked = true;
     
 let team = [];
 
@@ -998,6 +1052,142 @@ function generateRandomName() {
     document.getElementById("customName").value =
         pick(names);
 }
+
+function spinEquipmentChanceWheel(){
+
+    let display =
+        document.getElementById("equipmentChanceResult");
+
+    display.innerText = "Spinning...";
+
+    setTimeout(() => {
+
+        equipmentUnlocked =
+            getEquipmentChance();
+
+        if(equipmentUnlocked){
+
+            display.innerText =
+                "Equipment Granted";
+
+        }
+        else{
+
+            display.innerText =
+                "No Equipment";
+
+            equipmentSpinsRemaining = 0;
+
+            selectedEquipment = [];
+
+        }
+
+    }, 2000);
+}
+
+function spinEquipmentCountWheel(){
+
+    if(!equipmentUnlocked){
+
+        alert(
+            "Spin Equipment Chance first!"
+        );
+
+        return;
+    }
+
+    let count =
+        getEquipmentCount();
+
+    equipmentSpinsRemaining =
+        count;
+
+    selectedEquipment = [];
+
+    document.getElementById(
+        "equipmentCountResult"
+    ).innerText =
+        count + " Equipment";
+
+    document.getElementById(
+        "equipmentWheelResult"
+    ).innerHTML =
+        "--";
+}
+
+function spinEquipmentWheel(){
+
+    if(equipmentSpinsRemaining <= 0){
+
+        alert(
+            "No equipment spins remaining!"
+        );
+
+        return;
+    }
+
+    let display =
+        document.getElementById(
+            "equipmentWheelResult"
+        );
+
+    let item;
+
+    do{
+
+        item = pick(equipment);
+
+    }
+    while(selectedEquipment.includes(item));
+
+    selectedEquipment.push(item);
+
+    equipmentSpinsRemaining--;
+
+    display.innerHTML =
+        selectedEquipment.join("<br>") +
+        "<br><br>" +
+        "Spins Remaining: " +
+        equipmentSpinsRemaining;
+}
+
+function spinPowerChanceWheel() {
+
+    let display =
+        document.getElementById("powerChanceResult");
+
+    display.innerText = "Spinning...";
+
+    setTimeout(() => {
+
+        let roll = Math.random() * 100;
+
+        if(roll < 85){
+
+            powersUnlocked = true;
+
+            display.innerText =
+                "Powers Granted";
+
+        }
+        else{
+
+            powersUnlocked = false;
+
+            powerSpinsRemaining = 0;
+
+            selectedPowers = [];
+
+            document.getElementById("powerResult").innerHTML =
+                "--";
+
+            display.innerText =
+                "No Powers";
+
+        }
+
+    }, 2000);
+}
     
 function generateHero(){
 
@@ -1025,8 +1215,15 @@ else{
     document.getElementById("alignment").innerText=
         pick(alignments);
 
-    let count = window.currentPowerCount || getPowerCount();
+let count = 0;
 
+if(powersUnlocked){
+
+    count =
+        window.currentPowerCount ||
+        getPowerCount();
+}
+    
     document.getElementById("powerCount").innerText=
         count;
 let strength =
@@ -1118,9 +1315,10 @@ if(!getEquipmentChance()){
 }
 else{
 
-    let equipmentCount =
-        getEquipmentCount();
-
+   let equipmentCount =
+    equipmentSpinsRemaining ||
+    getEquipmentCount();
+    
     let chosenEquipment = [];
 
     while(chosenEquipment.length < equipmentCount){
@@ -1142,8 +1340,13 @@ else{
 document.getElementById("rank").innerText =
 rank;
     
- let chosenPowers = [...selectedPowers];
+let chosenPowers = [];
 
+if(powersUnlocked){
+
+    chosenPowers = [...selectedPowers];
+}
+    
 while(chosenPowers.length < count){
 
     let p = pick(powers);
