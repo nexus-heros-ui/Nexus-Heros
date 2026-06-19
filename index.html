@@ -310,13 +310,106 @@ No Members
 
 <div id="gmPortal" style="display:none;">
 
-    <h2>GM Portal</h2>
+    <div class="card">
 
-    <p>Villain Generator Coming Soon</p>
+<h2>GM Portal</h2>
 
-    <p>Mission Generator Coming Soon</p>
+<button onclick="generateVillain()">
+😈 Generate Villain
+</button>
 
-    <p>Battle Simulator Coming Soon</p>
+<button onclick="generateMission()">
+📜 Generate Mission
+</button>
+
+<button onclick="simulateBattle()">
+⚔ Battle Simulator
+</button>
+
+<div class="card">
+
+<h2>Villain Sheet</h2>
+
+<p><strong>Name:</strong>
+<span id="villainName">--</span></p>
+
+<p><strong>Species:</strong>
+<span id="villainSpecies">--</span></p>
+
+<p><strong>Origin:</strong>
+<span id="villainOrigin">--</span></p>
+
+<p><strong>Threat Level:</strong>
+<span id="threatLevel">--</span></p>
+
+<p><strong>Class:</strong>
+<span id="villainClass">--</span></p>
+
+<p><strong>Power Score:</strong>
+<span id="villainScore">--</span></p>
+
+<p><strong>Rank:</strong>
+<span id="villainRank">--</span></p>
+
+</div>
+        
+</div>
+
+<div class="card">
+
+<h2>Villain Sheet</h2>
+
+<p><strong>Name:</strong> <span id="villainName">--</span></p>
+
+<p><strong>Threat:</strong> <span id="threatLevel">--</span></p>
+
+<p><strong>Class:</strong> <span id="villainClass">--</span></p>
+
+<p><strong>Power Score:</strong> <span id="villainScore">--</span></p>
+
+</div>
+
+<div class="card">
+
+<h2>Mission</h2>
+
+<div id="missionResult">
+--
+</div>
+
+<div id="rewardResult">
+--
+</div>
+
+</div>
+    
+<div class="card">
+
+<h2>Battle Result</h2>
+
+<div id="battleResult">
+--
+</div>
+
+</div>
+    
+<div class="card">
+
+<h2>Mission</h2>
+
+<div id="missionResult">
+--
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Battle Result</h2>
+
+<div id="battleResult">
+--
+</div>
 
 </div>
 
@@ -669,6 +762,64 @@ const powerControlLevels = [
 "Absolute Control"
 ];
 
+const villainNames = [
+"Void Tyrant",
+"Dread King",
+"Shadow Lord",
+"Iron Reaper",
+"Blood Phantom",
+"Chaos Bringer",
+"Omega Beast",
+"Nexus Destroyer",
+"Dark Sentinel",
+"Cosmic Warlord"
+];
+
+const missions = [
+
+"Bank Robbery",
+"Hostage Rescue",
+"Artifact Recovery",
+"Prison Break",
+"Monster Attack",
+"Alien Invasion",
+"Dimensional Rift",
+"Secret Laboratory Raid",
+"Rogue AI Uprising",
+"Cosmic Disturbance",
+"Ancient Relic Hunt",
+"World Threatening Crisis",
+"Reality Breach",
+"Lost Civilization Discovery",
+"Nexus Energy Surge"
+
+];
+
+const rewards = [
+
+"Credits",
+"Rare Equipment",
+"Epic Equipment",
+"Legendary Equipment",
+"Artifact",
+"Relic",
+"Power Upgrade",
+"Reputation",
+"Bonus Stat Point",
+"Team Resource"
+
+];
+    
+const threatLevels = [
+"Street Threat",
+"City Threat",
+"National Threat",
+"Planetary Threat",
+"Galactic Threat",
+"Universal Threat",
+"Nexus Threat"
+];
+    
 function getArchetype(
     strength,
     speed,
@@ -1215,8 +1366,6 @@ function spinPowerChanceWheel() {
 
 function showPlayer(){
 
-    alert("Player button works");
-
     document.getElementById("playerPortal").style.display =
         "block";
 
@@ -1226,18 +1375,122 @@ function showPlayer(){
 
 function showGM(){
 
-    alert("GM button works");
-
     document.getElementById("playerPortal").style.display =
         "none";
 
     document.getElementById("gmPortal").style.display =
         "block";
-
-    document.getElementById("gmPortal").innerHTML =
-        "<h1>GM PORTAL WORKS</h1>";
 }
 
+function generateVillain(){
+
+    let score = 0;
+
+    for(let i=0;i<7;i++){
+        score += statRoll();
+    }
+
+    let rank = "Street Villain";
+
+    if(score > 20) rank = "Enhanced Villain";
+    if(score > 35) rank = "Super Villain";
+    if(score > 50) rank = "Champion Villain";
+    if(score > 65) rank = "Omega Villain";
+    if(score > 80) rank = "Cosmic Villain";
+    if(score > 95) rank = "Nexus Villain";
+
+    document.getElementById("villainName").innerText =
+        pick(villainNames);
+
+    document.getElementById("villainSpecies").innerText =
+        pick(species);
+
+    document.getElementById("villainOrigin").innerText =
+        pick(origins);
+
+    document.getElementById("threatLevel").innerText =
+        pick(threatLevels);
+
+    document.getElementById("villainClass").innerText =
+        "Villain";
+
+    document.getElementById("villainScore").innerText =
+        score;
+
+    document.getElementById("villainRank").innerText =
+        rank;
+
+    window.currentVillainScore = score;
+}
+
+function simulateBattle(){
+
+    if(!window.currentHeroScore){
+
+        alert("Generate a Hero First");
+
+        return;
+    }
+
+    if(!window.currentVillainScore){
+
+        alert("Generate a Villain First");
+
+        return;
+    }
+
+    let heroScore =
+        window.currentHeroScore +
+        Math.floor(Math.random() * 20);
+
+    let villainScore =
+        window.currentVillainScore +
+        Math.floor(Math.random() * 20);
+
+    let result = "";
+
+    if(heroScore > villainScore){
+
+        result =
+        "🏆 HERO VICTORY";
+
+    }
+    else if(villainScore > heroScore){
+
+        result =
+        "💀 VILLAIN VICTORY";
+
+    }
+    else{
+
+        result =
+        "⚔ DRAW";
+    }
+
+    document.getElementById(
+        "battleResult"
+    ).innerHTML =
+        result;
+}
+
+function generateMission(){
+
+    let mission =
+        pick(missions);
+
+    let reward =
+        pick(rewards);
+
+    document.getElementById(
+        "missionResult"
+    ).innerHTML =
+        mission;
+
+    document.getElementById(
+        "rewardResult"
+    ).innerHTML =
+        "Reward: " + reward;
+}
     
 function generateHero(){
 
@@ -1330,6 +1583,8 @@ powerControl;
 document.getElementById("powerScore").innerText =
 score;
 
+window.currentHeroScore = score;
+    
     let archetype = getArchetype(
     strength,
     speed,
