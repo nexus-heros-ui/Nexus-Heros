@@ -188,6 +188,58 @@ Power Control: --
 🎡 Spin Power Control
 </button>
 
+<hr>
+
+<h2>Additional Wheels</h2>
+
+<h3>Species Wheel</h3>
+<div id="speciesWheelResult">--</div>
+<button onclick="spinSpeciesWheel()">
+🎡 Spin Species
+</button>
+
+<h3>Origin Wheel</h3>
+<div id="originWheelResult">--</div>
+<button onclick="spinOriginWheel()">
+🎡 Spin Origin
+</button>
+
+<h3>Alignment Wheel</h3>
+<div id="alignmentWheelResult">--</div>
+<button onclick="spinAlignmentWheel()">
+🎡 Spin Alignment
+</button>
+
+<h3>Equipment Chance Wheel</h3>
+<div id="equipmentChanceResult">--</div>
+<button onclick="spinEquipmentChanceWheel()">
+🎡 Spin Equipment Chance
+</button>
+
+<h3>Equipment Count Wheel</h3>
+<div id="equipmentCountResult">--</div>
+<button onclick="spinEquipmentCountWheel()">
+🎡 Spin Equipment Count
+</button>
+
+<h3>Equipment Wheel</h3>
+<div id="equipmentWheelResult">--</div>
+<button onclick="spinEquipmentWheel()">
+🎡 Spin Equipment
+</button>
+
+<h3>Weakness Count Wheel</h3>
+<div id="weaknessCountResult">--</div>
+<button onclick="spinWeaknessCountWheel()">
+🎡 Spin Weakness Count
+</button>
+
+<h3>Weakness Wheel</h3>
+<div id="weaknessWheelResult">--</div>
+<button onclick="spinWeaknessWheel()">
+🎡 Spin Weakness
+</button>
+    
 <h3>Equipment Chance Wheel</h3>
 
 <div id="equipmentChanceResult">
@@ -1102,7 +1154,15 @@ let powerSpinsRemaining = 0;
 
 let selectedEquipment = [];
 let equipmentSpinsRemaining = 0;
+
+let selectedWeaknesses = [];
+let weaknessSpinsRemaining = 0;
+
 let equipmentUnlocked = false;
+
+let currentSpecies = null;
+let currentOrigin = null;
+let currentAlignment = null;
 
 let powersUnlocked = true;
     
@@ -1487,14 +1547,14 @@ else{
         customName;
 } 
 
-    document.getElementById("species").innerText=
-        pick(species);
+   document.getElementById("species").innerText =
+    currentSpecies || pick(species);
 
-    document.getElementById("origin").innerText=
-        pick(origins);
+document.getElementById("origin").innerText =
+    currentOrigin || pick(origins);
 
-    document.getElementById("alignment").innerText=
-        pick(alignments);
+document.getElementById("alignment").innerText =
+    currentAlignment || pick(alignments);
 
 let count = 0;
 
@@ -1669,6 +1729,152 @@ document.getElementById("powerResult").innerHTML =
 
 document.getElementById("powerWheelResult").innerText =
     "--";
+}
+
+function spinSpeciesWheel(){
+
+    currentSpecies = pick(species);
+
+    document.getElementById(
+        "speciesWheelResult"
+    ).innerText = currentSpecies;
+}
+
+function spinOriginWheel(){
+
+    currentOrigin = pick(origins);
+
+    document.getElementById(
+        "originWheelResult"
+    ).innerText = currentOrigin;
+}
+
+function spinAlignmentWheel(){
+
+    currentAlignment = pick(alignments);
+
+    document.getElementById(
+        "alignmentWheelResult"
+    ).innerText = currentAlignment;
+}
+
+function spinEquipmentChanceWheel(){
+
+    let roll = Math.random()*100;
+
+    equipmentUnlocked = roll < 85;
+
+    document.getElementById(
+        "equipmentChanceResult"
+    ).innerText =
+        equipmentUnlocked
+        ? "YES"
+        : "NO";
+}
+
+function spinEquipmentCountWheel(){
+
+    if(!equipmentUnlocked){
+
+        alert("No Equipment!");
+
+        return;
+    }
+
+    let count = getEquipmentCount();
+
+    equipmentSpinsRemaining = count;
+
+    selectedEquipment = [];
+
+    document.getElementById(
+        "equipmentCountResult"
+    ).innerText =
+        count + " Equipment";
+}
+
+function spinEquipmentWheel(){
+
+    if(equipmentSpinsRemaining <= 0){
+
+        alert(
+            "No Equipment Spins Remaining"
+        );
+
+        return;
+    }
+
+    let item;
+
+    do{
+
+        item = pick(equipment);
+
+    }while(
+        selectedEquipment.includes(item)
+    );
+
+    selectedEquipment.push(item);
+
+    equipmentSpinsRemaining--;
+
+    document.getElementById(
+        "equipmentWheelResult"
+    ).innerHTML =
+        selectedEquipment.join("<br>");
+}
+
+function spinWeaknessCountWheel(){
+
+    let count = 1;
+
+    let roll = Math.random()*100;
+
+    if(roll > 70) count = 2;
+
+    if(roll > 95) count = 3;
+
+    weaknessSpinsRemaining = count;
+
+    selectedWeaknesses = [];
+
+    document.getElementById(
+        "weaknessCountResult"
+    ).innerText =
+        count + " Weakness(es)";
+}
+
+function spinWeaknessWheel(){
+
+    if(weaknessSpinsRemaining <= 0){
+
+        alert(
+            "No Weakness Spins Remaining"
+        );
+
+        return;
+    }
+
+    let weakness;
+
+    do{
+
+        weakness = pick(weaknesses);
+
+    }while(
+        selectedWeaknesses.includes(weakness)
+    );
+
+    selectedWeaknesses.push(
+        weakness
+    );
+
+    weaknessSpinsRemaining--;
+
+    document.getElementById(
+        "weaknessWheelResult"
+    ).innerHTML =
+        selectedWeaknesses.join("<br>");
 }
     
 </script>
