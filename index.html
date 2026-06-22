@@ -1658,22 +1658,24 @@ if(!equipmentUnlocked){
 }
 else{
 
-   let equipmentCount =
-    equipmentSpinsRemaining ||
-    getEquipmentCount();
-    
-    let chosenEquipment = [];
+   if(!equipmentUnlocked){
 
-    while(chosenEquipment.length < equipmentCount){
+    document.getElementById("equipment").innerHTML =
+        "None";
 
-        let item =
-            pick(equipment);
+}
+else if(selectedEquipment.length > 0){
 
-        if(!chosenEquipment.includes(item)){
+    document.getElementById("equipment").innerHTML =
+        selectedEquipment.join("<br>");
 
-            chosenEquipment.push(item);
+}
+else{
 
-        }
+    document.getElementById("equipment").innerHTML =
+        "None";
+
+}
     }
 
     document.getElementById("equipment").innerHTML =
@@ -1708,11 +1710,18 @@ while(chosenPowers.length < count){
 document.getElementById("heroClass").innerText =
     heroClass;
 
-   let weakness=
-    pick(weaknesses);
+  if(selectedWeaknesses.length > 0){
 
-document.getElementById("weaknesses").innerHTML=
-    weakness;
+    document.getElementById("weaknesses").innerHTML =
+        selectedWeaknesses.join("<br>");
+
+}
+else{
+
+    document.getElementById("weaknesses").innerHTML =
+        pick(weaknesses);
+
+}
 
 // Reset power system
 
@@ -1756,72 +1765,6 @@ function spinAlignmentWheel(){
     document.getElementById(
         "alignmentWheelResult"
     ).innerText = currentAlignment;
-}
-
-function spinEquipmentChanceWheel(){
-
-    let roll = Math.random()*100;
-
-    equipmentUnlocked = roll < 85;
-
-    document.getElementById(
-        "equipmentChanceResult"
-    ).innerText =
-        equipmentUnlocked
-        ? "YES"
-        : "NO";
-}
-
-function spinEquipmentCountWheel(){
-
-    if(!equipmentUnlocked){
-
-        alert("No Equipment!");
-
-        return;
-    }
-
-    let count = getEquipmentCount();
-
-    equipmentSpinsRemaining = count;
-
-    selectedEquipment = [];
-
-    document.getElementById(
-        "equipmentCountResult"
-    ).innerText =
-        count + " Equipment";
-}
-
-function spinEquipmentWheel(){
-
-    if(equipmentSpinsRemaining <= 0){
-
-        alert(
-            "No Equipment Spins Remaining"
-        );
-
-        return;
-    }
-
-    let item;
-
-    do{
-
-        item = pick(equipment);
-
-    }while(
-        selectedEquipment.includes(item)
-    );
-
-    selectedEquipment.push(item);
-
-    equipmentSpinsRemaining--;
-
-    document.getElementById(
-        "equipmentWheelResult"
-    ).innerHTML =
-        selectedEquipment.join("<br>");
 }
 
 function spinWeaknessCountWheel(){
