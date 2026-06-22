@@ -1658,28 +1658,23 @@ if(!equipmentUnlocked){
 }
 else{
 
-   if(!equipmentUnlocked){
+  if (!equipmentUnlocked) {
 
     document.getElementById("equipment").innerHTML =
         "None";
 
 }
-else if(selectedEquipment.length > 0){
+else if (selectedEquipment.length > 0) {
 
     document.getElementById("equipment").innerHTML =
         selectedEquipment.join("<br>");
 
 }
-else{
+else {
 
     document.getElementById("equipment").innerHTML =
         "None";
 
-}
-    }
-
-    document.getElementById("equipment").innerHTML =
-        chosenEquipment.join("<br>");
 }
 
 document.getElementById("rank").innerText =
