@@ -299,6 +299,33 @@ const powers = [
     "Infinite Energy","Law Manipulation","Fate Control","Nexus Authority"
 ];
 
+function getWeightedPower(){
+
+    let roll = Math.random() * 100;
+
+    if(roll < 45){
+        return pick(powers.slice(0, 16));
+    }
+
+    if(roll < 75){
+        return pick(powers.slice(16, 36));
+    }
+
+    if(roll < 92){
+        return pick(powers.slice(36, 56));
+    }
+
+    if(roll < 98){
+        return pick(powers.slice(56, 72));
+    }
+
+    if(roll < 99.6){
+        return pick(powers.slice(72, 82));
+    }
+
+    return pick(powers.slice(82));
+}
+    
 const equipment = [
     "Energy Sword","Plasma Blade","Photon Saber","Gravity Hammer",
     "War Hammer","Battle Axe","Combat Axe","Energy Axe","Shock Mace",
@@ -450,7 +477,7 @@ function spinPowerWheel2(){
 
     setTimeout(() => {
         let power;
-        do { power = pick(powers); }
+        do { power = getWeightedPower(); }
         while(selectedPowers.includes(power));
 
         selectedPowers.push(power);
@@ -659,7 +686,7 @@ function generateHero(){
 
     let chosenPowers = powersUnlocked ? [...selectedPowers] : [];
     while(chosenPowers.length < count){
-        const power = pick(powers);
+        const power = getWeightedPower();
         if(!chosenPowers.includes(power)) chosenPowers.push(power);
     }
 
