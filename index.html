@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +12,7 @@ body{
     font-family:Arial,sans-serif;
     text-align:center;
     padding:20px;
+    margin:0;
 }
 
 h1{ color:#3B82F6; }
@@ -24,6 +25,7 @@ button{
     margin:5px;
     border-radius:10px;
     cursor:pointer;
+    font-size:15px;
 }
 
 button:hover{ background:#3B82F6; }
@@ -37,30 +39,26 @@ input{
 
 .card{
     background:#1F2937;
-    max-width:700px;
+    max-width:650px;
     margin:20px auto;
     padding:20px;
     border-radius:15px;
 }
 
-.rulebook{
-    text-align:left;
-    line-height:1.5;
-}
-
-.rulebook h2{
-    color:#93C5FD;
-}
-
-.rulebook h3{
-    color:#60A5FA;
-}
+.section{ margin-top:20px; }
 
 .result{
     min-height:24px;
     color:#93C5FD;
-    font-weight:bold;
-    margin:8px;
+    margin:8px 0;
+}
+
+.rulebook-item{
+    text-align:left;
+    background:#111827;
+    padding:12px;
+    margin:8px 0;
+    border-radius:8px;
 }
 </style>
 </head>
@@ -71,15 +69,16 @@ input{
 
 <button onclick="showPlayer()">Player Portal</button>
 <button onclick="showGM()">GM Portal</button>
+<button onclick="showRulebook()">Rulebook</button>
 
+<!-- PLAYER PORTAL -->
 <div id="playerPortal">
 
 <p>Create Heroes. Build Teams. Shape the Universe.</p>
 
 <div class="card">
-<h2>Hero Creator</h2>
+<h2>Hero Generator</h2>
 
-<h3>Hero Name</h3>
 <input id="customName" placeholder="Enter Hero Name">
 
 <br>
@@ -93,77 +92,77 @@ input{
 <div class="card">
 <h2>Power Wheels</h2>
 
-<h3>Power Chance Wheel</h3>
-<div class="result" id="powerChanceResult">--</div>
+<h3>Power Chance</h3>
+<div id="powerChanceResult" class="result">--</div>
 <button onclick="spinPowerChanceWheel()">🎡 Spin Power Chance</button>
 
-<h3>Power Count Wheel</h3>
-<div class="result" id="powerWheelResult">--</div>
+<h3>Power Count</h3>
+<div id="powerWheelResult" class="result">--</div>
 <button onclick="spinPowerWheel()">🎡 Spin Power Count</button>
 
 <h3>Power Wheel</h3>
-<div class="result" id="powerResult">--</div>
+<div id="powerResult" class="result">--</div>
 <button onclick="spinPowerWheel2()">🎡 Spin Power</button>
 </div>
 
 <div class="card">
 <h2>Stat Wheels</h2>
 
-<div class="result" id="strengthWheelResult">Strength: --</div>
+<div id="strengthWheelResult" class="result">Strength: --</div>
 <button onclick="spinStatWheel('Strength', strengthLevels, 'currentStrength', 'strengthWheelResult')">🎡 Spin Strength</button>
 
-<div class="result" id="speedWheelResult">Speed: --</div>
+<div id="speedWheelResult" class="result">Speed: --</div>
 <button onclick="spinStatWheel('Speed', speedLevels, 'currentSpeed', 'speedWheelResult')">🎡 Spin Speed</button>
 
-<div class="result" id="durabilityWheelResult">Durability: --</div>
+<div id="durabilityWheelResult" class="result">Durability: --</div>
 <button onclick="spinStatWheel('Durability', durabilityLevels, 'currentDurability', 'durabilityWheelResult')">🎡 Spin Durability</button>
 
-<div class="result" id="intelligenceWheelResult">Intelligence: --</div>
+<div id="intelligenceWheelResult" class="result">Intelligence: --</div>
 <button onclick="spinStatWheel('Intelligence', intelligenceLevels, 'currentIntelligence', 'intelligenceWheelResult')">🎡 Spin Intelligence</button>
 
-<div class="result" id="combatWheelResult">Combat: --</div>
+<div id="combatWheelResult" class="result">Combat: --</div>
 <button onclick="spinStatWheel('Combat', combatLevels, 'currentCombat', 'combatWheelResult')">🎡 Spin Combat</button>
 
-<div class="result" id="staminaWheelResult">Stamina: --</div>
+<div id="staminaWheelResult" class="result">Stamina: --</div>
 <button onclick="spinStatWheel('Stamina', staminaLevels, 'currentStamina', 'staminaWheelResult')">🎡 Spin Stamina</button>
 
-<div class="result" id="powerControlWheelResult">Power Control: --</div>
+<div id="powerControlWheelResult" class="result">Power Control: --</div>
 <button onclick="spinStatWheel('Power Control', powerControlLevels, 'currentPowerControl', 'powerControlWheelResult')">🎡 Spin Power Control</button>
 </div>
 
 <div class="card">
 <h2>Additional Wheels</h2>
 
-<h3>Species Wheel</h3>
-<div class="result" id="speciesWheelResult">--</div>
+<h3>Species</h3>
+<div id="speciesWheelResult" class="result">--</div>
 <button onclick="spinSpeciesWheel()">🎡 Spin Species</button>
 
-<h3>Origin Wheel</h3>
-<div class="result" id="originWheelResult">--</div>
+<h3>Origin</h3>
+<div id="originWheelResult" class="result">--</div>
 <button onclick="spinOriginWheel()">🎡 Spin Origin</button>
 
-<h3>Alignment Wheel</h3>
-<div class="result" id="alignmentWheelResult">--</div>
+<h3>Alignment</h3>
+<div id="alignmentWheelResult" class="result">--</div>
 <button onclick="spinAlignmentWheel()">🎡 Spin Alignment</button>
 
-<h3>Equipment Chance Wheel</h3>
-<div class="result" id="equipmentChanceResult">--</div>
+<h3>Equipment Chance</h3>
+<div id="equipmentChanceResult" class="result">--</div>
 <button onclick="spinEquipmentChanceWheel()">🎡 Spin Equipment Chance</button>
 
-<h3>Equipment Count Wheel</h3>
-<div class="result" id="equipmentCountResult">--</div>
+<h3>Equipment Count</h3>
+<div id="equipmentCountResult" class="result">--</div>
 <button onclick="spinEquipmentCountWheel()">🎡 Spin Equipment Count</button>
 
 <h3>Equipment Wheel</h3>
-<div class="result" id="equipmentWheelResult">--</div>
+<div id="equipmentWheelResult" class="result">--</div>
 <button onclick="spinEquipmentWheel()">🎡 Spin Equipment</button>
 
-<h3>Weakness Count Wheel</h3>
-<div class="result" id="weaknessCountResult">--</div>
+<h3>Weakness Count</h3>
+<div id="weaknessCountResult" class="result">--</div>
 <button onclick="spinWeaknessCountWheel()">🎡 Spin Weakness Count</button>
 
 <h3>Weakness Wheel</h3>
-<div class="result" id="weaknessWheelResult">--</div>
+<div id="weaknessWheelResult" class="result">--</div>
 <button onclick="spinWeaknessWheel()">🎡 Spin Weakness</button>
 </div>
 
@@ -188,8 +187,10 @@ input{
 <p><strong>Power Score:</strong> <span id="powerScore">--</span></p>
 <p><strong>Archetype:</strong> <span id="archetype">--</span></p>
 <p><strong>Class:</strong> <span id="heroClass">--</span></p>
-<p><strong>Equipment:</strong> <span id="equipment">--</span></p>
 <p><strong>Rank:</strong> <span id="rank">--</span></p>
+
+<h3>Equipment</h3>
+<div id="equipment">--</div>
 
 <h3>Powers</h3>
 <div id="powers">--</div>
@@ -200,28 +201,34 @@ input{
 
 <div class="card">
 <h2>Team Builder</h2>
+
 <input id="teamName" placeholder="Enter Team Name">
+
 <br>
+
 <button onclick="addToTeam()">➕ Add Current Hero</button>
 <button onclick="clearTeam()">🗑 Clear Team</button>
+
 <h3>Team Members</h3>
 <div id="teamMembers">No Members</div>
 </div>
 
 </div>
 
+<!-- GM PORTAL -->
 <div id="gmPortal" style="display:none;">
 
 <div class="card">
 <h2>GM Portal</h2>
+
 <button onclick="generateVillain()">😈 Generate Villain</button>
 <button onclick="generateMission()">📜 Generate Mission</button>
 <button onclick="simulateBattle()">⚔ Battle Simulator</button>
-<button onclick="showRulebook()">📖 GM Rulebook</button>
 </div>
 
 <div class="card">
 <h2>Villain Sheet</h2>
+
 <p><strong>Name:</strong> <span id="villainName">--</span></p>
 <p><strong>Species:</strong> <span id="villainSpecies">--</span></p>
 <p><strong>Origin:</strong> <span id="villainOrigin">--</span></p>
@@ -244,527 +251,77 @@ input{
 
 </div>
 
+<!-- RULEBOOK -->
 <div id="rulebookPortal" style="display:none;">
 
-<div class="card rulebook">
-
-<button onclick="showGM()">⬅ Back to GM Portal</button>
-
-<h1>NEXUS HEROES GM RULEBOOK</h1>
-
-<h2>1. What Is Nexus Heroes?</h2>
-<p>
-Nexus Heroes is a build-your-own superhero tabletop game where players create heroes using wheels.
-The Game Master controls villains, missions, rewards, battle rules, and campaign events.
-The game can be played as a quick character builder, a one-shot battle game, or a long campaign.
-</p>
-
-<h2>2. Basic Game Loop</h2>
-<ol>
-<li>Create a hero.</li>
-<li>Spin powers, stats, equipment, and weaknesses.</li>
-<li>Add heroes to a team.</li>
-<li>The GM generates a mission.</li>
-<li>The GM generates or creates a villain.</li>
-<li>Resolve the battle using quick battle, dice battle, or full campaign battle.</li>
-<li>Award rewards, upgrades, story progress, or new equipment.</li>
-</ol>
-
-<h2>3. Hero Creation</h2>
-
-<h3>Name</h3>
-<p>
-Players may type their own hero name or use the Random Name button.
-</p>
-
-<h3>Species</h3>
-<p>
-Species determines what kind of being the character is. Examples include Human, Mutant, Alien, Synthetic, and Ascended Being.
-Species can be used by the GM for roleplay bonuses, story restrictions, or special background rules.
-</p>
-
-<h3>Origin</h3>
-<p>
-Origin explains how the hero became powerful. Examples include Scientific Accident, Magic, Technology, Cosmic Energy, and Elite Training.
-Origin can affect how NPCs treat the hero and what kinds of missions connect to them.
-</p>
-
-<h3>Alignment</h3>
-<p>
-Alignment describes morality and behavior. Heroes can be pure heroes, anti-heroes, neutral, mercenary, villain-like, or cosmic evil.
-Alignment does not force a player to act one way, but the GM can use it for story consequences.
-</p>
-
-<h2>4. Power System</h2>
-
-<h3>Power Chance Wheel</h3>
-<p>
-Before getting powers, a player may spin the Power Chance Wheel.
-If powers are granted, the player may continue to the Power Count Wheel.
-If no powers are granted, the hero has no powers and must rely on stats, skill, equipment, and teamwork.
-</p>
-
-<h3>Power Count Wheel</h3>
-<p>
-The Power Count Wheel decides how many powers the hero gets.
-Current power count chances:
-</p>
-<ul>
-<li>1 Power: 37%</li>
-<li>2 Powers: 35%</li>
-<li>3 Powers: 10%</li>
-<li>4 Powers: 8%</li>
-<li>5 Powers: 5%</li>
-<li>6 Powers: 2%</li>
-<li>7 Powers: 3%</li>
-</ul>
-
-<h3>Power Wheel</h3>
-<p>
-After power count is decided, the player spins the Power Wheel once for each power.
-The same power cannot be gained twice on the same hero.
-If the player does not manually spin all powers, Generate Entire Hero fills in the missing powers.
-</p>
-
-<h3>Power Rarity Rule</h3>
-<p>
-Basic powers should be more common. Extremely powerful abilities should be rare.
-For future versions, powers can be divided into Common, Uncommon, Rare, Epic, Legendary, and Nexus-tier.
-The GM should be careful with reality warping, time travel, immortality, and universe-level powers.
-</p>
-
-<h2>5. Stat System</h2>
-
-<p>Every hero has seven main stats:</p>
-<ul>
-<li><strong>Strength:</strong> physical force and lifting power.</li>
-<li><strong>Speed:</strong> movement speed and reaction speed.</li>
-<li><strong>Durability:</strong> toughness and damage resistance.</li>
-<li><strong>Intelligence:</strong> knowledge, invention, and planning.</li>
-<li><strong>Combat:</strong> fighting skill and battle technique.</li>
-<li><strong>Stamina:</strong> endurance and how long the hero can keep fighting.</li>
-<li><strong>Power Control:</strong> how well the hero controls abilities.</li>
-</ul>
-
-<h3>Stat Levels</h3>
-<p>
-Stats range from 1 to 14. Level 1 is weak or uncontrolled. Level 14 is god-tier or absolute.
-The higher the total score, the higher the hero rank.
-</p>
-
-<h3>Power Score</h3>
-<p>
-Power Score is the total of all seven stat numbers.
-Minimum score is 7. Maximum score is 98.
-Power Score is used for ranking and quick battles.
-</p>
-
-<h2>6. Ranks</h2>
-<ul>
-<li>7-20: Street Hero</li>
-<li>21-35: Enhanced Hero</li>
-<li>36-50: Super Hero</li>
-<li>51-65: Champion</li>
-<li>66-80: Omega Hero</li>
-<li>81-95: Cosmic Hero</li>
-<li>96+: Nexus Ascendant</li>
-</ul>
-
-<h2>7. Archetypes</h2>
-<p>
-The hero's highest stat decides their archetype.
-</p>
-<ul>
-<li>Highest Speed: Speedster</li>
-<li>Highest Strength: Powerhouse</li>
-<li>Highest Durability: Tank</li>
-<li>Highest Intelligence: Genius</li>
-<li>Highest Combat: Martial Master</li>
-<li>Highest Stamina: Endurance Hero</li>
-<li>Highest Power Control: Energy Master</li>
-</ul>
-
-<h2>8. Hero Class</h2>
-<p>
-Hero Class is based on powers and archetype.
-For example, Telepathy may create a Telepath, Reality Warping may create a Reality Warper, and high Strength may create a Brute.
-Class helps the GM understand the hero's battlefield role.
-</p>
-
-<h2>9. Equipment System</h2>
-
-<h3>Equipment Chance Wheel</h3>
-<p>
-The Equipment Chance Wheel decides if the hero starts with equipment.
-If equipment is not granted, the hero starts with none.
-</p>
-
-<h3>Equipment Count Wheel</h3>
-<p>
-If equipment is granted, spin Equipment Count to decide how many items the hero receives.
-</p>
-
-<h3>Equipment Wheel</h3>
-<p>
-Spin once for each item. Equipment can include weapons, armor, relics, shields, crystals, cores, and artifacts.
-Equipment may give roleplay advantages or battle bonuses if the GM allows it.
-</p>
-
-<h3>Suggested Equipment Bonuses</h3>
-<ul>
-<li>Minor weapon: +2 battle bonus</li>
-<li>Strong weapon: +5 battle bonus</li>
-<li>Armor: +3 defense bonus</li>
-<li>Artifact or relic: +5 to +10 special bonus</li>
-</ul>
-
-<h2>10. Weakness System</h2>
-
-<h3>Weakness Count Wheel</h3>
-<p>
-The Weakness Count Wheel decides how many weaknesses a hero may have.
-Current system gives 1, 2, or 3 weaknesses.
-</p>
-
-<h3>Weakness Wheel</h3>
-<p>
-Weaknesses are flaws, limits, or problems that make the hero more interesting.
-Examples include Energy Drain, Public Distrust, Fear, Overconfidence, and Power Instability.
-</p>
-
-<h3>Using Weaknesses</h3>
-<p>
-The GM should not use weaknesses to instantly defeat players. Weaknesses should create drama, tension, bad choices, and story consequences.
-</p>
-
-<h2>11. Team Rules</h2>
-<p>
-A team can currently hold up to 5 heroes.
-The Team Builder stores hero name, class, and rank.
-Teams can be used for team battles, campaigns, missions, and PvP.
-</p>
-
-<h3>Suggested Team Roles</h3>
-<ul>
-<li>Tank: protects the team.</li>
-<li>Damage Dealer: deals heavy damage.</li>
-<li>Speedster: acts first and rescues allies.</li>
-<li>Support: heals, shields, or boosts.</li>
-<li>Genius: solves problems and creates plans.</li>
-<li>Leader: coordinates the team.</li>
-</ul>
-
-<h2>12. GM Portal</h2>
-<p>
-The GM Portal contains GM-only tools:
-</p>
-<ul>
-<li>Villain Generator</li>
-<li>Mission Generator</li>
-<li>Battle Simulator</li>
-<li>Rulebook</li>
-</ul>
-
-<h2>13. Villain Rules</h2>
-<p>
-Villains are generated with a name, species, origin, threat level, class, power score, and rank.
-The GM may use the generated villain as-is or edit their story manually.
-</p>
-
-<h3>Villain Rank</h3>
-<ul>
-<li>Street Villain</li>
-<li>Enhanced Villain</li>
-<li>Super Villain</li>
-<li>Champion Villain</li>
-<li>Omega Villain</li>
-<li>Cosmic Villain</li>
-<li>Nexus Villain</li>
-</ul>
-
-<h3>Threat Levels</h3>
-<ul>
-<li>Street Threat: local danger.</li>
-<li>City Threat: threatens a city.</li>
-<li>National Threat: threatens a country.</li>
-<li>Planetary Threat: threatens the world.</li>
-<li>Galactic Threat: threatens planets or star systems.</li>
-<li>Universal Threat: threatens reality.</li>
-<li>Nexus Threat: threatens the multiverse or the Nexus itself.</li>
-</ul>
-
-<h2>14. Mission Rules</h2>
-<p>
-The Mission Generator creates a mission and reward.
-The GM should connect the mission to the villain, team, and campaign.
-</p>
-
-<h3>Mission Examples</h3>
-<ul>
-<li>Bank Robbery</li>
-<li>Hostage Rescue</li>
-<li>Artifact Recovery</li>
-<li>Alien Invasion</li>
-<li>Dimensional Rift</li>
-<li>Reality Breach</li>
-<li>Nexus Energy Surge</li>
-</ul>
-
-<h3>Reward Examples</h3>
-<ul>
-<li>Credits</li>
-<li>Rare Equipment</li>
-<li>Legendary Equipment</li>
-<li>Artifact</li>
-<li>Power Upgrade</li>
-<li>Bonus Stat Point</li>
-<li>Team Resource</li>
-</ul>
-
-<h2>15. Battle System 1: Quick Battle</h2>
-<p>
-Quick Battle is the fastest way to resolve fights.
-This is what the current Battle Simulator uses.
-</p>
-
-<h3>Quick Battle Steps</h3>
-<ol>
-<li>Generate a hero.</li>
-<li>Generate a villain.</li>
-<li>Click Battle Simulator.</li>
-<li>The system compares Hero Power Score + random bonus vs Villain Power Score + random bonus.</li>
-<li>Higher total wins.</li>
-</ol>
-
-<h3>Quick Battle Formula</h3>
-<p>
-Hero Total = Hero Power Score + random 0-19 bonus.
-<br>
-Villain Total = Villain Power Score + random 0-19 bonus.
-</p>
-
-<h3>Quick Battle Use</h3>
-<p>
-Use Quick Battle for fast fights, solo missions, testing heroes, or when you do not want a full turn-by-turn fight.
-</p>
-
-<h2>16. Battle System 2: Dice Battle</h2>
-<p>
-Dice Battle is for players who want more tabletop-style combat.
-Use a d20 or random number from 1 to 20.
-</p>
-
-<h3>Turn Order</h3>
-<p>
-Each character rolls:
-</p>
-<p>
-Speed Stat + d20
-</p>
-<p>
-Highest result acts first.
-</p>
-
-<h3>Attack Roll</h3>
-<p>
-Attacker rolls:
-</p>
-<p>
-Combat Stat + d20
-</p>
-
-<h3>Defense Roll</h3>
-<p>
-Defender rolls:
-</p>
-<p>
-Durability Stat + d20
-</p>
-
-<h3>Hit Rule</h3>
-<p>
-If Attack Roll is higher than Defense Roll, the attack hits.
-If Defense Roll is equal or higher, the attack misses or is blocked.
-</p>
-
-<h3>Damage Rule</h3>
-<p>
-Damage = Strength or Power Control + weapon bonus.
-The defender reduces damage using Durability.
-</p>
-
-<h3>Power Use</h3>
-<p>
-When using a power, roll:
-</p>
-<p>
-Power Control + d20
-</p>
-<p>
-The GM decides the difficulty:
-</p>
-<ul>
-<li>Easy: 10</li>
-<li>Medium: 15</li>
-<li>Hard: 20</li>
-<li>Extreme: 25</li>
-<li>Nexus Level: 30+</li>
-</ul>
-
-<h3>Critical Success</h3>
-<p>
-Natural 20 means the action succeeds with a bonus effect.
-</p>
-
-<h3>Critical Failure</h3>
-<p>
-Natural 1 means the action fails badly or creates a complication.
-</p>
-
-<h2>17. Battle System 3: Full Campaign Battle</h2>
-<p>
-Full Campaign Battle is for long fights, team battles, boss fights, PvP, and major story missions.
-</p>
-
-<h3>Full Battle Setup</h3>
-<ol>
-<li>Pick the hero team.</li>
-<li>Pick or generate the villain team.</li>
-<li>Choose mission objective.</li>
-<li>Choose battlefield.</li>
-<li>Roll turn order.</li>
-<li>Play round by round.</li>
-</ol>
-
-<h3>Round Structure</h3>
-<ol>
-<li>Start of round effects happen.</li>
-<li>Fastest character acts first.</li>
-<li>Each character gets one main action.</li>
-<li>Each character may get one movement or minor action.</li>
-<li>End of round effects happen.</li>
-</ol>
-
-<h3>Main Actions</h3>
-<ul>
-<li>Attack</li>
-<li>Use Power</li>
-<li>Defend</li>
-<li>Protect Ally</li>
-<li>Use Equipment</li>
-<li>Escape</li>
-<li>Objective Action</li>
-</ul>
-
-<h3>Team Combo Rule</h3>
-<p>
-Two heroes may combine powers if the GM agrees.
-Both players roll Power Control.
-If both succeed, the combo gains a bonus.
-</p>
-
-<h3>Boss Fight Rule</h3>
-<p>
-Boss villains may act twice per round or gain a bonus reaction.
-Bosses should have higher Power Score, special resistances, or unique objectives.
-</p>
-
-<h3>Defeat Rule</h3>
-<p>
-A defeated hero is not always dead.
-They may be knocked out, captured, weakened, injured, or forced to retreat.
-Death should only happen if the group agrees.
-</p>
-
-<h2>18. Campaign Modes</h2>
-
-<h3>Standard Campaign</h3>
-<p>
-Players form a team, fight villains, complete missions, gain rewards, and slowly rise in rank.
-</p>
-
-<h3>Endless Campaign</h3>
-<p>
-The campaign never truly ends. Threats keep getting stronger until the team reaches cosmic or Nexus-level enemies.
-</p>
-
-<h3>Power Campaign</h3>
-<p>
-The goal is to become the strongest hero, villain, or team in the universe.
-Players seek upgrades, relics, rare powers, and rank advancement.
-</p>
-
-<h3>Villain Campaign</h3>
-<p>
-Players may play anti-heroes or villains trying to conquer cities, planets, dimensions, or the Nexus itself.
-</p>
-
-<h3>PvP Campaign</h3>
-<p>
-Players may fight each other using Quick Battle, Dice Battle, or Full Campaign Battle.
-PvP should be agreed on before the campaign starts.
-</p>
-
-<h3>One-Shot Mode</h3>
-<p>
-Create heroes, generate one mission, fight one villain, and finish in one session.
-</p>
-
-<h3>Survival Mode</h3>
-<p>
-Heroes fight waves of enemies. Each wave gets harder.
-Rewards are earned after each wave.
-</p>
-
-<h2>19. Leveling And Progression</h2>
-
-<h3>Suggested Level Rewards</h3>
-<ul>
-<li>Complete easy mission: +1 progress point</li>
-<li>Complete hard mission: +2 progress points</li>
-<li>Defeat major villain: +3 progress points</li>
-<li>Complete campaign arc: +5 progress points</li>
-</ul>
-
-<h3>Spending Progress Points</h3>
-<ul>
-<li>3 points: reroll one weakness</li>
-<li>5 points: gain +1 to one stat</li>
-<li>7 points: upgrade equipment</li>
-<li>10 points: gain a new power chance roll</li>
-<li>15 points: evolve a power</li>
-</ul>
-
-<h2>20. GM Advice</h2>
-<ul>
-<li>Do not punish players for bad rolls too harshly.</li>
-<li>Use weaknesses to make stories better, not to ruin characters.</li>
-<li>Let players describe how their powers look.</li>
-<li>Make villains personal when possible.</li>
-<li>Reward creative ideas.</li>
-<li>Use high-tier powers carefully.</li>
-<li>Let the team win sometimes and struggle sometimes.</li>
-</ul>
-
-<h2>21. Quick GM Reference</h2>
-<ul>
-<li>Create Hero: Player Portal</li>
-<li>Create Villain: GM Portal</li>
-<li>Create Mission: GM Portal</li>
-<li>Fast Fight: Quick Battle</li>
-<li>Detailed Fight: Dice Battle</li>
-<li>Big Story Fight: Full Campaign Battle</li>
-<li>Team Size: up to 5 heroes</li>
-<li>Max Stat: 14</li>
-<li>Max Power Score: 98</li>
-<li>Highest Hero Rank: Nexus Ascendant</li>
-<li>Highest Villain Rank: Nexus Villain</li>
-</ul>
-
-<button onclick="showGM()">⬅ Back to GM Portal</button>
-
+<div class="card">
+<h2>Nexus Heroes Rulebook</h2>
+
+<h3>How Hero Creation Works</h3>
+<div class="rulebook-item">
+1. Spin Power Chance.<br>
+2. If powers are granted, spin Power Count.<br>
+3. Spin the Power Wheel once for every power you earned.<br>
+4. Spin all stat wheels, species, origin, alignment, equipment, and weaknesses.<br>
+5. Press Generate Entire Hero to create the final hero sheet.
 </div>
 
+<h3>Power Rarity</h3>
+<div class="rulebook-item">
+Common powers appear most often.<br>
+Uncommon powers appear less often.<br>
+Rare powers are difficult to get.<br>
+Epic powers are very difficult to get.<br>
+Legendary powers are extremely rare.<br>
+Nexus powers are the strongest powers and have the lowest chance.
+</div>
+
+<h3>Power List</h3>
+
+<div class="rulebook-item"><strong>Enhanced Strength:</strong> Increased physical strength.</div>
+<div class="rulebook-item"><strong>Enhanced Speed:</strong> Faster movement and reaction speed.</div>
+<div class="rulebook-item"><strong>Flight:</strong> Ability to fly.</div>
+<div class="rulebook-item"><strong>Regeneration:</strong> Heals damage over time.</div>
+<div class="rulebook-item"><strong>Invulnerability:</strong> Greatly reduces damage.</div>
+<div class="rulebook-item"><strong>Telepathy:</strong> Read and communicate through thoughts.</div>
+<div class="rulebook-item"><strong>Telekinesis:</strong> Move objects using the mind.</div>
+<div class="rulebook-item"><strong>Force Fields:</strong> Create energy barriers.</div>
+<div class="rulebook-item"><strong>Fire Manipulation:</strong> Control and create fire.</div>
+<div class="rulebook-item"><strong>Ice Manipulation:</strong> Control and create ice.</div>
+<div class="rulebook-item"><strong>Energy Projection:</strong> Fire energy blasts.</div>
+<div class="rulebook-item"><strong>Technopathy:</strong> Control technology with the mind.</div>
+<div class="rulebook-item"><strong>Shapeshifting:</strong> Change body form and appearance.</div>
+<div class="rulebook-item"><strong>Gravity Manipulation:</strong> Control gravity around targets.</div>
+<div class="rulebook-item"><strong>Teleportation:</strong> Instantly move to another location.</div>
+<div class="rulebook-item"><strong>Time Manipulation:</strong> Slow, speed up, or pause time in limited ways.</div>
+<div class="rulebook-item"><strong>Reality Warping:</strong> Alter reality with GM approval.</div>
+<div class="rulebook-item"><strong>Dimensional Travel:</strong> Travel between dimensions.</div>
+<div class="rulebook-item"><strong>Cosmic Energy:</strong> Control powerful cosmic energy.</div>
+<div class="rulebook-item"><strong>Existence Erasure:</strong> Extremely rare power that can erase a target from existence.</div>
+<div class="rulebook-item"><strong>Nexus Authority:</strong> The rarest power. Gives control over Nexus energy and major reality effects with GM approval.</div>
+
+<h3>Equipment List</h3>
+
+<div class="rulebook-item"><strong>Energy Sword:</strong> Energy melee weapon.</div>
+<div class="rulebook-item"><strong>Plasma Blade:</strong> Superheated cutting weapon.</div>
+<div class="rulebook-item"><strong>Gravity Hammer:</strong> Heavy weapon that creates gravity impacts.</div>
+<div class="rulebook-item"><strong>Photon Lance:</strong> Long-range energy spear.</div>
+<div class="rulebook-item"><strong>Combat Rifle:</strong> Standard ranged weapon.</div>
+<div class="rulebook-item"><strong>Pulse Rifle:</strong> Fires energy pulses.</div>
+<div class="rulebook-item"><strong>Plasma Cannon:</strong> Heavy plasma weapon.</div>
+<div class="rulebook-item"><strong>Energy Shield:</strong> Creates a defensive barrier.</div>
+<div class="rulebook-item"><strong>Power Armor:</strong> Increases strength and durability.</div>
+<div class="rulebook-item"><strong>Celestial Armor:</strong> Powerful cosmic armor.</div>
+<div class="rulebook-item"><strong>Mystic Orb:</strong> Focuses magical energy.</div>
+<div class="rulebook-item"><strong>Reality Core:</strong> Rare artifact that improves reality-based abilities.</div>
+<div class="rulebook-item"><strong>World Relic:</strong> Major relic with GM-created world-level effects.</div>
+
+<h3>Equipment Rules</h3>
+<div class="rulebook-item">
+Heroes must first win the Equipment Chance Wheel. If equipment is granted, spin Equipment Count and then spin Equipment once for each item. Equipment may be gifted, traded item-for-item, lost, stolen, upgraded, or destroyed if the GM allows it.
+</div>
+
+</div>
 </div>
 
 <script>
@@ -795,45 +352,41 @@ const alignments = [
     "Opportunistic Villain","Pure Villain","Cosmic Evil"
 ];
 
-const powers = [
-    // Common
-    "Enhanced Strength","Enhanced Speed","Enhanced Reflexes","Enhanced Durability",
-    "Enhanced Senses","Wall Crawling","Night Vision","Underwater Breathing",
-    "Climbing Grip","Pain Resistance","High Jump","Fast Healing",
-    "Weapon Mastery","Martial Adaptation","Tracking Sense","Tactical Instinct",
-
-    // Uncommon
-    "Super Strength","Super Speed","Flight","Regeneration",
-    "Force Fields","Energy Projection","Fire Manipulation","Ice Manipulation",
-    "Electric Manipulation","Wind Manipulation","Earth Manipulation","Water Manipulation",
-    "Elastic Body","Size Growth","Size Shrinking","Animal Communication",
-    "Invisibility","Illusion Casting","Sonic Scream","Poison Generation",
-
-    // Rare
-    "Telepathy","Telekinesis","Teleportation","Technopathy",
-    "Shapeshifting","Gravity Manipulation","Magnetism","Light Manipulation",
-    "Shadow Manipulation","Plant Manipulation","Metal Manipulation","Crystal Generation",
-    "Duplication","Density Control","Phasing","Power Absorption",
-    "Memory Manipulation","Dream Walking","Portal Creation","Healing Touch",
-
-    // Epic
-    "Invulnerability","Molecular Manipulation","Time Slow","Precognition",
-    "Probability Manipulation","Soul Manipulation","Energy Absorption","Matter Transmutation",
-    "Weather Control","Plasma Manipulation","Dimensional Travel","Anti-Magic",
-    "Power Nullification","Mind Control","Cosmic Awareness","Atomic Vision",
-
-    // Legendary
-    "Reality Warping","Time Travel","Immortality","True Resurrection",
-    "Planetary Telekinesis","Star Energy Manipulation","Black Hole Creation",
-    "Space-Time Manipulation","Concept Manipulation","Causality Manipulation",
-
-    // Mythic/Nexus
-    "Universal Creation","Universal Destruction","Absolute Regeneration",
-    "Omniscient Awareness","Existence Erasure","Multiversal Travel",
-    "Infinite Energy","Law Manipulation","Fate Control","Nexus Authority"
+const commonPowers = [
+    "Enhanced Strength","Enhanced Speed","Flight","Regeneration",
+    "Invulnerability","Force Fields","Fire Manipulation",
+    "Ice Manipulation","Energy Projection","Shapeshifting"
 ];
 
-const equipment = [
+const uncommonPowers = [
+    "Super Strength","Super Speed","Telepathy","Telekinesis",
+    "Technopathy","Teleportation","Combat Instinct",
+    "Animal Control","Sonic Blast","Light Manipulation"
+];
+
+const rarePowers = [
+    "Gravity Manipulation","Weather Control","Shadow Manipulation",
+    "Metal Manipulation","Plant Control","Mind Control",
+    "Invisibility","Intangibility","Size Changing","Energy Absorption"
+];
+
+const epicPowers = [
+    "Time Manipulation","Dimensional Travel","Cosmic Energy",
+    "Matter Manipulation","Probability Manipulation",
+    "Soul Manipulation","Power Absorption"
+];
+
+const legendaryPowers = [
+    "Reality Warping","Immortality","Universal Energy Control",
+    "Space Manipulation","Creation Powers","Absolute Regeneration"
+];
+
+const nexusPowers = [
+    "Existence Erasure","Nexus Authority","Infinite Evolution",
+    "Omnipresence","Omniscience","Multiversal Control"
+];
+
+const equipmentList = [
     "Energy Sword","Plasma Blade","Photon Saber","Gravity Hammer",
     "War Hammer","Battle Axe","Combat Axe","Energy Axe","Shock Mace",
     "Power Mace","Combat Spear","Photon Lance","Halberd","Glaive",
@@ -855,48 +408,145 @@ const equipment = [
 
 const weaknesses = [
     "Power Instability","Energy Drain","Public Distrust","Fear",
-    "Overconfidence","Secret Identity","Power Overload","Unstable Mutation"
+    "Overconfidence","Secret Identity","Power Overload",
+    "Unstable Mutation","Magic Weakness","Technology Weakness",
+    "Limited Stamina","Emotional Weakness"
 ];
 
-const strengthLevels = ["","Below Average Human","Average Human","Athletic Human","Peak Human","Enhanced Human Strength","Superhuman Strength","Building Level","City Block Level","City Level","Mountain Level","Planetary Level","Cosmic Strength","Universal Strength","Omnipotent Potential"];
-const speedLevels = ["","Below Average Human","Average Human","Athletic Human","Peak Human","Enhanced Human Speed","Superhuman Speed","Bullet Timer","Hypersonic Movement","Lightning Speed","Mach Speed","Relativistic Speed","Lightspeed Travel","Faster Than Light","Instant Movement"];
-const durabilityLevels = ["","Fragile Human","Average Human","Trained Human","Peak Human Durability","Enhanced Human Durability","Bullet Resistant","Explosion Resistant","Superhuman Toughness","Tank Level Durability","High Superhuman","Hulk Level Durability","Planetary Durability","Cosmic Durability","Abstract God Tier Durability"];
-const intelligenceLevels = ["","Below Average","Average Intelligence","Educated","Highly Educated","Specialist","Tactical Mind","Genius","Super Genius","Master Scientist","Global Mastermind","Alien Genius","Cosmic Intelligence","Universal Intellect","Abstract Intelligence"];
-const combatLevels = ["","No Fighting Skill","Basic Self Defense","Street Fighter","Trained Fighter","Martial Artist","Expert Fighter","Elite Fighter","Master Combatant","Grandmaster Fighter","Legendary Fighter","Superhuman Combat Skill","Tactical War Master","Cosmic Warrior","Perfect Combat Master"];
-const staminaLevels = ["","Low Stamina","Average Stamina","Athletic Stamina","Peak Human Endurance","Enhanced Stamina","Can Fight For Hours","Superhuman Endurance","Days Without Rest","Weeks Without Fatigue","Hulk Level Endurance","Self Sustaining Biology","Cosmic Energy Powered","Never Tires","Infinite Endurance"];
-const powerControlLevels = ["","Cannot Control Powers","Powers Activate Randomly","Beginner Control","Basic Control","Reliable Use","Skilled User","Creative Applications","Tactical Usage","Expert Control","Mastery","Perfect Precision","Legendary Mastery","Reality Level Control","Absolute Control"];
+const strengthLevels = [
+    "","Below Average Human","Average Human","Athletic Human","Peak Human",
+    "Enhanced Human Strength","Superhuman Strength","Building Level",
+    "City Block Level","City Level","Mountain Level","Planetary Level",
+    "Cosmic Strength","Universal Strength","Omnipotent Potential"
+];
 
-const villainNames = ["Void Tyrant","Dread King","Shadow Lord","Iron Reaper","Blood Phantom","Chaos Bringer","Omega Beast","Nexus Destroyer","Dark Sentinel","Cosmic Warlord"];
-const threatLevels = ["Street Threat","City Threat","National Threat","Planetary Threat","Galactic Threat","Universal Threat","Nexus Threat"];
-const missions = ["Bank Robbery","Hostage Rescue","Artifact Recovery","Prison Break","Monster Attack","Alien Invasion","Dimensional Rift","Secret Laboratory Raid","Rogue AI Uprising","Cosmic Disturbance","Ancient Relic Hunt","World Threatening Crisis","Reality Breach","Lost Civilization Discovery","Nexus Energy Surge"];
-const rewards = ["Credits","Rare Equipment","Epic Equipment","Legendary Equipment","Artifact","Relic","Power Upgrade","Reputation","Bonus Stat Point","Team Resource"];
+const speedLevels = [
+    "","Below Average Human","Average Human","Athletic Human","Peak Human",
+    "Enhanced Human Speed","Superhuman Speed","Bullet Timer",
+    "Hypersonic Movement","Lightning Speed","Mach Speed",
+    "Relativistic Speed","Lightspeed Travel","Faster Than Light",
+    "Instant Movement"
+];
+
+const durabilityLevels = [
+    "","Fragile Human","Average Human","Trained Human","Peak Human Durability",
+    "Enhanced Human Durability","Bullet Resistant","Explosion Resistant",
+    "Superhuman Toughness","Tank Level Durability","High Superhuman",
+    "Hulk Level Durability","Planetary Durability","Cosmic Durability",
+    "Abstract God Tier Durability"
+];
+
+const intelligenceLevels = [
+    "","Below Average","Average Intelligence","Educated","Highly Educated",
+    "Specialist","Tactical Mind","Genius","Super Genius","Master Scientist",
+    "Global Mastermind","Alien Genius","Cosmic Intelligence",
+    "Universal Intellect","Abstract Intelligence"
+];
+
+const combatLevels = [
+    "","No Fighting Skill","Basic Self Defense","Street Fighter",
+    "Trained Fighter","Martial Artist","Expert Fighter","Elite Fighter",
+    "Master Combatant","Grandmaster Fighter","Legendary Fighter",
+    "Superhuman Combat Skill","Tactical War Master","Cosmic Warrior",
+    "Perfect Combat Master"
+];
+
+const staminaLevels = [
+    "","Low Stamina","Average Stamina","Athletic Stamina","Peak Human Endurance",
+    "Enhanced Stamina","Can Fight For Hours","Superhuman Endurance",
+    "Days Without Rest","Weeks Without Fatigue","Hulk Level Endurance",
+    "Self Sustaining Biology","Cosmic Energy Powered","Never Tires",
+    "Infinite Endurance"
+];
+
+const powerControlLevels = [
+    "","Cannot Control Powers","Powers Activate Randomly","Beginner Control",
+    "Basic Control","Reliable Use","Skilled User","Creative Applications",
+    "Tactical Usage","Expert Control","Mastery","Perfect Precision",
+    "Legendary Mastery","Reality Level Control","Absolute Control"
+];
+
+const villainNames = [
+    "Void Tyrant","Dread King","Shadow Lord","Iron Reaper","Blood Phantom",
+    "Chaos Bringer","Omega Beast","Nexus Destroyer","Dark Sentinel",
+    "Cosmic Warlord"
+];
+
+const missions = [
+    "Bank Robbery","Hostage Rescue","Artifact Recovery","Prison Break",
+    "Monster Attack","Alien Invasion","Dimensional Rift",
+    "Secret Laboratory Raid","Rogue AI Uprising","Cosmic Disturbance",
+    "Ancient Relic Hunt","World Threatening Crisis","Reality Breach",
+    "Lost Civilization Discovery","Nexus Energy Surge"
+];
+
+const rewards = [
+    "Credits","Rare Equipment","Epic Equipment","Legendary Equipment",
+    "Artifact","Relic","Power Upgrade","Reputation",
+    "Bonus Stat Point","Team Resource"
+];
+
+const threatLevels = [
+    "Street Threat","City Threat","National Threat","Planetary Threat",
+    "Galactic Threat","Universal Threat","Nexus Threat"
+];
 
 let selectedPowers = [];
 let powerSpinsRemaining = 0;
+let powersUnlocked = true;
+
 let selectedEquipment = [];
 let equipmentSpinsRemaining = 0;
+let equipmentUnlocked = false;
+
 let selectedWeaknesses = [];
 let weaknessSpinsRemaining = 0;
-let equipmentUnlocked = false;
-let powersUnlocked = true;
+
 let currentSpecies = null;
 let currentOrigin = null;
 let currentAlignment = null;
+
+let currentStrength = null;
+let currentSpeed = null;
+let currentDurability = null;
+let currentIntelligence = null;
+let currentCombat = null;
+let currentStamina = null;
+let currentPowerControl = null;
+let currentPowerCount = null;
+
 let team = [];
+let currentHeroScore = 0;
+let currentVillainScore = 0;
+
+function getWeightedPower(){
+    const roll = Math.random() * 100;
+
+    if(roll < 50) return pick(commonPowers);
+    if(roll < 80) return pick(uncommonPowers);
+    if(roll < 94) return pick(rarePowers);
+    if(roll < 98.5) return pick(epicPowers);
+    if(roll < 99.8) return pick(legendaryPowers);
+
+    return pick(nexusPowers);
+}
 
 function getPowerCount(){
-    let roll = Math.random() * 100;
+    const roll = Math.random() * 100;
+
     if(roll < 37) return 1;
     if(roll < 72) return 2;
     if(roll < 82) return 3;
     if(roll < 90) return 4;
     if(roll < 95) return 5;
     if(roll < 97) return 6;
+
     return 7;
 }
 
 function statRoll(){
-    let roll = Math.random() * 100;
+    const roll = Math.random() * 100;
+
     if(roll < 13.607) return 1;
     if(roll < 26.214) return 2;
     if(roll < 37.821) return 3;
@@ -910,6 +560,7 @@ function statRoll(){
     if(roll < 94.677) return 11;
     if(roll < 97.284) return 12;
     if(roll < 98.891) return 13;
+
     return 14;
 }
 
@@ -918,10 +569,12 @@ function getEquipmentChance(){
 }
 
 function getEquipmentCount(){
-    let roll = Math.random() * 100;
+    const roll = Math.random() * 100;
+
     if(roll < 70) return 1;
     if(roll < 90) return 2;
     if(roll < 98) return 3;
+
     return 4;
 }
 
@@ -950,40 +603,44 @@ function generateRandomName(){
 function spinPowerChanceWheel(){
     const display = document.getElementById("powerChanceResult");
     display.innerText = "Spinning...";
+
     setTimeout(() => {
         powersUnlocked = Math.random() * 100 < 85;
+
         if(powersUnlocked){
             display.innerText = "Powers Granted";
-        } else {
+        }else{
             display.innerText = "No Powers";
-            powerSpinsRemaining = 0;
             selectedPowers = [];
-            document.getElementById("powerResult").innerHTML = "--";
+            powerSpinsRemaining = 0;
+            currentPowerCount = 0;
             document.getElementById("powerWheelResult").innerText = "--";
+            document.getElementById("powerResult").innerHTML = "--";
         }
-    }, 700);
+    }, 900);
 }
 
 function spinPowerWheel(){
     if(!powersUnlocked){
-        alert("This hero has no powers!");
+        alert("This hero has no powers.");
         return;
     }
+
     const display = document.getElementById("powerWheelResult");
     display.innerText = "Spinning...";
+
     setTimeout(() => {
-        const count = getPowerCount();
-        window.currentPowerCount = count;
+        currentPowerCount = getPowerCount();
         selectedPowers = [];
-        powerSpinsRemaining = count;
+        powerSpinsRemaining = currentPowerCount;
         document.getElementById("powerResult").innerHTML = "--";
-        display.innerText = count + " Power(s)";
-    }, 700);
+        display.innerText = currentPowerCount + " Power(s)";
+    }, 900);
 }
 
 function spinPowerWheel2(){
     if(powerSpinsRemaining <= 0){
-        alert("No power spins remaining! Spin Power Count again.");
+        alert("Spin Power Count first, or you have no spins remaining.");
         return;
     }
 
@@ -992,15 +649,19 @@ function spinPowerWheel2(){
 
     setTimeout(() => {
         let power;
-        do { power = pick(powers); }
-        while(selectedPowers.includes(power));
+        let safety = 0;
+
+        do{
+            power = getWeightedPower();
+            safety++;
+        }while(selectedPowers.includes(power) && safety < 100);
 
         selectedPowers.push(power);
         powerSpinsRemaining--;
 
         display.innerHTML = selectedPowers.join("<br>") +
             "<br><br>Spins Remaining: " + powerSpinsRemaining;
-    }, 700);
+    }, 900);
 }
 
 function spinStatWheel(statName, levels, storageName, resultId){
@@ -1010,8 +671,9 @@ function spinStatWheel(statName, levels, storageName, resultId){
     setTimeout(() => {
         const result = statRoll();
         window[storageName] = result;
+
         display.innerText = statName + ": " + result + " - " + levels[result];
-    }, 700);
+    }, 900);
 }
 
 function spinSpeciesWheel(){
@@ -1038,38 +700,41 @@ function spinEquipmentChanceWheel(){
 
         if(equipmentUnlocked){
             display.innerText = "Equipment Granted";
-        } else {
+        }else{
             display.innerText = "No Equipment";
-            equipmentSpinsRemaining = 0;
             selectedEquipment = [];
+            equipmentSpinsRemaining = 0;
             document.getElementById("equipmentCountResult").innerText = "--";
             document.getElementById("equipmentWheelResult").innerHTML = "--";
         }
-    }, 700);
+    }, 900);
 }
 
 function spinEquipmentCountWheel(){
     if(!equipmentUnlocked){
-        alert("Spin Equipment Chance first!");
+        alert("Spin Equipment Chance first.");
         return;
     }
 
-    const count = getEquipmentCount();
-    equipmentSpinsRemaining = count;
+    equipmentSpinsRemaining = getEquipmentCount();
     selectedEquipment = [];
-    document.getElementById("equipmentCountResult").innerText = count + " Equipment";
+
+    document.getElementById("equipmentCountResult").innerText =
+        equipmentSpinsRemaining + " Equipment";
+
     document.getElementById("equipmentWheelResult").innerHTML = "--";
 }
 
 function spinEquipmentWheel(){
     if(equipmentSpinsRemaining <= 0){
-        alert("No equipment spins remaining!");
+        alert("Spin Equipment Count first, or you have no spins remaining.");
         return;
     }
 
     let item;
-    do { item = pick(equipment); }
-    while(selectedEquipment.includes(item));
+    do{
+        item = pick(equipmentList);
+    }while(selectedEquipment.includes(item));
 
     selectedEquipment.push(item);
     equipmentSpinsRemaining--;
@@ -1080,26 +745,30 @@ function spinEquipmentWheel(){
 }
 
 function spinWeaknessCountWheel(){
-    let roll = Math.random() * 100;
-    let count = 1;
-    if(roll > 70) count = 2;
-    if(roll > 95) count = 3;
+    const roll = Math.random() * 100;
+    weaknessSpinsRemaining = 1;
 
-    weaknessSpinsRemaining = count;
+    if(roll > 70) weaknessSpinsRemaining = 2;
+    if(roll > 95) weaknessSpinsRemaining = 3;
+
     selectedWeaknesses = [];
-    document.getElementById("weaknessCountResult").innerText = count + " Weakness(es)";
+
+    document.getElementById("weaknessCountResult").innerText =
+        weaknessSpinsRemaining + " Weakness(es)";
+
     document.getElementById("weaknessWheelResult").innerHTML = "--";
 }
 
 function spinWeaknessWheel(){
     if(weaknessSpinsRemaining <= 0){
-        alert("No Weakness Spins Remaining");
+        alert("Spin Weakness Count first, or you have no spins remaining.");
         return;
     }
 
     let weakness;
-    do { weakness = pick(weaknesses); }
-    while(selectedWeaknesses.includes(weakness));
+    do{
+        weakness = pick(weaknesses);
+    }while(selectedWeaknesses.includes(weakness));
 
     selectedWeaknesses.push(weakness);
     weaknessSpinsRemaining--;
@@ -1110,7 +779,11 @@ function spinWeaknessWheel(){
 }
 
 function getArchetype(strength, speed, durability, intelligence, combat, stamina, powerControl){
-    const highest = Math.max(strength, speed, durability, intelligence, combat, stamina, powerControl);
+    const highest = Math.max(
+        strength, speed, durability, intelligence,
+        combat, stamina, powerControl
+    );
+
     if(speed === highest) return "Speedster";
     if(strength === highest) return "Powerhouse";
     if(durability === highest) return "Tank";
@@ -1118,70 +791,97 @@ function getArchetype(strength, speed, durability, intelligence, combat, stamina
     if(combat === highest) return "Martial Master";
     if(stamina === highest) return "Endurance Hero";
     if(powerControl === highest) return "Energy Master";
+
     return "Balanced Hero";
 }
 
 function getHeroClass(heroPowers, archetype){
+    if(heroPowers.includes("Nexus Authority")) return "Nexus Entity";
+    if(heroPowers.includes("Existence Erasure")) return "Existence Breaker";
+    if(heroPowers.includes("Multiversal Control")) return "Multiversal Entity";
     if(heroPowers.includes("Reality Warping")) return "Reality Warper";
+    if(heroPowers.includes("Time Manipulation")) return "Time Master";
     if(heroPowers.includes("Telepathy") && heroPowers.includes("Telekinesis")) return "Psychic Master";
     if(heroPowers.includes("Telepathy")) return "Telepath";
     if(heroPowers.includes("Telekinesis")) return "Telekinetic";
-    if(heroPowers.includes("Fire Manipulation") || heroPowers.includes("Ice Manipulation")) return "Elementalist";
-    if(heroPowers.includes("Gravity Manipulation")) return "Gravity Lord";
     if(heroPowers.includes("Teleportation")) return "Teleporter";
-    if(heroPowers.includes("Shapeshifting")) return "Shapeshifter";
-    if(heroPowers.includes("Regeneration")) return "Immortal";
-    if(heroPowers.includes("Flight")) return "Sky Guardian";
+    if(heroPowers.includes("Gravity Manipulation")) return "Gravity Lord";
     if(heroPowers.includes("Technopathy")) return "Gadgeteer";
+    if(heroPowers.includes("Flight")) return "Sky Guardian";
+    if(heroPowers.includes("Shapeshifting")) return "Shapeshifter";
     if(heroPowers.includes("Energy Projection")) return "Energy Controller";
-    if(heroPowers.includes("Invulnerability")) return "Juggernaut";
     if(archetype === "Speedster") return "Speedster";
     if(archetype === "Tank") return "Tank";
     if(archetype === "Powerhouse") return "Brute";
     if(archetype === "Martial Master") return "Martial Artist";
     if(archetype === "Genius") return "Mastermind";
-    if(archetype === "Energy Master") return "Cosmic Entity";
-    if(archetype === "Endurance Hero") return "Warlord";
+    if(archetype === "Energy Master") return "Energy Master";
+
     return "Hero";
 }
 
-function getRank(score, type){
-    if(type === "hero"){
-        if(score > 95) return "Nexus Ascendant";
-        if(score > 80) return "Cosmic Hero";
-        if(score > 65) return "Omega Hero";
-        if(score > 50) return "Champion";
-        if(score > 35) return "Super Hero";
-        if(score > 20) return "Enhanced Hero";
-        return "Street Hero";
-    }
+function getRank(score){
+    if(score > 95) return "Nexus Ascendant";
+    if(score > 80) return "Cosmic Hero";
+    if(score > 65) return "Omega Hero";
+    if(score > 50) return "Champion";
+    if(score > 35) return "Super Hero";
+    if(score > 20) return "Enhanced Hero";
 
-    if(score > 95) return "Nexus Villain";
-    if(score > 80) return "Cosmic Villain";
-    if(score > 65) return "Omega Villain";
-    if(score > 50) return "Champion Villain";
-    if(score > 35) return "Super Villain";
-    if(score > 20) return "Enhanced Villain";
-    return "Street Villain";
+    return "Street Hero";
 }
 
 function generateHero(){
     const customName = document.getElementById("customName").value.trim();
-    document.getElementById("name").innerText = customName || pick(names);
-    document.getElementById("species").innerText = currentSpecies || pick(species);
-    document.getElementById("origin").innerText = currentOrigin || pick(origins);
-    document.getElementById("alignment").innerText = currentAlignment || pick(alignments);
 
-    const count = powersUnlocked ? (window.currentPowerCount || getPowerCount()) : 0;
+    const heroName = customName || pick(names);
+    const heroSpecies = currentSpecies || pick(species);
+    const heroOrigin = currentOrigin || pick(origins);
+    const heroAlignment = currentAlignment || pick(alignments);
+
+    const strength = currentStrength || statRoll();
+    const speed = currentSpeed || statRoll();
+    const durability = currentDurability || statRoll();
+    const intelligence = currentIntelligence || statRoll();
+    const combat = currentCombat || statRoll();
+    const stamina = currentStamina || statRoll();
+    const powerControl = currentPowerControl || statRoll();
+
+    let count = 0;
+    if(powersUnlocked){
+        count = currentPowerCount || getPowerCount();
+    }
+
+    const chosenPowers = [...selectedPowers];
+
+    while(chosenPowers.length < count){
+        const power = getWeightedPower();
+        if(!chosenPowers.includes(power)){
+            chosenPowers.push(power);
+        }
+    }
+
+    let chosenEquipment = [];
+    if(equipmentUnlocked && selectedEquipment.length > 0){
+        chosenEquipment = [...selectedEquipment];
+    }
+
+    let chosenWeaknesses = [...selectedWeaknesses];
+    if(chosenWeaknesses.length === 0){
+        chosenWeaknesses = [pick(weaknesses)];
+    }
+
+    const score = strength + speed + durability + intelligence + combat + stamina + powerControl;
+    const archetype = getArchetype(
+        strength, speed, durability, intelligence,
+        combat, stamina, powerControl
+    );
+
+    document.getElementById("name").innerText = heroName;
+    document.getElementById("species").innerText = heroSpecies;
+    document.getElementById("origin").innerText = heroOrigin;
+    document.getElementById("alignment").innerText = heroAlignment;
     document.getElementById("powerCount").innerText = count;
-
-    const strength = window.currentStrength || statRoll();
-    const speed = window.currentSpeed || statRoll();
-    const durability = window.currentDurability || statRoll();
-    const intelligence = window.currentIntelligence || statRoll();
-    const combat = window.currentCombat || statRoll();
-    const stamina = window.currentStamina || statRoll();
-    const powerControl = window.currentPowerControl || statRoll();
 
     document.getElementById("strength").innerText = strength + " - " + strengthLevels[strength];
     document.getElementById("speed").innerText = speed + " - " + speedLevels[speed];
@@ -1191,72 +891,26 @@ function generateHero(){
     document.getElementById("stamina").innerText = stamina + " - " + staminaLevels[stamina];
     document.getElementById("powerControl").innerText = powerControl + " - " + powerControlLevels[powerControl];
 
-    const score = strength + speed + durability + intelligence + combat + stamina + powerControl;
-    window.currentHeroScore = score;
     document.getElementById("powerScore").innerText = score;
-
-    const archetype = getArchetype(strength, speed, durability, intelligence, combat, stamina, powerControl);
     document.getElementById("archetype").innerText = archetype;
-    document.getElementById("rank").innerText = getRank(score, "hero");
-
-    let chosenPowers = powersUnlocked ? [...selectedPowers] : [];
-    while(chosenPowers.length < count){
-        const power = pick(powers);
-        if(!chosenPowers.includes(power)) chosenPowers.push(power);
-    }
-
-    document.getElementById("powers").innerHTML = chosenPowers.length ? chosenPowers.join("<br>") : "No Powers";
     document.getElementById("heroClass").innerText = getHeroClass(chosenPowers, archetype);
+    document.getElementById("rank").innerText = getRank(score);
+
+    document.getElementById("powers").innerHTML =
+        chosenPowers.length ? chosenPowers.join("<br>") : "No Powers";
 
     document.getElementById("equipment").innerHTML =
-        equipmentUnlocked && selectedEquipment.length
-            ? selectedEquipment.join("<br>")
-            : "None";
+        chosenEquipment.length ? chosenEquipment.join("<br>") : "None";
 
     document.getElementById("weaknesses").innerHTML =
-        selectedWeaknesses.length
-            ? selectedWeaknesses.join("<br>")
-            : pick(weaknesses);
+        chosenWeaknesses.join("<br>");
 
-    selectedPowers = [];
-    powerSpinsRemaining = 0;
-    window.currentPowerCount = null;
-    document.getElementById("powerResult").innerHTML = "--";
-    document.getElementById("powerWheelResult").innerText = "--";
-}
-
-function addToTeam(){
-    const heroName = document.getElementById("name").innerText;
-    const heroClass = document.getElementById("heroClass").innerText;
-    const heroRank = document.getElementById("rank").innerText;
-
-    if(heroName === "--"){
-        alert("Generate a hero first!");
-        return;
-    }
-
-    if(team.length >= 5){
-        alert("Team is full!");
-        return;
-    }
-
-    team.push(heroName + " | " + heroClass + " | " + heroRank);
-    updateTeamDisplay();
-}
-
-function updateTeamDisplay(){
-    document.getElementById("teamMembers").innerHTML =
-        team.length ? team.join("<br><br>") : "No Members";
-}
-
-function clearTeam(){
-    team = [];
-    updateTeamDisplay();
+    currentHeroScore = score;
 }
 
 function saveHero(){
     if(document.getElementById("name").innerText === "--"){
-        alert("Generate a hero first!");
+        alert("Generate a hero first.");
         return;
     }
 
@@ -1276,9 +930,9 @@ function saveHero(){
         powerScore: document.getElementById("powerScore").innerText,
         archetype: document.getElementById("archetype").innerText,
         heroClass: document.getElementById("heroClass").innerText,
-        equipment: document.getElementById("equipment").innerHTML,
         rank: document.getElementById("rank").innerText,
         powers: document.getElementById("powers").innerHTML,
+        equipment: document.getElementById("equipment").innerHTML,
         weaknesses: document.getElementById("weaknesses").innerHTML
     };
 
@@ -1309,16 +963,62 @@ function loadHero(){
     document.getElementById("powerScore").innerText = hero.powerScore;
     document.getElementById("archetype").innerText = hero.archetype;
     document.getElementById("heroClass").innerText = hero.heroClass;
-    document.getElementById("equipment").innerHTML = hero.equipment;
     document.getElementById("rank").innerText = hero.rank;
     document.getElementById("powers").innerHTML = hero.powers;
+    document.getElementById("equipment").innerHTML = hero.equipment;
     document.getElementById("weaknesses").innerHTML = hero.weaknesses;
+
+    currentHeroScore = Number(hero.powerScore) || 0;
+
     alert("Hero Loaded!");
+}
+
+function addToTeam(){
+    const heroName = document.getElementById("name").innerText;
+
+    if(heroName === "--"){
+        alert("Generate a hero first.");
+        return;
+    }
+
+    if(team.length >= 5){
+        alert("Team is full.");
+        return;
+    }
+
+    team.push(
+        heroName + " | " +
+        document.getElementById("heroClass").innerText + " | " +
+        document.getElementById("rank").innerText
+    );
+
+    updateTeamDisplay();
+}
+
+function clearTeam(){
+    team = [];
+    updateTeamDisplay();
+}
+
+function updateTeamDisplay(){
+    document.getElementById("teamMembers").innerHTML =
+        team.length ? team.join("<br><br>") : "No Members";
 }
 
 function generateVillain(){
     let score = 0;
-    for(let i = 0; i < 7; i++) score += statRoll();
+
+    for(let i = 0; i < 7; i++){
+        score += statRoll();
+    }
+
+    let rank = "Street Villain";
+    if(score > 20) rank = "Enhanced Villain";
+    if(score > 35) rank = "Super Villain";
+    if(score > 50) rank = "Champion Villain";
+    if(score > 65) rank = "Omega Villain";
+    if(score > 80) rank = "Cosmic Villain";
+    if(score > 95) rank = "Nexus Villain";
 
     document.getElementById("villainName").innerText = pick(villainNames);
     document.getElementById("villainSpecies").innerText = pick(species);
@@ -1326,38 +1026,41 @@ function generateVillain(){
     document.getElementById("threatLevel").innerText = pick(threatLevels);
     document.getElementById("villainClass").innerText = "Villain";
     document.getElementById("villainScore").innerText = score;
-    document.getElementById("villainRank").innerText = getRank(score, "villain");
+    document.getElementById("villainRank").innerText = rank;
 
-    window.currentVillainScore = score;
+    currentVillainScore = score;
 }
 
 function generateMission(){
-    document.getElementById("missionResult").innerHTML = pick(missions);
-    document.getElementById("rewardResult").innerHTML = "Reward: " + pick(rewards);
+    document.getElementById("missionResult").innerText = pick(missions);
+    document.getElementById("rewardResult").innerText = "Reward: " + pick(rewards);
 }
 
 function simulateBattle(){
-    if(!window.currentHeroScore){
-        alert("Generate a Hero First");
+    if(!currentHeroScore){
+        alert("Generate a hero first.");
         return;
     }
 
-    if(!window.currentVillainScore){
-        alert("Generate a Villain First");
+    if(!currentVillainScore){
+        alert("Generate a villain first.");
         return;
     }
 
-    const heroScore = window.currentHeroScore + Math.floor(Math.random() * 20);
-    const villainScore = window.currentVillainScore + Math.floor(Math.random() * 20);
+    const heroBattleScore = currentHeroScore + Math.floor(Math.random() * 20);
+    const villainBattleScore = currentVillainScore + Math.floor(Math.random() * 20);
 
     let result = "⚔ DRAW";
-    if(heroScore > villainScore) result = "🏆 HERO VICTORY";
-    if(villainScore > heroScore) result = "💀 VILLAIN VICTORY";
 
-    document.getElementById("battleResult").innerHTML =
-        result + "<br><br>Hero Total: " + heroScore + "<br>Villain Total: " + villainScore;
+    if(heroBattleScore > villainBattleScore){
+        result = "🏆 HERO VICTORY";
+    }else if(villainBattleScore > heroBattleScore){
+        result = "💀 VILLAIN VICTORY";
+    }
+
+    document.getElementById("battleResult").innerText = result;
 }
 </script>
 
 </body>
-    </html>
+</html>
