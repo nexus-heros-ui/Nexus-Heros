@@ -310,29 +310,41 @@ input{
 display:grid;
 grid-template-columns:repeat(5,1fr);
 gap:8px;
-max-width:500px;
+max-width:600px;
 margin:auto;
 ">
 
-<div class="map-tile">🏙 City</div>
-<div class="map-tile">🏦 Bank</div>
-<div class="map-tile">🏭 Lab</div>
-<div class="map-tile">🌲 Forest</div>
-<div class="map-tile">⛰ Mountain</div>
+<div class="map-tile" onclick="selectMapLocation('Nexus City','Main city zone. Good for patrols, crime, and hero missions.')">🏙<br>Nexus City</div>
 
-<div class="map-tile">🏚 Ruins</div>
-<div class="map-tile">🚔 Prison</div>
-<div class="map-tile">🛸 Crash Site</div>
-<div class="map-tile">🌌 Rift</div>
-<div class="map-tile">🏰 Fortress</div>
+<div class="map-tile" onclick="selectMapLocation('Central Bank','High-risk robbery and hostage area.')">🏦<br>Central Bank</div>
 
-<div class="map-tile">🌊 Harbor</div>
-<div class="map-tile">🧪 Facility</div>
-<div class="map-tile">⚡ Power Plant</div>
-<div class="map-tile">🏟 Arena</div>
-<div class="map-tile">🕳 Void Zone</div>
+<div class="map-tile" onclick="selectMapLocation('Omega Lab','Secret experiments, mutations, and tech villains.')">🏭<br>Omega Lab</div>
+
+<div class="map-tile" onclick="selectMapLocation('Elder Forest','Hidden creatures, magic relics, and ambushes.')">🌲<br>Elder Forest</div>
+
+<div class="map-tile" onclick="selectMapLocation('Titan Mountain','Boss fights, ancient caves, and powerful relics.')">⛰<br>Titan Mountain</div>
+
+<div class="map-tile" onclick="selectMapLocation('Ancient Ruins','Lost artifacts and forgotten powers.')">🏚<br>Ancient Ruins</div>
+
+<div class="map-tile" onclick="selectMapLocation('Blackgate Prison','Villain escapes and prison breaks.')">🚔<br>Blackgate Prison</div>
+
+<div class="map-tile" onclick="selectMapLocation('Crash Site','Alien tech and strange energy readings.')">🛸<br>Crash Site</div>
+
+<div class="map-tile" onclick="selectMapLocation('Dimensional Rift','Reality breaks and portal events.')">🌌<br>Dimensional Rift</div>
+
+<div class="map-tile" onclick="selectMapLocation('Void Fortress','Final boss area and villain headquarters.')">🏰<br>Void Fortress</div>
 
 </div>
+
+<h3>Selected Location</h3>
+<div id="selectedMapLocation">Click a location</div>
+
+<h3>Location Details</h3>
+<div id="mapLocationDetails">--</div>
+
+<button onclick="generateMapEvent()">🎲 Generate Map Event</button>
+
+<div id="mapEventResult">--</div>
 </div>
 
 </div>
