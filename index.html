@@ -60,6 +60,14 @@ input{
     margin:8px 0;
     border-radius:8px;
 }
+
+.map-tile{
+    background:#111827;
+    padding:18px;
+    border-radius:10px;
+    border:1px solid #3B82F6;
+    min-height:50px;
+}    
 </style>
 </head>
 
@@ -251,6 +259,84 @@ input{
 
 </div>
 
+<button onclick="showWorld()">World</button>
+
+<div id="worldPortal" style="display:none;">
+
+<div class="card">
+<h2>World Creator</h2>
+
+<input id="worldNameInput" placeholder="World Name">
+
+<br>
+
+<button onclick="createWorldCode()">🌍 Create World Code</button>
+
+<h3>World Code</h3>
+<div id="worldCodeDisplay">--</div>
+</div>
+
+<div class="card">
+<h2>Join World</h2>
+
+<input id="joinWorldInput" placeholder="Enter World Code">
+
+<br>
+
+<button onclick="joinWorld()">🚪 Join World</button>
+
+<div id="joinedWorldDisplay">Not Joined</div>
+</div>
+
+<div class="card">
+<h2>GM Team Control</h2>
+
+<button onclick="toggleTeamMode()">🔁 Toggle Team / Solo</button>
+
+<div id="teamModeDisplay">Mode: Solo</div>
+
+<br>
+
+<button onclick="addHeroToWorld()">➕ Add Current Hero To World</button>
+
+<h3>World Players</h3>
+<div id="worldPlayersDisplay">No Players</div>
+</div>
+
+<div class="card">
+<h2>World Map</h2>
+
+<div id="mapGrid" style="
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:8px;
+max-width:500px;
+margin:auto;
+">
+
+<div class="map-tile">🏙 City</div>
+<div class="map-tile">🏦 Bank</div>
+<div class="map-tile">🏭 Lab</div>
+<div class="map-tile">🌲 Forest</div>
+<div class="map-tile">⛰ Mountain</div>
+
+<div class="map-tile">🏚 Ruins</div>
+<div class="map-tile">🚔 Prison</div>
+<div class="map-tile">🛸 Crash Site</div>
+<div class="map-tile">🌌 Rift</div>
+<div class="map-tile">🏰 Fortress</div>
+
+<div class="map-tile">🌊 Harbor</div>
+<div class="map-tile">🧪 Facility</div>
+<div class="map-tile">⚡ Power Plant</div>
+<div class="map-tile">🏟 Arena</div>
+<div class="map-tile">🕳 Void Zone</div>
+
+</div>
+</div>
+
+</div>
+    
 <!-- RULEBOOK -->
 <div id="rulebookPortal" style="display:none;">
 
@@ -628,6 +714,33 @@ let currentPowerCount = null;
 let team = [];
 let currentHeroScore = 0;
 let currentVillainScore = 0;
+
+function hideAllPortals(){
+    document.getElementById("playerPortal").style.display = "none";
+    document.getElementById("gmPortal").style.display = "none";
+    document.getElementById("rulebookPortal").style.display = "none";
+    document.getElementById("worldPortal").style.display = "none";
+}
+
+function showPlayer(){
+    hideAllPortals();
+    document.getElementById("playerPortal").style.display = "block";
+}
+
+function showGM(){
+    hideAllPortals();
+    document.getElementById("gmPortal").style.display = "block";
+}
+
+function showRulebook(){
+    hideAllPortals();
+    document.getElementById("rulebookPortal").style.display = "block";
+}
+
+function showWorld(){
+    hideAllPortals();
+    document.getElementById("worldPortal").style.display = "block";
+}
 
 function getWeightedPower(){
     const roll = Math.random() * 100;
@@ -1170,6 +1283,110 @@ function simulateBattle(){
 
     document.getElementById("battleResult").innerText = result;
 }
+
+let currentWorldCode = null;
+let joinedWorldCode = null;
+let worldPlayers = [];
+let teamMode = false;
+
+function createWorldCode(){
+
+    let worldName =
+        document.getElementById("worldNameInput").value.trim();
+
+    if(worldName === ""){
+        worldName = "Nexus World";
+    }
+
+    let code =
+        worldName
+        .replace(/\s+/g,"")
+        .substring(0,5)
+        .toUpperCase()
+        + "-"
+        + Math.floor(1000 + Math.random() * 9000);
+
+    currentWorldCode = code;
+
+    localStorage.setItem("nexusWorldCode", code);
+    localStorage.setItem("nexusWorldName", worldName);
+
+    document.getElementById("worldCodeDisplay").innerText =
+        code;
+
+    alert("World Created: " + code);
+}
+
+function joinWorld(){
+
+    let code =
+        document.getElementById("joinWorldInput").value.trim();
+
+    if(code === ""){
+        alert("Enter a world code first.");
+        return;
+    }
+
+    joinedWorldCode = code;
+
+    document.getElementById("joinedWorldDisplay").innerText =
+        "Joined World: " + code;
+}
+
+function toggleTeamMode(){
+
+    teamMode = !teamMode;
+
+    document.getElementById("teamModeDisplay").innerText =
+        teamMode
+        ? "Mode: Team"
+        : "Mode: Solo";
+}
+
+function addHeroToWorld(){
+
+    let heroName =
+        document.getElementById("name").innerText;
+
+    let heroClass =
+        document.getElementById("heroClass").innerText;
+
+    let heroRank =
+        document.getElementById("rank").innerText;
+
+    if(heroName === "--"){
+        alert("Generate a hero first.");
+        return;
+    }
+
+    let member =
+        heroName +
+        " | " +
+        heroClass +
+        " | " +
+        heroRank +
+        " | " +
+        (teamMode ? "Team Member" : "Solo Player");
+
+    worldPlayers.push(member);
+
+    updateWorldPlayers();
+}
+
+function updateWorldPlayers(){
+
+    let display =
+        document.getElementById("worldPlayersDisplay");
+
+    if(worldPlayers.length === 0){
+        display.innerHTML = "No Players";
+        return;
+    }
+
+    display.innerHTML =
+        worldPlayers.join("<br><br>");
+}
+    
 </script>
 
 </body>
