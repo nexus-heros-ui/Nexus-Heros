@@ -73,6 +73,97 @@ input{
 .map-tile:hover{
     background:#3B82F6;
 }
+
+.world-map{
+    background:#050B18;
+    border:2px solid #2563EB;
+    border-radius:18px;
+    padding:15px;
+    max-width:1100px;
+    margin:auto;
+}
+
+.map-title{
+    color:#60A5FA;
+    font-size:32px;
+    letter-spacing:3px;
+}
+
+.map-layout{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:15px;
+}
+
+.map-board{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+}
+
+.map-zone{
+    background:#111827;
+    border:2px solid #374151;
+    border-radius:14px;
+    padding:18px;
+    min-height:85px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.map-zone:hover{
+    background:#1D4ED8;
+    transform:scale(1.03);
+}
+
+.safe-zone{
+    border-color:#22C55E;
+}
+
+.mission-zone{
+    border-color:#F97316;
+}
+
+.danger-zone{
+    border-color:#EF4444;
+}
+
+.mystery-zone{
+    border-color:#A855F7;
+}
+
+.boss-zone{
+    border-color:#EAB308;
+}
+
+.map-panel{
+    background:#111827;
+    border:1px solid #3B82F6;
+    border-radius:14px;
+    padding:15px;
+    text-align:left;
+}
+
+.character-card{
+    background:#0F172A;
+    border:1px solid #60A5FA;
+    padding:10px;
+    margin:8px 0;
+    border-radius:10px;
+}
+
+.health-bar{
+    background:#374151;
+    height:14px;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.health-fill{
+    background:#22C55E;
+    height:100%;
+    width:100%;
+}
     
 </style>
 </head>
@@ -318,48 +409,102 @@ input{
 </div>
 
 <div class="card">
-<h2>World Map</h2>
+<h2>Interactive World Map</h2>
 
-<div id="mapGrid" style="
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:8px;
-max-width:600px;
-margin:auto;
-">
+<div class="world-map">
 
-<div class="map-tile" onclick="selectMapLocation('Nexus City','Main city zone. Good for patrols, crime, and hero missions.')">🏙<br>Nexus City</div>
+<div class="map-title">NEXUS WORLD</div>
 
-<div class="map-tile" onclick="selectMapLocation('Central Bank','High-risk robbery and hostage area.')">🏦<br>Central Bank</div>
+<div class="map-layout">
 
-<div class="map-tile" onclick="selectMapLocation('Omega Lab','Secret experiments, mutations, and tech villains.')">🏭<br>Omega Lab</div>
+<div class="map-board">
 
-<div class="map-tile" onclick="selectMapLocation('Elder Forest','Hidden creatures, magic relics, and ambushes.')">🌲<br>Elder Forest</div>
+<div class="map-zone safe-zone" onclick="selectMapLocation('Nexus City','Safe Zone','Main city. Heroes, shops, missions, civilians.')">
+🏙<br><strong>Nexus City</strong><br>Safe Zone
+</div>
 
-<div class="map-tile" onclick="selectMapLocation('Titan Mountain','Boss fights, ancient caves, and powerful relics.')">⛰<br>Titan Mountain</div>
+<div class="map-zone mission-zone" onclick="selectMapLocation('Harbor District','Mission Zone','Trade, ships, smuggling, sea threats.')">
+⚓<br><strong>Harbor District</strong><br>Mission Zone
+</div>
 
-<div class="map-tile" onclick="selectMapLocation('Ancient Ruins','Lost artifacts and forgotten powers.')">🏚<br>Ancient Ruins</div>
+<div class="map-zone danger-zone" onclick="selectMapLocation('Blackgate Prison','Danger Zone','Villains, escapes, prison breaks.')">
+🚔<br><strong>Blackgate Prison</strong><br>Danger Zone
+</div>
 
-<div class="map-tile" onclick="selectMapLocation('Blackgate Prison','Villain escapes and prison breaks.')">🚔<br>Blackgate Prison</div>
+<div class="map-zone mystery-zone" onclick="selectMapLocation('Omega Labs','Mystery Zone','Experiments, mutants, strange science.')">
+🧪<br><strong>Omega Labs</strong><br>Mystery Zone
+</div>
 
-<div class="map-tile" onclick="selectMapLocation('Crash Site','Alien tech and strange energy readings.')">🛸<br>Crash Site</div>
+<div class="map-zone danger-zone" onclick="selectMapLocation('Crash Site','Danger Zone','Aliens, unknown tech, unstable signals.')">
+🛸<br><strong>Crash Site</strong><br>Danger Zone
+</div>
 
-<div class="map-tile" onclick="selectMapLocation('Dimensional Rift','Reality breaks and portal events.')">🌌<br>Dimensional Rift</div>
+<div class="map-zone mission-zone" onclick="selectMapLocation('Ancient Ruins','Mission Zone','Lost tech, secrets, relics.')">
+🏛<br><strong>Ancient Ruins</strong><br>Mission Zone
+</div>
 
-<div class="map-tile" onclick="selectMapLocation('Void Fortress','Final boss area and villain headquarters.')">🏰<br>Void Fortress</div>
+<div class="map-zone danger-zone" onclick="selectMapLocation('Wasteland Desert','Danger Zone','Bandits, scavengers, harsh travel.')">
+🏜<br><strong>Wasteland Desert</strong><br>Danger Zone
+</div>
+
+<div class="map-zone safe-zone" onclick="selectMapLocation('Hidden Sanctuary','Safe Zone','Peace, healing, training, upgrades.')">
+🛡<br><strong>Hidden Sanctuary</strong><br>Safe Zone
+</div>
+
+<div class="map-zone boss-zone" onclick="selectMapLocation('Titan Fortress','Boss Zone','Elite guards, bosses, legendary threats.')">
+🏰<br><strong>Titan Fortress</strong><br>Boss Zone
+</div>
+
+<div class="map-zone mystery-zone" onclick="selectMapLocation('Dimensional Portal','Mystery Zone','Travel, unstable reality, portals.')">
+🌀<br><strong>Dimensional Portal</strong><br>Mystery Zone
+</div>
+
+<div class="map-zone danger-zone" onclick="selectMapLocation('Power Plant','Danger Zone','Energy core, danger, sabotage.')">
+⚡<br><strong>Power Plant</strong><br>Danger Zone
+</div>
+
+<div class="map-zone boss-zone" onclick="selectMapLocation('Shadow Realm','Boss Zone','Dark magic, demons, final threats.')">
+💀<br><strong>Shadow Realm</strong><br>Boss Zone
+</div>
 
 </div>
 
-<h3>Selected Location</h3>
-<div id="selectedMapLocation">Click a location</div>
+<div class="map-panel">
 
-<h3>Location Details</h3>
-<div id="mapLocationDetails">--</div>
+<h3>Location Info</h3>
+<p><strong>Name:</strong> <span id="selectedMapLocation">None</span></p>
+<p><strong>Type:</strong> <span id="selectedMapType">--</span></p>
+<p><strong>Details:</strong> <span id="mapLocationDetails">Click a location.</span></p>
 
-<button onclick="generateMapEvent()">🎲 Generate Map Event</button>
+<hr>
 
-<div id="mapEventResult">--</div>
+<h3>World Status</h3>
+<p><strong>Threat Level:</strong> <span id="worldThreatLevel">Moderate</span></p>
+<p><strong>Active Events:</strong> <span id="activeEvents">0</span></p>
+<p><strong>Turn:</strong> <span id="worldTurn">1</span></p>
+
+<button onclick="generateFullMission()">📜 Generate Mission Here</button>
+<button onclick="nextWorldTurn()">➡ Next Turn</button>
+
 </div>
+
+</div>
+
+</div>
+</div>
+
+<div class="card">
+<h2>Active Mission</h2>
+<div id="fullMissionResult">No mission generated.</div>
+</div>
+
+<div class="card">
+<h2>Map Characters</h2>
+
+<button onclick="addCurrentHeroToMap()">➕ Add Current Hero To Map</button>
+
+<div id="mapCharactersDisplay">No characters on map.</div>
+</div>    
 
 </div>
     
@@ -1537,6 +1682,183 @@ function generateFullMission(){
         "<strong>Villain:</strong> " + villain + "<br><br>" +
         "<strong>Reward:</strong> " + reward + "<br><br>" +
         "<strong>If Heroes Fail:</strong> " + consequence;
+}
+
+let currentMapLocation = null;
+let currentMapType = null;
+let mapTurn = 1;
+let activeEventsCount = 0;
+let mapCharacters = [];
+
+function selectMapLocation(name, type, details){
+
+    currentMapLocation = name;
+    currentMapType = type;
+
+    document.getElementById("selectedMapLocation").innerText =
+        name;
+
+    document.getElementById("selectedMapType").innerText =
+        type;
+
+    document.getElementById("mapLocationDetails").innerText =
+        details;
+
+    if(document.getElementById("missionLocation")){
+        document.getElementById("missionLocation").innerText =
+            name;
+    }
+}
+
+function nextWorldTurn(){
+
+    mapTurn++;
+
+    document.getElementById("worldTurn").innerText =
+        mapTurn;
+
+    if(mapTurn % 3 === 0){
+        activeEventsCount++;
+
+        document.getElementById("activeEvents").innerText =
+            activeEventsCount;
+    }
+}
+
+function addCurrentHeroToMap(){
+
+    let heroName =
+        document.getElementById("name").innerText;
+
+    if(heroName === "--"){
+        alert("Generate a hero first.");
+        return;
+    }
+
+    let heroClass =
+        document.getElementById("heroClass").innerText;
+
+    let heroRank =
+        document.getElementById("rank").innerText;
+
+    let location =
+        currentMapLocation || "Nexus City";
+
+    let character = {
+        name: heroName,
+        heroClass: heroClass,
+        rank: heroRank,
+        location: location,
+        health: 100,
+        injuries: "None"
+    };
+
+    mapCharacters.push(character);
+
+    updateMapCharacters();
+}
+
+function updateMapCharacters(){
+
+    let display =
+        document.getElementById("mapCharactersDisplay");
+
+    if(mapCharacters.length === 0){
+        display.innerHTML =
+            "No characters on map.";
+        return;
+    }
+
+    let html = "";
+
+    mapCharacters.forEach((character, index) => {
+
+        html +=
+        "<div class='character-card'>" +
+        "<strong>" + character.name + "</strong><br>" +
+        "Class: " + character.heroClass + "<br>" +
+        "Rank: " + character.rank + "<br>" +
+        "Location: " + character.location + "<br>" +
+        "Health: " + character.health + "%<br>" +
+        "<div class='health-bar'>" +
+        "<div class='health-fill' style='width:" + character.health + "%'></div>" +
+        "</div>" +
+        "Injuries: " + character.injuries + "<br><br>" +
+
+        "<button onclick='damageCharacter(" + index + ")'>Damage</button>" +
+        "<button onclick='healCharacter(" + index + ")'>Heal</button>" +
+        "<button onclick='moveCharacterToSelected(" + index + ")'>Move Here</button>" +
+
+        "</div>";
+    });
+
+    display.innerHTML = html;
+}
+
+function damageCharacter(index){
+
+    mapCharacters[index].health -= 20;
+
+    if(mapCharacters[index].health < 0){
+        mapCharacters[index].health = 0;
+    }
+
+    if(mapCharacters[index].health <= 60){
+        mapCharacters[index].injuries =
+            "Minor Injury";
+    }
+
+    if(mapCharacters[index].health <= 30){
+        mapCharacters[index].injuries =
+            "Serious Injury";
+    }
+
+    if(mapCharacters[index].health <= 0){
+        mapCharacters[index].injuries =
+            "Defeated";
+    }
+
+    updateMapCharacters();
+}
+
+function healCharacter(index){
+
+    mapCharacters[index].health += 20;
+
+    if(mapCharacters[index].health > 100){
+        mapCharacters[index].health = 100;
+    }
+
+    if(mapCharacters[index].health > 60){
+        mapCharacters[index].injuries =
+            "None";
+    }
+
+    if(mapCharacters[index].health <= 60 &&
+       mapCharacters[index].health > 30){
+        mapCharacters[index].injuries =
+            "Minor Injury";
+    }
+
+    if(mapCharacters[index].health <= 30){
+        mapCharacters[index].injuries =
+            "Serious Injury";
+    }
+
+    updateMapCharacters();
+}
+
+function moveCharacterToSelected(index){
+
+    if(!currentMapLocation){
+        alert("Select a map location first.");
+        return;
+    }
+
+    mapCharacters[index].location =
+        currentMapLocation;
+
+    updateMapCharacters();
 }
     
 </script>
