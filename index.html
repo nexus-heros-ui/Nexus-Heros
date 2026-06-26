@@ -1558,40 +1558,6 @@ function updateWorldPlayers(){
         worldPlayers.join("<br><br>");
 }
 
-let currentMapLocation = null;
-
-function selectMapLocation(name, details){
-    
-    currentMapLocation = name;
-
-    document.getElementById("selectedMapLocation").innerText =
-        name;
-
-    document.getElementById("mapLocationDetails").innerText =
-        details;
-
-    document.getElementById("missionLocation").innerText = name;
-}
-
-function generateMapEvent(){
-
-    if(!currentMapLocation){
-        alert("Click a map location first.");
-        return;
-    }
-
-    const mapEvents = [
-        "Villain Ambush",
-        "Civilian Rescue",
-        "Hidden Relic Found",
-        "Enemy Patrol",
-        "Power Surge",
-        "Trap Activated",
-        "Boss Appears",
-        "Secret Mission Unlocked",
-        "Rare Equipment Found",
-        "Dimensional Distortion"
-    ];
 
     document.getElementById("mapEventResult").innerText =
         currentMapLocation + ": " + pick(mapEvents);
