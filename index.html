@@ -6,165 +6,29 @@
 <title>Nexus Heroes Alpha</title>
 
 <style>
-body{
-    background:#111827;
-    color:white;
-    font-family:Arial,sans-serif;
-    text-align:center;
-    padding:20px;
-    margin:0;
-}
-
-h1{ color:#3B82F6; }
-
-button{
-    background:#1F2937;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    margin:5px;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:15px;
-}
-
-button:hover{ background:#3B82F6; }
-
-input{
-    padding:10px;
-    border-radius:8px;
-    border:none;
-    margin:5px;
-}
-
-.card{
-    background:#1F2937;
-    max-width:650px;
-    margin:20px auto;
-    padding:20px;
-    border-radius:15px;
-}
-
-.section{ margin-top:20px; }
-
-.result{
-    min-height:24px;
-    color:#93C5FD;
-    margin:8px 0;
-}
-
-.rulebook-item{
-    text-align:left;
-    background:#111827;
-    padding:12px;
-    margin:8px 0;
-    border-radius:8px;
-}
-
-.map-tile{
-    background:#111827;
-    padding:18px;
-    border-radius:10px;
-    border:1px solid #3B82F6;
-    min-height:60px;
-    cursor:pointer;
-}
-
-.map-tile:hover{
-    background:#3B82F6;
-}
-
-.world-map{
-    background:#050B18;
-    border:2px solid #2563EB;
-    border-radius:18px;
-    padding:15px;
-    max-width:1100px;
-    margin:auto;
-}
-
-.map-title{
-    color:#60A5FA;
-    font-size:32px;
-    letter-spacing:3px;
-}
-
-.map-layout{
-    display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:15px;
-}
-
-.map-board{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:10px;
-}
-
-.map-zone{
-    background:#111827;
-    border:2px solid #374151;
-    border-radius:14px;
-    padding:18px;
-    min-height:85px;
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.map-zone:hover{
-    background:#1D4ED8;
-    transform:scale(1.03);
-}
-
-.safe-zone{
-    border-color:#22C55E;
-}
-
-.mission-zone{
-    border-color:#F97316;
-}
-
-.danger-zone{
-    border-color:#EF4444;
-}
-
-.mystery-zone{
-    border-color:#A855F7;
-}
-
-.boss-zone{
-    border-color:#EAB308;
-}
-
-.map-panel{
-    background:#111827;
-    border:1px solid #3B82F6;
-    border-radius:14px;
-    padding:15px;
-    text-align:left;
-}
-
-.character-card{
-    background:#0F172A;
-    border:1px solid #60A5FA;
-    padding:10px;
-    margin:8px 0;
-    border-radius:10px;
-}
-
-.health-bar{
-    background:#374151;
-    height:14px;
-    border-radius:10px;
-    overflow:hidden;
-}
-
-.health-fill{
-    background:#22C55E;
-    height:100%;
-    width:100%;
-}
-    
+body{background:#111827;color:white;font-family:Arial,sans-serif;text-align:center;padding:20px;margin:0;}
+h1{color:#3B82F6;}
+button{background:#1F2937;color:white;border:none;padding:12px 20px;margin:5px;border-radius:10px;cursor:pointer;font-size:15px;}
+button:hover{background:#3B82F6;}
+input{padding:10px;border-radius:8px;border:none;margin:5px;}
+.card{background:#1F2937;max-width:700px;margin:20px auto;padding:20px;border-radius:15px;}
+.result{min-height:24px;color:#93C5FD;margin:8px 0;}
+.rulebook-item{text-align:left;background:#111827;padding:12px;margin:8px 0;border-radius:8px;}
+.world-map{background:#050B18;border:2px solid #2563EB;border-radius:18px;padding:15px;max-width:1100px;margin:auto;}
+.map-title{color:#60A5FA;font-size:32px;letter-spacing:3px;}
+.map-layout{display:grid;grid-template-columns:2fr 1fr;gap:15px;}
+.map-board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.map-zone{background:#111827;border:2px solid #374151;border-radius:14px;padding:18px;min-height:85px;cursor:pointer;}
+.map-zone:hover{background:#1D4ED8;}
+.safe-zone{border-color:#22C55E;}
+.mission-zone{border-color:#F97316;}
+.danger-zone{border-color:#EF4444;}
+.mystery-zone{border-color:#A855F7;}
+.boss-zone{border-color:#EAB308;}
+.map-panel{background:#111827;border:1px solid #3B82F6;border-radius:14px;padding:15px;text-align:left;}
+.character-card{background:#0F172A;border:1px solid #60A5FA;padding:10px;margin:8px 0;border-radius:10px;}
+.health-bar{background:#374151;height:14px;border-radius:10px;overflow:hidden;}
+.health-fill{background:#22C55E;height:100%;width:100%;}
 </style>
 </head>
 
@@ -174,20 +38,13 @@ input{
 
 <button onclick="showPlayer()">Player Portal</button>
 <button onclick="showGM()">GM Portal</button>
+<button onclick="showWorld()">World</button>
 <button onclick="showRulebook()">Rulebook</button>
 
-<!-- PLAYER PORTAL -->
 <div id="playerPortal">
-
-<p>Create Heroes. Build Teams. Shape the Universe.</p>
-
 <div class="card">
 <h2>Hero Generator</h2>
-
-<input id="customName" placeholder="Enter Hero Name">
-
-<br>
-
+<input id="customName" placeholder="Enter Hero Name"><br>
 <button onclick="generateRandomName()">🎲 Random Name</button>
 <button onclick="generateHero()">⚡ Generate Entire Hero</button>
 <button onclick="saveHero()">💾 Save Hero</button>
@@ -196,7 +53,6 @@ input{
 
 <div class="card">
 <h2>Power Wheels</h2>
-
 <h3>Power Chance</h3>
 <div id="powerChanceResult" class="result">--</div>
 <button onclick="spinPowerChanceWheel()">🎡 Spin Power Chance</button>
@@ -212,74 +68,41 @@ input{
 
 <div class="card">
 <h2>Stat Wheels</h2>
-
 <div id="strengthWheelResult" class="result">Strength: --</div>
-<button onclick="spinStatWheel('Strength', strengthLevels, 'currentStrength', 'strengthWheelResult')">🎡 Spin Strength</button>
-
+<button onclick="spinStatWheel('Strength',strengthLevels,'currentStrength','strengthWheelResult')">🎡 Spin Strength</button>
 <div id="speedWheelResult" class="result">Speed: --</div>
-<button onclick="spinStatWheel('Speed', speedLevels, 'currentSpeed', 'speedWheelResult')">🎡 Spin Speed</button>
-
+<button onclick="spinStatWheel('Speed',speedLevels,'currentSpeed','speedWheelResult')">🎡 Spin Speed</button>
 <div id="durabilityWheelResult" class="result">Durability: --</div>
-<button onclick="spinStatWheel('Durability', durabilityLevels, 'currentDurability', 'durabilityWheelResult')">🎡 Spin Durability</button>
-
+<button onclick="spinStatWheel('Durability',durabilityLevels,'currentDurability','durabilityWheelResult')">🎡 Spin Durability</button>
 <div id="intelligenceWheelResult" class="result">Intelligence: --</div>
-<button onclick="spinStatWheel('Intelligence', intelligenceLevels, 'currentIntelligence', 'intelligenceWheelResult')">🎡 Spin Intelligence</button>
-
+<button onclick="spinStatWheel('Intelligence',intelligenceLevels,'currentIntelligence','intelligenceWheelResult')">🎡 Spin Intelligence</button>
 <div id="combatWheelResult" class="result">Combat: --</div>
-<button onclick="spinStatWheel('Combat', combatLevels, 'currentCombat', 'combatWheelResult')">🎡 Spin Combat</button>
-
+<button onclick="spinStatWheel('Combat',combatLevels,'currentCombat','combatWheelResult')">🎡 Spin Combat</button>
 <div id="staminaWheelResult" class="result">Stamina: --</div>
-<button onclick="spinStatWheel('Stamina', staminaLevels, 'currentStamina', 'staminaWheelResult')">🎡 Spin Stamina</button>
-
+<button onclick="spinStatWheel('Stamina',staminaLevels,'currentStamina','staminaWheelResult')">🎡 Spin Stamina</button>
 <div id="powerControlWheelResult" class="result">Power Control: --</div>
-<button onclick="spinStatWheel('Power Control', powerControlLevels, 'currentPowerControl', 'powerControlWheelResult')">🎡 Spin Power Control</button>
+<button onclick="spinStatWheel('Power Control',powerControlLevels,'currentPowerControl','powerControlWheelResult')">🎡 Spin Power Control</button>
 </div>
 
 <div class="card">
 <h2>Additional Wheels</h2>
-
-<h3>Species</h3>
-<div id="speciesWheelResult" class="result">--</div>
-<button onclick="spinSpeciesWheel()">🎡 Spin Species</button>
-
-<h3>Origin</h3>
-<div id="originWheelResult" class="result">--</div>
-<button onclick="spinOriginWheel()">🎡 Spin Origin</button>
-
-<h3>Alignment</h3>
-<div id="alignmentWheelResult" class="result">--</div>
-<button onclick="spinAlignmentWheel()">🎡 Spin Alignment</button>
-
-<h3>Equipment Chance</h3>
-<div id="equipmentChanceResult" class="result">--</div>
-<button onclick="spinEquipmentChanceWheel()">🎡 Spin Equipment Chance</button>
-
-<h3>Equipment Count</h3>
-<div id="equipmentCountResult" class="result">--</div>
-<button onclick="spinEquipmentCountWheel()">🎡 Spin Equipment Count</button>
-
-<h3>Equipment Wheel</h3>
-<div id="equipmentWheelResult" class="result">--</div>
-<button onclick="spinEquipmentWheel()">🎡 Spin Equipment</button>
-
-<h3>Weakness Count</h3>
-<div id="weaknessCountResult" class="result">--</div>
-<button onclick="spinWeaknessCountWheel()">🎡 Spin Weakness Count</button>
-
-<h3>Weakness Wheel</h3>
-<div id="weaknessWheelResult" class="result">--</div>
-<button onclick="spinWeaknessWheel()">🎡 Spin Weakness</button>
+<h3>Species</h3><div id="speciesWheelResult" class="result">--</div><button onclick="spinSpeciesWheel()">🎡 Spin Species</button>
+<h3>Origin</h3><div id="originWheelResult" class="result">--</div><button onclick="spinOriginWheel()">🎡 Spin Origin</button>
+<h3>Alignment</h3><div id="alignmentWheelResult" class="result">--</div><button onclick="spinAlignmentWheel()">🎡 Spin Alignment</button>
+<h3>Equipment Chance</h3><div id="equipmentChanceResult" class="result">--</div><button onclick="spinEquipmentChanceWheel()">🎡 Spin Equipment Chance</button>
+<h3>Equipment Count</h3><div id="equipmentCountResult" class="result">--</div><button onclick="spinEquipmentCountWheel()">🎡 Spin Equipment Count</button>
+<h3>Equipment Wheel</h3><div id="equipmentWheelResult" class="result">--</div><button onclick="spinEquipmentWheel()">🎡 Spin Equipment</button>
+<h3>Weakness Count</h3><div id="weaknessCountResult" class="result">--</div><button onclick="spinWeaknessCountWheel()">🎡 Spin Weakness Count</button>
+<h3>Weakness Wheel</h3><div id="weaknessWheelResult" class="result">--</div><button onclick="spinWeaknessWheel()">🎡 Spin Weakness</button>
 </div>
 
 <div class="card">
 <h2>Hero Sheet</h2>
-
 <p><strong>Name:</strong> <span id="name">--</span></p>
 <p><strong>Species:</strong> <span id="species">--</span></p>
 <p><strong>Origin:</strong> <span id="origin">--</span></p>
 <p><strong>Alignment:</strong> <span id="alignment">--</span></p>
 <p><strong>Power Count:</strong> <span id="powerCount">--</span></p>
-
 <h3>Stats</h3>
 <p><strong>Strength:</strong> <span id="strength">--</span></p>
 <p><strong>Speed:</strong> <span id="speed">--</span></p>
@@ -288,52 +111,35 @@ input{
 <p><strong>Combat:</strong> <span id="combat">--</span></p>
 <p><strong>Stamina:</strong> <span id="stamina">--</span></p>
 <p><strong>Power Control:</strong> <span id="powerControl">--</span></p>
-
 <p><strong>Power Score:</strong> <span id="powerScore">--</span></p>
 <p><strong>Archetype:</strong> <span id="archetype">--</span></p>
 <p><strong>Class:</strong> <span id="heroClass">--</span></p>
 <p><strong>Rank:</strong> <span id="rank">--</span></p>
-
-<h3>Equipment</h3>
-<div id="equipment">--</div>
-
-<h3>Powers</h3>
-<div id="powers">--</div>
-
-<h3>Weaknesses</h3>
-<div id="weaknesses">--</div>
+<h3>Equipment</h3><div id="equipment">--</div>
+<h3>Powers</h3><div id="powers">--</div>
+<h3>Weaknesses</h3><div id="weaknesses">--</div>
 </div>
 
 <div class="card">
 <h2>Team Builder</h2>
-
-<input id="teamName" placeholder="Enter Team Name">
-
-<br>
-
+<input id="teamName" placeholder="Enter Team Name"><br>
 <button onclick="addToTeam()">➕ Add Current Hero</button>
 <button onclick="clearTeam()">🗑 Clear Team</button>
-
 <h3>Team Members</h3>
 <div id="teamMembers">No Members</div>
 </div>
-
 </div>
 
-<!-- GM PORTAL -->
 <div id="gmPortal" style="display:none;">
-
 <div class="card">
 <h2>GM Portal</h2>
-
 <button onclick="generateVillain()">😈 Generate Villain</button>
-<button onclick="generateMission()">📜 Generate Mission</button>
+<button onclick="generateFullMission()">📜 Generate Full Mission</button>
 <button onclick="simulateBattle()">⚔ Battle Simulator</button>
 </div>
 
 <div class="card">
 <h2>Villain Sheet</h2>
-
 <p><strong>Name:</strong> <span id="villainName">--</span></p>
 <p><strong>Species:</strong> <span id="villainSpecies">--</span></p>
 <p><strong>Origin:</strong> <span id="villainOrigin">--</span></p>
@@ -345,14 +151,9 @@ input{
 
 <div class="card">
 <h2>Mission Generator</h2>
-
 <p><strong>Selected Location:</strong></p>
 <div id="missionLocation">No location selected</div>
-
-<button onclick="generateFullMission()">
-📜 Generate Full Mission
-</button>
-
+<button onclick="generateFullMission()">📜 Generate Full Mission</button>
 <h3>Mission Brief</h3>
 <div id="fullMissionResult">--</div>
 </div>
@@ -361,1467 +162,235 @@ input{
 <h2>Battle Result</h2>
 <div id="battleResult">--</div>
 </div>
-
 </div>
 
-<button onclick="showWorld()">World</button>
-
 <div id="worldPortal" style="display:none;">
-
 <div class="card">
 <h2>World Creator</h2>
-
-<input id="worldNameInput" placeholder="World Name">
-
-<br>
-
+<input id="worldNameInput" placeholder="World Name"><br>
 <button onclick="createWorldCode()">🌍 Create World Code</button>
-
 <h3>World Code</h3>
 <div id="worldCodeDisplay">--</div>
 </div>
 
 <div class="card">
 <h2>Join World</h2>
-
-<input id="joinWorldInput" placeholder="Enter World Code">
-
-<br>
-
+<input id="joinWorldInput" placeholder="Enter World Code"><br>
 <button onclick="joinWorld()">🚪 Join World</button>
-
 <div id="joinedWorldDisplay">Not Joined</div>
 </div>
 
 <div class="card">
 <h2>GM Team Control</h2>
-
 <button onclick="toggleTeamMode()">🔁 Toggle Team / Solo</button>
-
-<div id="teamModeDisplay">Mode: Solo</div>
-
-<br>
-
+<div id="teamModeDisplay">Mode: Solo</div><br>
 <button onclick="addHeroToWorld()">➕ Add Current Hero To World</button>
-
 <h3>World Players</h3>
 <div id="worldPlayersDisplay">No Players</div>
 </div>
 
 <div class="card">
 <h2>Interactive World Map</h2>
-
 <div class="world-map">
-
 <div class="map-title">NEXUS WORLD</div>
-
 <div class="map-layout">
-
 <div class="map-board">
-
-<div class="map-zone safe-zone" onclick="selectMapLocation('Nexus City','Safe Zone','Main city. Heroes, shops, missions, civilians.')">
-🏙<br><strong>Nexus City</strong><br>Safe Zone
-</div>
-
-<div class="map-zone mission-zone" onclick="selectMapLocation('Harbor District','Mission Zone','Trade, ships, smuggling, sea threats.')">
-⚓<br><strong>Harbor District</strong><br>Mission Zone
-</div>
-
-<div class="map-zone danger-zone" onclick="selectMapLocation('Blackgate Prison','Danger Zone','Villains, escapes, prison breaks.')">
-🚔<br><strong>Blackgate Prison</strong><br>Danger Zone
-</div>
-
-<div class="map-zone mystery-zone" onclick="selectMapLocation('Omega Labs','Mystery Zone','Experiments, mutants, strange science.')">
-🧪<br><strong>Omega Labs</strong><br>Mystery Zone
-</div>
-
-<div class="map-zone danger-zone" onclick="selectMapLocation('Crash Site','Danger Zone','Aliens, unknown tech, unstable signals.')">
-🛸<br><strong>Crash Site</strong><br>Danger Zone
-</div>
-
-<div class="map-zone mission-zone" onclick="selectMapLocation('Ancient Ruins','Mission Zone','Lost tech, secrets, relics.')">
-🏛<br><strong>Ancient Ruins</strong><br>Mission Zone
-</div>
-
-<div class="map-zone danger-zone" onclick="selectMapLocation('Wasteland Desert','Danger Zone','Bandits, scavengers, harsh travel.')">
-🏜<br><strong>Wasteland Desert</strong><br>Danger Zone
-</div>
-
-<div class="map-zone safe-zone" onclick="selectMapLocation('Hidden Sanctuary','Safe Zone','Peace, healing, training, upgrades.')">
-🛡<br><strong>Hidden Sanctuary</strong><br>Safe Zone
-</div>
-
-<div class="map-zone boss-zone" onclick="selectMapLocation('Titan Fortress','Boss Zone','Elite guards, bosses, legendary threats.')">
-🏰<br><strong>Titan Fortress</strong><br>Boss Zone
-</div>
-
-<div class="map-zone mystery-zone" onclick="selectMapLocation('Dimensional Portal','Mystery Zone','Travel, unstable reality, portals.')">
-🌀<br><strong>Dimensional Portal</strong><br>Mystery Zone
-</div>
-
-<div class="map-zone danger-zone" onclick="selectMapLocation('Power Plant','Danger Zone','Energy core, danger, sabotage.')">
-⚡<br><strong>Power Plant</strong><br>Danger Zone
-</div>
-
-<div class="map-zone boss-zone" onclick="selectMapLocation('Shadow Realm','Boss Zone','Dark magic, demons, final threats.')">
-💀<br><strong>Shadow Realm</strong><br>Boss Zone
-</div>
-
+<div class="map-zone safe-zone" onclick="selectMapLocation('Nexus City','Safe Zone','Main city. Heroes, shops, missions, civilians.')">🏙<br><strong>Nexus City</strong><br>Safe Zone</div>
+<div class="map-zone mission-zone" onclick="selectMapLocation('Harbor District','Mission Zone','Trade, ships, smuggling, sea threats.')">⚓<br><strong>Harbor District</strong><br>Mission Zone</div>
+<div class="map-zone danger-zone" onclick="selectMapLocation('Blackgate Prison','Danger Zone','Villains, escapes, prison breaks.')">🚔<br><strong>Blackgate Prison</strong><br>Danger Zone</div>
+<div class="map-zone mystery-zone" onclick="selectMapLocation('Omega Labs','Mystery Zone','Experiments, mutants, strange science.')">🧪<br><strong>Omega Labs</strong><br>Mystery Zone</div>
+<div class="map-zone danger-zone" onclick="selectMapLocation('Crash Site','Danger Zone','Aliens, unknown tech, unstable signals.')">🛸<br><strong>Crash Site</strong><br>Danger Zone</div>
+<div class="map-zone mission-zone" onclick="selectMapLocation('Ancient Ruins','Mission Zone','Lost tech, secrets, relics.')">🏛<br><strong>Ancient Ruins</strong><br>Mission Zone</div>
+<div class="map-zone danger-zone" onclick="selectMapLocation('Wasteland Desert','Danger Zone','Bandits, scavengers, harsh travel.')">🏜<br><strong>Wasteland Desert</strong><br>Danger Zone</div>
+<div class="map-zone safe-zone" onclick="selectMapLocation('Hidden Sanctuary','Safe Zone','Peace, healing, training, upgrades.')">🛡<br><strong>Hidden Sanctuary</strong><br>Safe Zone</div>
+<div class="map-zone boss-zone" onclick="selectMapLocation('Titan Fortress','Boss Zone','Elite guards, bosses, legendary threats.')">🏰<br><strong>Titan Fortress</strong><br>Boss Zone</div>
+<div class="map-zone mystery-zone" onclick="selectMapLocation('Dimensional Portal','Mystery Zone','Travel, unstable reality, portals.')">🌀<br><strong>Dimensional Portal</strong><br>Mystery Zone</div>
+<div class="map-zone danger-zone" onclick="selectMapLocation('Power Plant','Danger Zone','Energy core, danger, sabotage.')">⚡<br><strong>Power Plant</strong><br>Danger Zone</div>
+<div class="map-zone boss-zone" onclick="selectMapLocation('Shadow Realm','Boss Zone','Dark magic, demons, final threats.')">💀<br><strong>Shadow Realm</strong><br>Boss Zone</div>
 </div>
 
 <div class="map-panel">
-
 <h3>Location Info</h3>
 <p><strong>Name:</strong> <span id="selectedMapLocation">None</span></p>
 <p><strong>Type:</strong> <span id="selectedMapType">--</span></p>
 <p><strong>Details:</strong> <span id="mapLocationDetails">Click a location.</span></p>
-
 <hr>
-
 <h3>World Status</h3>
 <p><strong>Threat Level:</strong> <span id="worldThreatLevel">Moderate</span></p>
 <p><strong>Active Events:</strong> <span id="activeEvents">0</span></p>
 <p><strong>Turn:</strong> <span id="worldTurn">1</span></p>
-
 <button onclick="generateFullMission()">📜 Generate Mission Here</button>
 <button onclick="nextWorldTurn()">➡ Next Turn</button>
-
-</div>
-
-</div>
-
 </div>
 </div>
-
-<div class="card">
-<h2>Active Mission</h2>
-<div id="fullMissionResult">No mission generated.</div>
+</div>
 </div>
 
 <div class="card">
 <h2>Map Characters</h2>
-
 <button onclick="addCurrentHeroToMap()">➕ Add Current Hero To Map</button>
-
 <div id="mapCharactersDisplay">No characters on map.</div>
-</div>    
-
 </div>
-    
-<!-- RULEBOOK -->
-<div id="rulebookPortal" style="display:none;">
+</div>
 
+<div id="rulebookPortal" style="display:none;">
 <div class="card">
 <h2>Nexus Heroes Rulebook</h2>
-
-<h3>1. Goal of the Game</h3>
-<div class="rulebook-item">
-Create heroes, build teams, complete missions, fight villains, earn rewards, and grow stronger through the campaign.
+<div class="rulebook-item">Create heroes, build teams, complete missions, fight villains, earn rewards, and grow stronger through the campaign.</div>
+<h3>How Fighting Works</h3>
+<div class="rulebook-item">Combat is turn-based. Each character gets one turn per round. On your turn, choose Attack, Defend, Use Power, Use Equipment, Help Ally, or Move.</div>
+<h3>Combat Rolls</h3>
+<div class="rulebook-item">Use Strength for melee, Speed for dodging, Combat for fighting skill, Power Control for powers, and Intelligence for tactics or tech. The GM decides difficulty.</div>
+<h3>Damage</h3>
+<div class="rulebook-item">Compare the attacker’s stat against the defender’s Durability, Speed, or defense. The GM decides light, serious, critical, or battle-ending damage.</div>
+<h3>Power Rarity</h3>
+<div class="rulebook-item">Common 50%, Uncommon 30%, Rare 14%, Epic 4.5%, Legendary 1.3%, Nexus 0.2%.</div>
+<h3>GM Final Rule</h3>
+<div class="rulebook-item">The GM has final say on unclear rules, power limits, mission results, rewards, and campaign consequences.</div>
 </div>
-
-<h3>2. Player and GM Roles</h3>
-<div class="rulebook-item">
-<strong>Players:</strong> Create heroes, make choices, fight battles, complete missions, and build teams.<br><br>
-<strong>GM:</strong> Controls villains, missions, rewards, story events, battles, consequences, and world rules.
-</div>
-
-<h3>3. Hero Creation</h3>
-<div class="rulebook-item">
-1. Choose or generate a name.<br>
-2. Spin Species, Origin, and Alignment.<br>
-3. Spin Power Chance.<br>
-4. If powers are granted, spin Power Count.<br>
-5. Spin Power Wheel once for each power slot.<br>
-6. Spin all stat wheels.<br>
-7. Spin Equipment Chance, Count, and Equipment if granted.<br>
-8. Spin Weakness Count and Weaknesses.<br>
-9. Press Generate Entire Hero.
-</div>
-
-<h3>4. Stats</h3>
-<div class="rulebook-item">
-Heroes have 7 stats: Strength, Speed, Durability, Intelligence, Combat, Stamina, and Power Control. Each stat ranks from 1 to 14.
-</div>
-
-<h3>5. Power Score and Rank</h3>
-<div class="rulebook-item">
-Power Score is all 7 stat numbers added together.<br><br>
-Ranks:<br>
-Street Hero → Enhanced Hero → Super Hero → Champion → Omega Hero → Cosmic Hero → Nexus Ascendant
-</div>
-
-<h3>6. How Fighting Works</h3>
-<div class="rulebook-item">
-Combat is turn-based. Each character gets one turn per round. On your turn, you may usually do one main action and one movement action.
-</div>
-
-<h3>7. Turn Actions</h3>
-<div class="rulebook-item">
-On your turn you may choose one:<br><br>
-<strong>Attack:</strong> Strike, shoot, blast, or use a power offensively.<br>
-<strong>Defend:</strong> Block, dodge, shield, or reduce incoming damage.<br>
-<strong>Use Power:</strong> Use a power creatively outside a normal attack.<br>
-<strong>Use Equipment:</strong> Activate a weapon, armor, relic, or artifact.<br>
-<strong>Help Ally:</strong> Give another hero an advantage.<br>
-<strong>Move:</strong> Change position, escape, chase, fly, teleport, or take cover.
-</div>
-
-<h3>8. Combat Rolls</h3>
-<div class="rulebook-item">
-To attack, roll or compare using the most relevant stat:<br><br>
-Strength for melee power.<br>
-Speed for dodging or fast attacks.<br>
-Combat for fighting skill.<br>
-Power Control for powers.<br>
-Intelligence for tactics or tech.<br><br>
-The GM decides the difficulty based on the enemy and situation.
-</div>
-
-<h3>9. Damage Rules</h3>
-<div class="rulebook-item">
-If an attack succeeds, compare the attacker’s relevant stat against the defender’s Durability, Speed, or defensive power. Stronger attacks cause heavier damage. The GM decides if damage is light, serious, critical, or battle-ending.
-</div>
-
-<h3>10. Defeat</h3>
-<div class="rulebook-item">
-A defeated character is not always dead. They may be knocked out, captured, forced to retreat, badly injured, or temporarily removed from battle. Death should only happen if the GM and story allow it.
-</div>
-
-<h3>11. Powers</h3>
-<div class="rulebook-item">
-Powers can be used in combat, missions, movement, defense, investigation, or roleplay. Strong powers still require Power Control. Overpowered powers are rare and should have GM limits.
-</div>
-
-<h3>12. Power Rarity</h3>
-<div class="rulebook-item">
-Common: 50%<br>
-Uncommon: 30%<br>
-Rare: 14%<br>
-Epic: 4.5%<br>
-Legendary: 1.3%<br>
-Nexus / Extreme: 0.2%
-</div>
-
-<h3>13. Equipment Rules</h3>
-<div class="rulebook-item">
-A hero must win the Equipment Chance Wheel before gaining equipment. If equipment is granted, spin Equipment Count, then spin Equipment once for each item. Equipment can be earned, gifted, traded item-for-item, stolen, damaged, upgraded, or destroyed if the GM allows it.
-</div>
-
-<h3>14. Weakness Rules</h3>
-<div class="rulebook-item">
-Weaknesses are flaws, limits, or dangers connected to the hero. The GM may use weaknesses during missions, battles, or story events. Weaknesses should make the game harder but not make the hero useless.
-</div>
-
-<h3>15. Teams</h3>
-<div class="rulebook-item">
-Players can form teams. Team size is normally 5 heroes max. Teams can complete harder missions, fight stronger villains, and enter PvP battles if allowed.
-</div>
-
-<h3>16. PvP Rules</h3>
-<div class="rulebook-item">
-PvP is allowed only if the GM allows it. Both players choose actions, compare relevant stats, and the GM decides results. PvP should be fair and not ruin the campaign.
-</div>
-
-<h3>17. Missions</h3>
-<div class="rulebook-item">
-The GM generates or creates missions. Missions have objectives, enemies, danger, rewards, and consequences. Winning missions can give equipment, upgrades, reputation, or story progress.
-</div>
-
-<h3>18. Villains</h3>
-<div class="rulebook-item">
-Villains are controlled by the GM. Villains have ranks, power scores, classes, missions, and threat levels. Stronger villains should require stronger heroes or teams.
-</div>
-
-<h3>19. Battle Simulator</h3>
-<div class="rulebook-item">
-The Battle Simulator compares Hero Power Score against Villain Power Score with a random battle bonus. It gives a quick result: Hero Victory, Villain Victory, or Draw.
-</div>
-
-<h3>20. Rewards</h3>
-<div class="rulebook-item">
-Rewards can include credits, rare equipment, epic equipment, legendary equipment, artifacts, relics, power upgrades, reputation, bonus stat points, or team resources.
-</div>
-
-<h3>21. Campaign Modes</h3>
-<div class="rulebook-item">
-<strong>Standard Campaign:</strong> Normal story campaign with missions and villains.<br><br>
-<strong>Free Campaign:</strong> Endless campaign where threats keep getting stronger.<br><br>
-<strong>Power Campaign:</strong> Heroes compete to become the strongest and possibly rule.
-</div>
-
-<h3>22. Trading</h3>
-<div class="rulebook-item">
-There is no full marketplace. Players may trade item-for-item or gift items if the GM allows it.
-</div>
-
-<h3>23. GM Final Rule</h3>
-<div class="rulebook-item">
-The GM has final say on unclear rules, power limits, mission results, villain actions, rewards, and campaign consequences.
-</div>
-
-<h2>Powers Reference</h2>
-
-<div class="rulebook-item"><strong>Enhanced Strength:</strong> Increased lifting, striking, and grappling power.</div>
-<div class="rulebook-item"><strong>Enhanced Speed:</strong> Faster movement and reaction time.</div>
-<div class="rulebook-item"><strong>Flight:</strong> Allows air travel and aerial combat.</div>
-<div class="rulebook-item"><strong>Regeneration:</strong> Heals damage over time.</div>
-<div class="rulebook-item"><strong>Invulnerability:</strong> Greatly reduces physical damage.</div>
-<div class="rulebook-item"><strong>Telepathy:</strong> Read, sense, or send thoughts.</div>
-<div class="rulebook-item"><strong>Telekinesis:</strong> Move objects with the mind.</div>
-<div class="rulebook-item"><strong>Teleportation:</strong> Instantly move to another place.</div>
-<div class="rulebook-item"><strong>Reality Warping:</strong> Change reality in GM-approved ways.</div>
-<div class="rulebook-item"><strong>Existence Erasure:</strong> Extremely rare ability to erase a target from existence.</div>
-<div class="rulebook-item"><strong>Nexus Authority:</strong> Highest-level Nexus energy control.</div>
-
-<h2>Equipment Reference</h2>
-
-<div class="rulebook-item"><strong>Energy Sword:</strong> Energy melee weapon.</div>
-<div class="rulebook-item"><strong>Plasma Blade:</strong> Superheated cutting weapon.</div>
-<div class="rulebook-item"><strong>Gravity Hammer:</strong> Creates gravity impacts.</div>
-<div class="rulebook-item"><strong>Combat Rifle:</strong> Standard ranged weapon.</div>
-<div class="rulebook-item"><strong>Pulse Rifle:</strong> Fires energy pulses.</div>
-<div class="rulebook-item"><strong>Energy Shield:</strong> Creates a defensive barrier.</div>
-<div class="rulebook-item"><strong>Power Armor:</strong> Boosts strength and defense.</div>
-<div class="rulebook-item"><strong>Celestial Armor:</strong> Cosmic-level armor.</div>
-<div class="rulebook-item"><strong>Reality Core:</strong> Stabilizes or alters reality effects.</div>
-<div class="rulebook-item"><strong>World Relic:</strong> Rare artifact with GM-created world-level effects.</div>
-
-</div>
-</div>
-    
 </div>
 
 <script>
-function pick(array){
-    return array[Math.floor(Math.random() * array.length)];
-}
+function pick(array){return array[Math.floor(Math.random()*array.length)];}
 
-const names = [
-    "Nova Strike","Void Hunter","Solar Sentinel","Titan Blade",
-    "Shadow Pulse","Iron Phantom","Quantum Knight","Starbreaker",
-    "Nexus Reaper","Eclipse Guardian"
-];
+const names=["Nova Strike","Void Hunter","Solar Sentinel","Titan Blade","Shadow Pulse","Iron Phantom","Quantum Knight","Starbreaker","Nexus Reaper","Eclipse Guardian"];
+const species=["Human","Mutant","Enhanced Human","Inhuman","Alien","Synthetic","Ascended Being"];
+const origins=["Natural Birth","Scientific Accident","Artificial Enhancement","Technology","Magic","Cosmic Energy","Elite Training"];
+const alignments=["Pure Hero","Idealistic Hero","Traditional Hero","Reluctant Hero","Anti-Hero","Independent Hero","Neutral","Mercenary","Morally Gray","Anti-Villain","Villain With Code","Opportunistic Villain","Pure Villain","Cosmic Evil"];
 
-const species = [
-    "Human","Mutant","Enhanced Human","Inhuman",
-    "Alien","Synthetic","Ascended Being"
-];
+const commonPowers=["Enhanced Strength","Enhanced Speed","Flight","Regeneration","Invulnerability","Force Fields","Fire Manipulation","Ice Manipulation","Energy Projection","Shapeshifting"];
+const uncommonPowers=["Super Strength","Super Speed","Telepathy","Telekinesis","Technopathy","Teleportation","Combat Instinct","Animal Control","Sonic Blast","Light Manipulation"];
+const rarePowers=["Gravity Manipulation","Weather Control","Shadow Manipulation","Metal Manipulation","Plant Control","Mind Control","Invisibility","Intangibility","Size Changing","Energy Absorption"];
+const epicPowers=["Time Manipulation","Dimensional Travel","Cosmic Energy","Matter Manipulation","Probability Manipulation","Soul Manipulation","Power Absorption"];
+const legendaryPowers=["Reality Warping","Immortality","Universal Energy Control","Space Manipulation","Creation Powers","Absolute Regeneration"];
+const nexusPowers=["Existence Erasure","Nexus Authority","Infinite Evolution","Omnipresence","Omniscience","Multiversal Control"];
 
-const origins = [
-    "Natural Birth","Scientific Accident","Artificial Enhancement",
-    "Technology","Magic","Cosmic Energy","Elite Training"
-];
+const equipmentList=["Energy Sword","Plasma Blade","Photon Saber","Gravity Hammer","War Hammer","Battle Axe","Combat Axe","Energy Axe","Shock Mace","Power Mace","Combat Spear","Photon Lance","Halberd","Glaive","Trident","Combat Staff","Energy Staff","Rune Staff","Storm Staff","Celestial Staff","Twin Daggers","Energy Daggers","Void Daggers","Crystal Daggers","Combat Knives","Hunter Bow","Photon Bow","War Crossbow","Combat Rifle","Pulse Rifle","Particle Rifle","Gravity Rifle","Heavy Cannon","Plasma Cannon","Void Cannon","Energy Shield","Combat Shield","Tower Shield","Rune Shield","Celestial Shield","Power Armor","Titan Armor","Battle Armor","Assault Armor","Shock Armor","Guardian Armor","Void Armor","Celestial Armor","Adaptive Armor","Warplate Armor","Mystic Orb","Power Crystal","Soul Crystal","Energy Core","Reality Core","Void Core","Rune Stone","Ancient Totem","Cosmic Prism","Eternal Shard","Celestial Relic","Ancient Relic","Forgotten Relic","Void Relic","Titan Relic","Storm Relic","Dragon Relic","Sun Relic","Moon Relic","World Relic"];
+const weaknesses=["Power Instability","Energy Drain","Public Distrust","Fear","Overconfidence","Secret Identity","Power Overload","Unstable Mutation","Magic Weakness","Technology Weakness","Limited Stamina","Emotional Weakness"];
 
-const alignments = [
-    "Pure Hero","Idealistic Hero","Traditional Hero","Reluctant Hero",
-    "Anti-Hero","Independent Hero","Neutral","Mercenary",
-    "Morally Gray","Anti-Villain","Villain With Code",
-    "Opportunistic Villain","Pure Villain","Cosmic Evil"
-];
+const strengthLevels=["","Below Average Human","Average Human","Athletic Human","Peak Human","Enhanced Human Strength","Superhuman Strength","Building Level","City Block Level","City Level","Mountain Level","Planetary Level","Cosmic Strength","Universal Strength","Omnipotent Potential"];
+const speedLevels=["","Below Average Human","Average Human","Athletic Human","Peak Human","Enhanced Human Speed","Superhuman Speed","Bullet Timer","Hypersonic Movement","Lightning Speed","Mach Speed","Relativistic Speed","Lightspeed Travel","Faster Than Light","Instant Movement"];
+const durabilityLevels=["","Fragile Human","Average Human","Trained Human","Peak Human Durability","Enhanced Human Durability","Bullet Resistant","Explosion Resistant","Superhuman Toughness","Tank Level Durability","High Superhuman","Hulk Level Durability","Planetary Durability","Cosmic Durability","Abstract God Tier Durability"];
+const intelligenceLevels=["","Below Average","Average Intelligence","Educated","Highly Educated","Specialist","Tactical Mind","Genius","Super Genius","Master Scientist","Global Mastermind","Alien Genius","Cosmic Intelligence","Universal Intellect","Abstract Intelligence"];
+const combatLevels=["","No Fighting Skill","Basic Self Defense","Street Fighter","Trained Fighter","Martial Artist","Expert Fighter","Elite Fighter","Master Combatant","Grandmaster Fighter","Legendary Fighter","Superhuman Combat Skill","Tactical War Master","Cosmic Warrior","Perfect Combat Master"];
+const staminaLevels=["","Low Stamina","Average Stamina","Athletic Stamina","Peak Human Endurance","Enhanced Stamina","Can Fight For Hours","Superhuman Endurance","Days Without Rest","Weeks Without Fatigue","Hulk Level Endurance","Self Sustaining Biology","Cosmic Energy Powered","Never Tires","Infinite Endurance"];
+const powerControlLevels=["","Cannot Control Powers","Powers Activate Randomly","Beginner Control","Basic Control","Reliable Use","Skilled User","Creative Applications","Tactical Usage","Expert Control","Mastery","Perfect Precision","Legendary Mastery","Reality Level Control","Absolute Control"];
 
-const commonPowers = [
-    "Enhanced Strength","Enhanced Speed","Flight","Regeneration",
-    "Invulnerability","Force Fields","Fire Manipulation",
-    "Ice Manipulation","Energy Projection","Shapeshifting"
-];
+const villainNames=["Void Tyrant","Dread King","Shadow Lord","Iron Reaper","Blood Phantom","Chaos Bringer","Omega Beast","Nexus Destroyer","Dark Sentinel","Cosmic Warlord"];
+const rewards=["Credits","Rare Equipment","Epic Equipment","Legendary Equipment","Artifact","Relic","Power Upgrade","Reputation","Bonus Stat Point","Team Resource"];
+const threatLevels=["Street Threat","City Threat","National Threat","Planetary Threat","Galactic Threat","Universal Threat","Nexus Threat"];
 
-const uncommonPowers = [
-    "Super Strength","Super Speed","Telepathy","Telekinesis",
-    "Technopathy","Teleportation","Combat Instinct",
-    "Animal Control","Sonic Blast","Light Manipulation"
-];
-
-const rarePowers = [
-    "Gravity Manipulation","Weather Control","Shadow Manipulation",
-    "Metal Manipulation","Plant Control","Mind Control",
-    "Invisibility","Intangibility","Size Changing","Energy Absorption"
-];
-
-const epicPowers = [
-    "Time Manipulation","Dimensional Travel","Cosmic Energy",
-    "Matter Manipulation","Probability Manipulation",
-    "Soul Manipulation","Power Absorption"
-];
-
-const legendaryPowers = [
-    "Reality Warping","Immortality","Universal Energy Control",
-    "Space Manipulation","Creation Powers","Absolute Regeneration"
-];
-
-const nexusPowers = [
-    "Existence Erasure","Nexus Authority","Infinite Evolution",
-    "Omnipresence","Omniscience","Multiversal Control"
-];
-
-const equipmentList = [
-    "Energy Sword","Plasma Blade","Photon Saber","Gravity Hammer",
-    "War Hammer","Battle Axe","Combat Axe","Energy Axe","Shock Mace",
-    "Power Mace","Combat Spear","Photon Lance","Halberd","Glaive",
-    "Trident","Combat Staff","Energy Staff","Rune Staff","Storm Staff",
-    "Celestial Staff","Twin Daggers","Energy Daggers","Void Daggers",
-    "Crystal Daggers","Combat Knives","Hunter Bow","Photon Bow",
-    "War Crossbow","Combat Rifle","Pulse Rifle","Particle Rifle",
-    "Gravity Rifle","Heavy Cannon","Plasma Cannon","Void Cannon",
-    "Energy Shield","Combat Shield","Tower Shield","Rune Shield",
-    "Celestial Shield","Power Armor","Titan Armor","Battle Armor",
-    "Assault Armor","Shock Armor","Guardian Armor","Void Armor",
-    "Celestial Armor","Adaptive Armor","Warplate Armor","Mystic Orb",
-    "Power Crystal","Soul Crystal","Energy Core","Reality Core",
-    "Void Core","Rune Stone","Ancient Totem","Cosmic Prism",
-    "Eternal Shard","Celestial Relic","Ancient Relic","Forgotten Relic",
-    "Void Relic","Titan Relic","Storm Relic","Dragon Relic",
-    "Sun Relic","Moon Relic","World Relic"
-];
-
-const weaknesses = [
-    "Power Instability","Energy Drain","Public Distrust","Fear",
-    "Overconfidence","Secret Identity","Power Overload",
-    "Unstable Mutation","Magic Weakness","Technology Weakness",
-    "Limited Stamina","Emotional Weakness"
-];
-
-const strengthLevels = [
-    "","Below Average Human","Average Human","Athletic Human","Peak Human",
-    "Enhanced Human Strength","Superhuman Strength","Building Level",
-    "City Block Level","City Level","Mountain Level","Planetary Level",
-    "Cosmic Strength","Universal Strength","Omnipotent Potential"
-];
-
-const speedLevels = [
-    "","Below Average Human","Average Human","Athletic Human","Peak Human",
-    "Enhanced Human Speed","Superhuman Speed","Bullet Timer",
-    "Hypersonic Movement","Lightning Speed","Mach Speed",
-    "Relativistic Speed","Lightspeed Travel","Faster Than Light",
-    "Instant Movement"
-];
-
-const durabilityLevels = [
-    "","Fragile Human","Average Human","Trained Human","Peak Human Durability",
-    "Enhanced Human Durability","Bullet Resistant","Explosion Resistant",
-    "Superhuman Toughness","Tank Level Durability","High Superhuman",
-    "Hulk Level Durability","Planetary Durability","Cosmic Durability",
-    "Abstract God Tier Durability"
-];
-
-const intelligenceLevels = [
-    "","Below Average","Average Intelligence","Educated","Highly Educated",
-    "Specialist","Tactical Mind","Genius","Super Genius","Master Scientist",
-    "Global Mastermind","Alien Genius","Cosmic Intelligence",
-    "Universal Intellect","Abstract Intelligence"
-];
-
-const combatLevels = [
-    "","No Fighting Skill","Basic Self Defense","Street Fighter",
-    "Trained Fighter","Martial Artist","Expert Fighter","Elite Fighter",
-    "Master Combatant","Grandmaster Fighter","Legendary Fighter",
-    "Superhuman Combat Skill","Tactical War Master","Cosmic Warrior",
-    "Perfect Combat Master"
-];
-
-const staminaLevels = [
-    "","Low Stamina","Average Stamina","Athletic Stamina","Peak Human Endurance",
-    "Enhanced Stamina","Can Fight For Hours","Superhuman Endurance",
-    "Days Without Rest","Weeks Without Fatigue","Hulk Level Endurance",
-    "Self Sustaining Biology","Cosmic Energy Powered","Never Tires",
-    "Infinite Endurance"
-];
-
-const powerControlLevels = [
-    "","Cannot Control Powers","Powers Activate Randomly","Beginner Control",
-    "Basic Control","Reliable Use","Skilled User","Creative Applications",
-    "Tactical Usage","Expert Control","Mastery","Perfect Precision",
-    "Legendary Mastery","Reality Level Control","Absolute Control"
-];
-
-const villainNames = [
-    "Void Tyrant","Dread King","Shadow Lord","Iron Reaper","Blood Phantom",
-    "Chaos Bringer","Omega Beast","Nexus Destroyer","Dark Sentinel",
-    "Cosmic Warlord"
-];
-
-const missions = [
-    "Bank Robbery","Hostage Rescue","Artifact Recovery","Prison Break",
-    "Monster Attack","Alien Invasion","Dimensional Rift",
-    "Secret Laboratory Raid","Rogue AI Uprising","Cosmic Disturbance",
-    "Ancient Relic Hunt","World Threatening Crisis","Reality Breach",
-    "Lost Civilization Discovery","Nexus Energy Surge"
-];
-
-const rewards = [
-    "Credits","Rare Equipment","Epic Equipment","Legendary Equipment",
-    "Artifact","Relic","Power Upgrade","Reputation",
-    "Bonus Stat Point","Team Resource"
-];
-
-const threatLevels = [
-    "Street Threat","City Threat","National Threat","Planetary Threat",
-    "Galactic Threat","Universal Threat","Nexus Threat"
-];
-
-let selectedPowers = [];
-let powerSpinsRemaining = 0;
-let powersUnlocked = true;
-
-let selectedEquipment = [];
-let equipmentSpinsRemaining = 0;
-let equipmentUnlocked = false;
-
-let selectedWeaknesses = [];
-let weaknessSpinsRemaining = 0;
-
-let currentSpecies = null;
-let currentOrigin = null;
-let currentAlignment = null;
-
-let currentStrength = null;
-let currentSpeed = null;
-let currentDurability = null;
-let currentIntelligence = null;
-let currentCombat = null;
-let currentStamina = null;
-let currentPowerControl = null;
-let currentPowerCount = null;
-
-let team = [];
-let currentHeroScore = 0;
-let currentVillainScore = 0;
+let selectedPowers=[],powerSpinsRemaining=0,powersUnlocked=true;
+let selectedEquipment=[],equipmentSpinsRemaining=0,equipmentUnlocked=false;
+let selectedWeaknesses=[],weaknessSpinsRemaining=0;
+let currentSpecies=null,currentOrigin=null,currentAlignment=null;
+let currentStrength=null,currentSpeed=null,currentDurability=null,currentIntelligence=null,currentCombat=null,currentStamina=null,currentPowerControl=null,currentPowerCount=null;
+let team=[],currentHeroScore=0,currentVillainScore=0;
+let currentWorldCode=null,joinedWorldCode=null,worldPlayers=[],teamMode=false;
+let currentMapLocation=null,currentMapType=null,mapTurn=1,activeEventsCount=0,mapCharacters=[];
 
 function hideAllPortals(){
-    document.getElementById("playerPortal").style.display = "none";
-    document.getElementById("gmPortal").style.display = "none";
-    document.getElementById("rulebookPortal").style.display = "none";
-    document.getElementById("worldPortal").style.display = "none";
+document.getElementById("playerPortal").style.display="none";
+document.getElementById("gmPortal").style.display="none";
+document.getElementById("worldPortal").style.display="none";
+document.getElementById("rulebookPortal").style.display="none";
 }
-
-function showPlayer(){
-    hideAllPortals();
-    document.getElementById("playerPortal").style.display = "block";
-}
-
-function showGM(){
-    hideAllPortals();
-    document.getElementById("gmPortal").style.display = "block";
-}
-
-function showRulebook(){
-    hideAllPortals();
-    document.getElementById("rulebookPortal").style.display = "block";
-}
-
-function showWorld(){
-    hideAllPortals();
-    document.getElementById("worldPortal").style.display = "block";
-}
-
-function getWeightedPower(){
-    const roll = Math.random() * 100;
-
-    if(roll < 50) return pick(commonPowers);
-    if(roll < 80) return pick(uncommonPowers);
-    if(roll < 94) return pick(rarePowers);
-    if(roll < 98.5) return pick(epicPowers);
-    if(roll < 99.8) return pick(legendaryPowers);
-
-    return pick(nexusPowers);
-}
-
-function getPowerCount(){
-    const roll = Math.random() * 100;
-
-    if(roll < 37) return 1;
-    if(roll < 72) return 2;
-    if(roll < 82) return 3;
-    if(roll < 90) return 4;
-    if(roll < 95) return 5;
-    if(roll < 97) return 6;
-
-    return 7;
-}
-
-function statRoll(){
-    const roll = Math.random() * 100;
-
-    if(roll < 13.607) return 1;
-    if(roll < 26.214) return 2;
-    if(roll < 37.821) return 3;
-    if(roll < 48.428) return 4;
-    if(roll < 58.035) return 5;
-    if(roll < 66.642) return 6;
-    if(roll < 74.249) return 7;
-    if(roll < 80.856) return 8;
-    if(roll < 86.463) return 9;
-    if(roll < 91.070) return 10;
-    if(roll < 94.677) return 11;
-    if(roll < 97.284) return 12;
-    if(roll < 98.891) return 13;
-
-    return 14;
-}
-
-function getEquipmentChance(){
-    return Math.random() * 100 >= 75;
-}
-
-function getEquipmentCount(){
-    const roll = Math.random() * 100;
-
-    if(roll < 70) return 1;
-    if(roll < 90) return 2;
-    if(roll < 98) return 3;
-
-    return 4;
-}
-
-function showPlayer(){
-    document.getElementById("playerPortal").style.display = "block";
-    document.getElementById("gmPortal").style.display = "none";
-    document.getElementById("rulebookPortal").style.display = "none";
-}
-
-function showGM(){
-    document.getElementById("playerPortal").style.display = "none";
-    document.getElementById("gmPortal").style.display = "block";
-    document.getElementById("rulebookPortal").style.display = "none";
-}
-
-function showRulebook(){
-    document.getElementById("playerPortal").style.display = "none";
-    document.getElementById("gmPortal").style.display = "none";
-    document.getElementById("rulebookPortal").style.display = "block";
-}
-
-function generateRandomName(){
-    document.getElementById("customName").value = pick(names);
-}
-
-function spinPowerChanceWheel(){
-    const display = document.getElementById("powerChanceResult");
-    display.innerText = "Spinning...";
-
-    setTimeout(() => {
-        powersUnlocked = Math.random() * 100 < 85;
-
-        if(powersUnlocked){
-            display.innerText = "Powers Granted";
-        }else{
-            display.innerText = "No Powers";
-            selectedPowers = [];
-            powerSpinsRemaining = 0;
-            currentPowerCount = 0;
-            document.getElementById("powerWheelResult").innerText = "--";
-            document.getElementById("powerResult").innerHTML = "--";
-        }
-    }, 900);
-}
-
-function spinPowerWheel(){
-    if(!powersUnlocked){
-        alert("This hero has no powers.");
-        return;
-    }
-
-    const display = document.getElementById("powerWheelResult");
-    display.innerText = "Spinning...";
-
-    setTimeout(() => {
-        currentPowerCount = getPowerCount();
-        selectedPowers = [];
-        powerSpinsRemaining = currentPowerCount;
-        document.getElementById("powerResult").innerHTML = "--";
-        display.innerText = currentPowerCount + " Power(s)";
-    }, 900);
-}
-
-function spinPowerWheel2(){
-    if(powerSpinsRemaining <= 0){
-        alert("Spin Power Count first, or you have no spins remaining.");
-        return;
-    }
-
-    const display = document.getElementById("powerResult");
-    display.innerText = "Spinning...";
-
-    setTimeout(() => {
-        let power;
-        let safety = 0;
-
-        do{
-            power = getWeightedPower();
-            safety++;
-        }while(selectedPowers.includes(power) && safety < 100);
-
-        selectedPowers.push(power);
-        powerSpinsRemaining--;
-
-        display.innerHTML = selectedPowers.join("<br>") +
-            "<br><br>Spins Remaining: " + powerSpinsRemaining;
-    }, 900);
-}
-
-function spinStatWheel(statName, levels, storageName, resultId){
-    const display = document.getElementById(resultId);
-    display.innerText = statName + ": Spinning...";
-
-    setTimeout(() => {
-        const result = statRoll();
-        window[storageName] = result;
-
-        display.innerText = statName + ": " + result + " - " + levels[result];
-    }, 900);
-}
-
-function spinSpeciesWheel(){
-    currentSpecies = pick(species);
-    document.getElementById("speciesWheelResult").innerText = currentSpecies;
-}
-
-function spinOriginWheel(){
-    currentOrigin = pick(origins);
-    document.getElementById("originWheelResult").innerText = currentOrigin;
-}
-
-function spinAlignmentWheel(){
-    currentAlignment = pick(alignments);
-    document.getElementById("alignmentWheelResult").innerText = currentAlignment;
-}
-
-function spinEquipmentChanceWheel(){
-    const display = document.getElementById("equipmentChanceResult");
-    display.innerText = "Spinning...";
-
-    setTimeout(() => {
-        equipmentUnlocked = getEquipmentChance();
-
-        if(equipmentUnlocked){
-            display.innerText = "Equipment Granted";
-        }else{
-            display.innerText = "No Equipment";
-            selectedEquipment = [];
-            equipmentSpinsRemaining = 0;
-            document.getElementById("equipmentCountResult").innerText = "--";
-            document.getElementById("equipmentWheelResult").innerHTML = "--";
-        }
-    }, 900);
-}
-
-function spinEquipmentCountWheel(){
-    if(!equipmentUnlocked){
-        alert("Spin Equipment Chance first.");
-        return;
-    }
-
-    equipmentSpinsRemaining = getEquipmentCount();
-    selectedEquipment = [];
-
-    document.getElementById("equipmentCountResult").innerText =
-        equipmentSpinsRemaining + " Equipment";
-
-    document.getElementById("equipmentWheelResult").innerHTML = "--";
-}
-
-function spinEquipmentWheel(){
-    if(equipmentSpinsRemaining <= 0){
-        alert("Spin Equipment Count first, or you have no spins remaining.");
-        return;
-    }
-
-    let item;
-    do{
-        item = pick(equipmentList);
-    }while(selectedEquipment.includes(item));
-
-    selectedEquipment.push(item);
-    equipmentSpinsRemaining--;
-
-    document.getElementById("equipmentWheelResult").innerHTML =
-        selectedEquipment.join("<br>") +
-        "<br><br>Spins Remaining: " + equipmentSpinsRemaining;
-}
-
-function spinWeaknessCountWheel(){
-    const roll = Math.random() * 100;
-    weaknessSpinsRemaining = 1;
-
-    if(roll > 70) weaknessSpinsRemaining = 2;
-    if(roll > 95) weaknessSpinsRemaining = 3;
-
-    selectedWeaknesses = [];
-
-    document.getElementById("weaknessCountResult").innerText =
-        weaknessSpinsRemaining + " Weakness(es)";
-
-    document.getElementById("weaknessWheelResult").innerHTML = "--";
-}
-
-function spinWeaknessWheel(){
-    if(weaknessSpinsRemaining <= 0){
-        alert("Spin Weakness Count first, or you have no spins remaining.");
-        return;
-    }
-
-    let weakness;
-    do{
-        weakness = pick(weaknesses);
-    }while(selectedWeaknesses.includes(weakness));
-
-    selectedWeaknesses.push(weakness);
-    weaknessSpinsRemaining--;
-
-    document.getElementById("weaknessWheelResult").innerHTML =
-        selectedWeaknesses.join("<br>") +
-        "<br><br>Spins Remaining: " + weaknessSpinsRemaining;
-}
-
-function getArchetype(strength, speed, durability, intelligence, combat, stamina, powerControl){
-    const highest = Math.max(
-        strength, speed, durability, intelligence,
-        combat, stamina, powerControl
-    );
-
-    if(speed === highest) return "Speedster";
-    if(strength === highest) return "Powerhouse";
-    if(durability === highest) return "Tank";
-    if(intelligence === highest) return "Genius";
-    if(combat === highest) return "Martial Master";
-    if(stamina === highest) return "Endurance Hero";
-    if(powerControl === highest) return "Energy Master";
-
-    return "Balanced Hero";
-}
-
-function getHeroClass(heroPowers, archetype){
-    if(heroPowers.includes("Nexus Authority")) return "Nexus Entity";
-    if(heroPowers.includes("Existence Erasure")) return "Existence Breaker";
-    if(heroPowers.includes("Multiversal Control")) return "Multiversal Entity";
-    if(heroPowers.includes("Reality Warping")) return "Reality Warper";
-    if(heroPowers.includes("Time Manipulation")) return "Time Master";
-    if(heroPowers.includes("Telepathy") && heroPowers.includes("Telekinesis")) return "Psychic Master";
-    if(heroPowers.includes("Telepathy")) return "Telepath";
-    if(heroPowers.includes("Telekinesis")) return "Telekinetic";
-    if(heroPowers.includes("Teleportation")) return "Teleporter";
-    if(heroPowers.includes("Gravity Manipulation")) return "Gravity Lord";
-    if(heroPowers.includes("Technopathy")) return "Gadgeteer";
-    if(heroPowers.includes("Flight")) return "Sky Guardian";
-    if(heroPowers.includes("Shapeshifting")) return "Shapeshifter";
-    if(heroPowers.includes("Energy Projection")) return "Energy Controller";
-    if(archetype === "Speedster") return "Speedster";
-    if(archetype === "Tank") return "Tank";
-    if(archetype === "Powerhouse") return "Brute";
-    if(archetype === "Martial Master") return "Martial Artist";
-    if(archetype === "Genius") return "Mastermind";
-    if(archetype === "Energy Master") return "Energy Master";
-
-    return "Hero";
-}
-
-function getRank(score){
-    if(score > 95) return "Nexus Ascendant";
-    if(score > 80) return "Cosmic Hero";
-    if(score > 65) return "Omega Hero";
-    if(score > 50) return "Champion";
-    if(score > 35) return "Super Hero";
-    if(score > 20) return "Enhanced Hero";
-
-    return "Street Hero";
-}
+function showPlayer(){hideAllPortals();document.getElementById("playerPortal").style.display="block";}
+function showGM(){hideAllPortals();document.getElementById("gmPortal").style.display="block";}
+function showWorld(){hideAllPortals();document.getElementById("worldPortal").style.display="block";}
+function showRulebook(){hideAllPortals();document.getElementById("rulebookPortal").style.display="block";}
+
+function getWeightedPower(){let roll=Math.random()*100;if(roll<50)return pick(commonPowers);if(roll<80)return pick(uncommonPowers);if(roll<94)return pick(rarePowers);if(roll<98.5)return pick(epicPowers);if(roll<99.8)return pick(legendaryPowers);return pick(nexusPowers);}
+function getPowerCount(){let roll=Math.random()*100;if(roll<37)return 1;if(roll<72)return 2;if(roll<82)return 3;if(roll<90)return 4;if(roll<95)return 5;if(roll<97)return 6;return 7;}
+function statRoll(){let roll=Math.random()*100;if(roll<13.607)return 1;if(roll<26.214)return 2;if(roll<37.821)return 3;if(roll<48.428)return 4;if(roll<58.035)return 5;if(roll<66.642)return 6;if(roll<74.249)return 7;if(roll<80.856)return 8;if(roll<86.463)return 9;if(roll<91.070)return 10;if(roll<94.677)return 11;if(roll<97.284)return 12;if(roll<98.891)return 13;return 14;}
+function getEquipmentChance(){return Math.random()*100>=75;}
+function getEquipmentCount(){let roll=Math.random()*100;if(roll<70)return 1;if(roll<90)return 2;if(roll<98)return 3;return 4;}
+
+function generateRandomName(){document.getElementById("customName").value=pick(names);}
+
+function spinPowerChanceWheel(){let d=document.getElementById("powerChanceResult");d.innerText="Spinning...";setTimeout(()=>{powersUnlocked=Math.random()*100<85;if(powersUnlocked){d.innerText="Powers Granted";}else{d.innerText="No Powers";selectedPowers=[];powerSpinsRemaining=0;currentPowerCount=0;document.getElementById("powerWheelResult").innerText="--";document.getElementById("powerResult").innerHTML="--";}},600);}
+function spinPowerWheel(){if(!powersUnlocked){alert("This hero has no powers.");return;}let d=document.getElementById("powerWheelResult");d.innerText="Spinning...";setTimeout(()=>{currentPowerCount=getPowerCount();selectedPowers=[];powerSpinsRemaining=currentPowerCount;document.getElementById("powerResult").innerHTML="--";d.innerText=currentPowerCount+" Power(s)";},600);}
+function spinPowerWheel2(){if(powerSpinsRemaining<=0){alert("Spin Power Count first.");return;}let d=document.getElementById("powerResult");d.innerText="Spinning...";setTimeout(()=>{let p;do{p=getWeightedPower();}while(selectedPowers.includes(p));selectedPowers.push(p);powerSpinsRemaining--;d.innerHTML=selectedPowers.join("<br>")+"<br><br>Spins Remaining: "+powerSpinsRemaining;},600);}
+
+function spinStatWheel(statName,levels,storageName,resultId){let d=document.getElementById(resultId);d.innerText=statName+": Spinning...";setTimeout(()=>{let r=statRoll();window[storageName]=r;d.innerText=statName+": "+r+" - "+levels[r];},600);}
+function spinSpeciesWheel(){currentSpecies=pick(species);document.getElementById("speciesWheelResult").innerText=currentSpecies;}
+function spinOriginWheel(){currentOrigin=pick(origins);document.getElementById("originWheelResult").innerText=currentOrigin;}
+function spinAlignmentWheel(){currentAlignment=pick(alignments);document.getElementById("alignmentWheelResult").innerText=currentAlignment;}
+
+function spinEquipmentChanceWheel(){let d=document.getElementById("equipmentChanceResult");d.innerText="Spinning...";setTimeout(()=>{equipmentUnlocked=getEquipmentChance();if(equipmentUnlocked){d.innerText="Equipment Granted";}else{d.innerText="No Equipment";selectedEquipment=[];equipmentSpinsRemaining=0;}},600);}
+function spinEquipmentCountWheel(){if(!equipmentUnlocked){alert("Spin Equipment Chance first.");return;}equipmentSpinsRemaining=getEquipmentCount();selectedEquipment=[];document.getElementById("equipmentCountResult").innerText=equipmentSpinsRemaining+" Equipment";document.getElementById("equipmentWheelResult").innerHTML="--";}
+function spinEquipmentWheel(){if(equipmentSpinsRemaining<=0){alert("Spin Equipment Count first.");return;}let item;do{item=pick(equipmentList);}while(selectedEquipment.includes(item));selectedEquipment.push(item);equipmentSpinsRemaining--;document.getElementById("equipmentWheelResult").innerHTML=selectedEquipment.join("<br>")+"<br><br>Spins Remaining: "+equipmentSpinsRemaining;}
+
+function spinWeaknessCountWheel(){let roll=Math.random()*100;weaknessSpinsRemaining=1;if(roll>70)weaknessSpinsRemaining=2;if(roll>95)weaknessSpinsRemaining=3;selectedWeaknesses=[];document.getElementById("weaknessCountResult").innerText=weaknessSpinsRemaining+" Weakness(es)";document.getElementById("weaknessWheelResult").innerHTML="--";}
+function spinWeaknessWheel(){if(weaknessSpinsRemaining<=0){alert("Spin Weakness Count first.");return;}let w;do{w=pick(weaknesses);}while(selectedWeaknesses.includes(w));selectedWeaknesses.push(w);weaknessSpinsRemaining--;document.getElementById("weaknessWheelResult").innerHTML=selectedWeaknesses.join("<br>")+"<br><br>Spins Remaining: "+weaknessSpinsRemaining;}
+
+function getArchetype(a,b,c,d,e,f,g){let h=Math.max(a,b,c,d,e,f,g);if(b===h)return"Speedster";if(a===h)return"Powerhouse";if(c===h)return"Tank";if(d===h)return"Genius";if(e===h)return"Martial Master";if(f===h)return"Endurance Hero";if(g===h)return"Energy Master";return"Balanced Hero";}
+function getRank(score){if(score>95)return"Nexus Ascendant";if(score>80)return"Cosmic Hero";if(score>65)return"Omega Hero";if(score>50)return"Champion";if(score>35)return"Super Hero";if(score>20)return"Enhanced Hero";return"Street Hero";}
+function getHeroClass(powers,arch){if(powers.includes("Nexus Authority"))return"Nexus Entity";if(powers.includes("Reality Warping"))return"Reality Warper";if(powers.includes("Teleportation"))return"Teleporter";if(powers.includes("Telepathy"))return"Telepath";if(powers.includes("Telekinesis"))return"Telekinetic";if(arch==="Powerhouse")return"Brute";return arch;}
 
 function generateHero(){
-    const customName = document.getElementById("customName").value.trim();
-
-    const heroName = customName || pick(names);
-    const heroSpecies = currentSpecies || pick(species);
-    const heroOrigin = currentOrigin || pick(origins);
-    const heroAlignment = currentAlignment || pick(alignments);
-
-    const strength = currentStrength || statRoll();
-    const speed = currentSpeed || statRoll();
-    const durability = currentDurability || statRoll();
-    const intelligence = currentIntelligence || statRoll();
-    const combat = currentCombat || statRoll();
-    const stamina = currentStamina || statRoll();
-    const powerControl = currentPowerControl || statRoll();
-
-    let count = 0;
-    if(powersUnlocked){
-        count = currentPowerCount || getPowerCount();
-    }
-
-    const chosenPowers = [...selectedPowers];
-
-    while(chosenPowers.length < count){
-        const power = getWeightedPower();
-        if(!chosenPowers.includes(power)){
-            chosenPowers.push(power);
-        }
-    }
-
-    let chosenEquipment = [];
-    if(equipmentUnlocked && selectedEquipment.length > 0){
-        chosenEquipment = [...selectedEquipment];
-    }
-
-    let chosenWeaknesses = [...selectedWeaknesses];
-    if(chosenWeaknesses.length === 0){
-        chosenWeaknesses = [pick(weaknesses)];
-    }
-
-    const score = strength + speed + durability + intelligence + combat + stamina + powerControl;
-    const archetype = getArchetype(
-        strength, speed, durability, intelligence,
-        combat, stamina, powerControl
-    );
-
-    document.getElementById("name").innerText = heroName;
-    document.getElementById("species").innerText = heroSpecies;
-    document.getElementById("origin").innerText = heroOrigin;
-    document.getElementById("alignment").innerText = heroAlignment;
-    document.getElementById("powerCount").innerText = count;
-
-    document.getElementById("strength").innerText = strength + " - " + strengthLevels[strength];
-    document.getElementById("speed").innerText = speed + " - " + speedLevels[speed];
-    document.getElementById("durability").innerText = durability + " - " + durabilityLevels[durability];
-    document.getElementById("intelligence").innerText = intelligence + " - " + intelligenceLevels[intelligence];
-    document.getElementById("combat").innerText = combat + " - " + combatLevels[combat];
-    document.getElementById("stamina").innerText = stamina + " - " + staminaLevels[stamina];
-    document.getElementById("powerControl").innerText = powerControl + " - " + powerControlLevels[powerControl];
-
-    document.getElementById("powerScore").innerText = score;
-    document.getElementById("archetype").innerText = archetype;
-    document.getElementById("heroClass").innerText = getHeroClass(chosenPowers, archetype);
-    document.getElementById("rank").innerText = getRank(score);
-
-    document.getElementById("powers").innerHTML =
-        chosenPowers.length ? chosenPowers.join("<br>") : "No Powers";
-
-    document.getElementById("equipment").innerHTML =
-        chosenEquipment.length ? chosenEquipment.join("<br>") : "None";
-
-    document.getElementById("weaknesses").innerHTML =
-        chosenWeaknesses.join("<br>");
-
-    currentHeroScore = score;
+let heroName=document.getElementById("customName").value.trim()||pick(names);
+let s=currentStrength||statRoll(),sp=currentSpeed||statRoll(),d=currentDurability||statRoll(),i=currentIntelligence||statRoll(),c=currentCombat||statRoll(),st=currentStamina||statRoll(),pc=currentPowerControl||statRoll();
+let count=powersUnlocked?(currentPowerCount||getPowerCount()):0;
+let chosen=[...selectedPowers];while(chosen.length<count){let p=getWeightedPower();if(!chosen.includes(p))chosen.push(p);}
+let eq=equipmentUnlocked?[...selectedEquipment]:[];
+let weak=selectedWeaknesses.length?[...selectedWeaknesses]:[pick(weaknesses)];
+let score=s+sp+d+i+c+st+pc;
+let arch=getArchetype(s,sp,d,i,c,st,pc);
+document.getElementById("name").innerText=heroName;
+document.getElementById("species").innerText=currentSpecies||pick(species);
+document.getElementById("origin").innerText=currentOrigin||pick(origins);
+document.getElementById("alignment").innerText=currentAlignment||pick(alignments);
+document.getElementById("powerCount").innerText=count;
+document.getElementById("strength").innerText=s+" - "+strengthLevels[s];
+document.getElementById("speed").innerText=sp+" - "+speedLevels[sp];
+document.getElementById("durability").innerText=d+" - "+durabilityLevels[d];
+document.getElementById("intelligence").innerText=i+" - "+intelligenceLevels[i];
+document.getElementById("combat").innerText=c+" - "+combatLevels[c];
+document.getElementById("stamina").innerText=st+" - "+staminaLevels[st];
+document.getElementById("powerControl").innerText=pc+" - "+powerControlLevels[pc];
+document.getElementById("powerScore").innerText=score;
+document.getElementById("archetype").innerText=arch;
+document.getElementById("heroClass").innerText=getHeroClass(chosen,arch);
+document.getElementById("rank").innerText=getRank(score);
+document.getElementById("powers").innerHTML=chosen.length?chosen.join("<br>"):"No Powers";
+document.getElementById("equipment").innerHTML=eq.length?eq.join("<br>"):"None";
+document.getElementById("weaknesses").innerHTML=weak.join("<br>");
+currentHeroScore=score;
 }
 
-function saveHero(){
-    if(document.getElementById("name").innerText === "--"){
-        alert("Generate a hero first.");
-        return;
-    }
+function saveHero(){localStorage.setItem("savedHero",document.getElementById("playerPortal").innerHTML);alert("Hero Saved!");}
+function loadHero(){alert("Saved hero loading will be rebuilt later. Generate for now.");}
 
-    const hero = {
-        name: document.getElementById("name").innerText,
-        species: document.getElementById("species").innerText,
-        origin: document.getElementById("origin").innerText,
-        alignment: document.getElementById("alignment").innerText,
-        powerCount: document.getElementById("powerCount").innerText,
-        strength: document.getElementById("strength").innerText,
-        speed: document.getElementById("speed").innerText,
-        durability: document.getElementById("durability").innerText,
-        intelligence: document.getElementById("intelligence").innerText,
-        combat: document.getElementById("combat").innerText,
-        stamina: document.getElementById("stamina").innerText,
-        powerControl: document.getElementById("powerControl").innerText,
-        powerScore: document.getElementById("powerScore").innerText,
-        archetype: document.getElementById("archetype").innerText,
-        heroClass: document.getElementById("heroClass").innerText,
-        rank: document.getElementById("rank").innerText,
-        powers: document.getElementById("powers").innerHTML,
-        equipment: document.getElementById("equipment").innerHTML,
-        weaknesses: document.getElementById("weaknesses").innerHTML
-    };
+function addToTeam(){let n=document.getElementById("name").innerText;if(n==="--"){alert("Generate a hero first.");return;}team.push(n+" | "+document.getElementById("heroClass").innerText+" | "+document.getElementById("rank").innerText);updateTeamDisplay();}
+function clearTeam(){team=[];updateTeamDisplay();}
+function updateTeamDisplay(){document.getElementById("teamMembers").innerHTML=team.length?team.join("<br><br>"):"No Members";}
 
-    localStorage.setItem("savedHero", JSON.stringify(hero));
-    alert("Hero Saved!");
-}
+function generateVillain(){let score=0;for(let i=0;i<7;i++)score+=statRoll();document.getElementById("villainName").innerText=pick(villainNames);document.getElementById("villainSpecies").innerText=pick(species);document.getElementById("villainOrigin").innerText=pick(origins);document.getElementById("threatLevel").innerText=pick(threatLevels);document.getElementById("villainClass").innerText="Villain";document.getElementById("villainScore").innerText=score;document.getElementById("villainRank").innerText=getRank(score).replace("Hero","Villain");currentVillainScore=score;}
+function simulateBattle(){if(!currentHeroScore){alert("Generate a hero first.");return;}if(!currentVillainScore){alert("Generate a villain first.");return;}let h=currentHeroScore+Math.floor(Math.random()*20),v=currentVillainScore+Math.floor(Math.random()*20);document.getElementById("battleResult").innerText=h>v?"🏆 HERO VICTORY":v>h?"💀 VILLAIN VICTORY":"⚔ DRAW";}
 
-function loadHero(){
-    const hero = JSON.parse(localStorage.getItem("savedHero"));
+function createWorldCode(){let n=document.getElementById("worldNameInput").value.trim()||"Nexus World";let code=n.replace(/\s+/g,"").substring(0,5).toUpperCase()+"-"+Math.floor(1000+Math.random()*9000);currentWorldCode=code;document.getElementById("worldCodeDisplay").innerText=code;alert("World Created: "+code);}
+function joinWorld(){let code=document.getElementById("joinWorldInput").value.trim();if(!code){alert("Enter a world code first.");return;}joinedWorldCode=code;document.getElementById("joinedWorldDisplay").innerText="Joined World: "+code;}
+function toggleTeamMode(){teamMode=!teamMode;document.getElementById("teamModeDisplay").innerText=teamMode?"Mode: Team":"Mode: Solo";}
+function addHeroToWorld(){let n=document.getElementById("name").innerText;if(n==="--"){alert("Generate a hero first.");return;}worldPlayers.push(n+" | "+document.getElementById("heroClass").innerText+" | "+document.getElementById("rank").innerText+" | "+(teamMode?"Team Member":"Solo Player"));document.getElementById("worldPlayersDisplay").innerHTML=worldPlayers.join("<br><br>");}
 
-    if(!hero){
-        alert("No saved hero found.");
-        return;
-    }
-
-    document.getElementById("name").innerText = hero.name;
-    document.getElementById("species").innerText = hero.species;
-    document.getElementById("origin").innerText = hero.origin;
-    document.getElementById("alignment").innerText = hero.alignment;
-    document.getElementById("powerCount").innerText = hero.powerCount;
-    document.getElementById("strength").innerText = hero.strength;
-    document.getElementById("speed").innerText = hero.speed;
-    document.getElementById("durability").innerText = hero.durability;
-    document.getElementById("intelligence").innerText = hero.intelligence;
-    document.getElementById("combat").innerText = hero.combat;
-    document.getElementById("stamina").innerText = hero.stamina;
-    document.getElementById("powerControl").innerText = hero.powerControl;
-    document.getElementById("powerScore").innerText = hero.powerScore;
-    document.getElementById("archetype").innerText = hero.archetype;
-    document.getElementById("heroClass").innerText = hero.heroClass;
-    document.getElementById("rank").innerText = hero.rank;
-    document.getElementById("powers").innerHTML = hero.powers;
-    document.getElementById("equipment").innerHTML = hero.equipment;
-    document.getElementById("weaknesses").innerHTML = hero.weaknesses;
-
-    currentHeroScore = Number(hero.powerScore) || 0;
-
-    alert("Hero Loaded!");
-}
-
-function addToTeam(){
-    const heroName = document.getElementById("name").innerText;
-
-    if(heroName === "--"){
-        alert("Generate a hero first.");
-        return;
-    }
-
-    if(team.length >= 5){
-        alert("Team is full.");
-        return;
-    }
-
-    team.push(
-        heroName + " | " +
-        document.getElementById("heroClass").innerText + " | " +
-        document.getElementById("rank").innerText
-    );
-
-    updateTeamDisplay();
-}
-
-function clearTeam(){
-    team = [];
-    updateTeamDisplay();
-}
-
-function updateTeamDisplay(){
-    document.getElementById("teamMembers").innerHTML =
-        team.length ? team.join("<br><br>") : "No Members";
-}
-
-function generateVillain(){
-    let score = 0;
-
-    for(let i = 0; i < 7; i++){
-        score += statRoll();
-    }
-
-    let rank = "Street Villain";
-    if(score > 20) rank = "Enhanced Villain";
-    if(score > 35) rank = "Super Villain";
-    if(score > 50) rank = "Champion Villain";
-    if(score > 65) rank = "Omega Villain";
-    if(score > 80) rank = "Cosmic Villain";
-    if(score > 95) rank = "Nexus Villain";
-
-    document.getElementById("villainName").innerText = pick(villainNames);
-    document.getElementById("villainSpecies").innerText = pick(species);
-    document.getElementById("villainOrigin").innerText = pick(origins);
-    document.getElementById("threatLevel").innerText = pick(threatLevels);
-    document.getElementById("villainClass").innerText = "Villain";
-    document.getElementById("villainScore").innerText = score;
-    document.getElementById("villainRank").innerText = rank;
-
-    currentVillainScore = score;
-}
-
-function generateMission(){
-    document.getElementById("missionResult").innerText = pick(missions);
-    document.getElementById("rewardResult").innerText = "Reward: " + pick(rewards);
-}
-
-function simulateBattle(){
-    if(!currentHeroScore){
-        alert("Generate a hero first.");
-        return;
-    }
-
-    if(!currentVillainScore){
-        alert("Generate a villain first.");
-        return;
-    }
-
-    const heroBattleScore = currentHeroScore + Math.floor(Math.random() * 20);
-    const villainBattleScore = currentVillainScore + Math.floor(Math.random() * 20);
-
-    let result = "⚔ DRAW";
-
-    if(heroBattleScore > villainBattleScore){
-        result = "🏆 HERO VICTORY";
-    }else if(villainBattleScore > heroBattleScore){
-        result = "💀 VILLAIN VICTORY";
-    }
-
-    document.getElementById("battleResult").innerText = result;
-}
-
-let currentWorldCode = null;
-let joinedWorldCode = null;
-let worldPlayers = [];
-let teamMode = false;
-
-function createWorldCode(){
-
-    let worldName =
-        document.getElementById("worldNameInput").value.trim();
-
-    if(worldName === ""){
-        worldName = "Nexus World";
-    }
-
-    let code =
-        worldName
-        .replace(/\s+/g,"")
-        .substring(0,5)
-        .toUpperCase()
-        + "-"
-        + Math.floor(1000 + Math.random() * 9000);
-
-    currentWorldCode = code;
-
-    localStorage.setItem("nexusWorldCode", code);
-    localStorage.setItem("nexusWorldName", worldName);
-
-    document.getElementById("worldCodeDisplay").innerText =
-        code;
-
-    alert("World Created: " + code);
-}
-
-function joinWorld(){
-
-    let code =
-        document.getElementById("joinWorldInput").value.trim();
-
-    if(code === ""){
-        alert("Enter a world code first.");
-        return;
-    }
-
-    joinedWorldCode = code;
-
-    document.getElementById("joinedWorldDisplay").innerText =
-        "Joined World: " + code;
-}
-
-function toggleTeamMode(){
-
-    teamMode = !teamMode;
-
-    document.getElementById("teamModeDisplay").innerText =
-        teamMode
-        ? "Mode: Team"
-        : "Mode: Solo";
-}
-
-function addHeroToWorld(){
-
-    let heroName =
-        document.getElementById("name").innerText;
-
-    let heroClass =
-        document.getElementById("heroClass").innerText;
-
-    let heroRank =
-        document.getElementById("rank").innerText;
-
-    if(heroName === "--"){
-        alert("Generate a hero first.");
-        return;
-    }
-
-    let member =
-        heroName +
-        " | " +
-        heroClass +
-        " | " +
-        heroRank +
-        " | " +
-        (teamMode ? "Team Member" : "Solo Player");
-
-    worldPlayers.push(member);
-
-    updateWorldPlayers();
-}
-
-function updateWorldPlayers(){
-
-    let display =
-        document.getElementById("worldPlayersDisplay");
-
-    if(worldPlayers.length === 0){
-        display.innerHTML = "No Players";
-        return;
-    }
-
-    display.innerHTML =
-        worldPlayers.join("<br><br>");
-}
-
-const missionObjectives = [
-    "Rescue civilians",
-    "Defeat the villain",
-    "Protect the location",
-    "Recover a stolen artifact",
-    "Stop an invasion",
-    "Investigate strange activity",
-    "Escort an important target",
-    "Survive an ambush",
-    "Destroy an enemy base",
-    "Close a dangerous portal"
-];
-
-const missionThreats = [
-    "Street criminals",
-    "Mutant outbreak",
-    "Rogue robot squad",
-    "Alien scouts",
-    "Dark magic cult",
-    "Corrupt soldiers",
-    "Dimensional creatures",
-    "Super villain attack",
-    "Cosmic energy storm",
-    "Nexus-level anomaly"
-];
-
-const missionConsequences = [
-    "Public trust drops",
-    "The villain escapes",
-    "The location is damaged",
-    "A new enemy is revealed",
-    "The team loses resources",
-    "The threat spreads to another location",
-    "A civilian group turns against heroes",
-    "A portal becomes unstable",
-    "The villain gains power",
-    "The next mission becomes harder"
-];
-
-const missionDifficulties = [
-    "Easy",
-    "Normal",
-    "Hard",
-    "Boss",
-    "Nexus Crisis"
-];
+function selectMapLocation(name,type,details){currentMapLocation=name;currentMapType=type;document.getElementById("selectedMapLocation").innerText=name;document.getElementById("selectedMapType").innerText=type;document.getElementById("mapLocationDetails").innerText=details;document.getElementById("missionLocation").innerText=name;}
+function nextWorldTurn(){mapTurn++;document.getElementById("worldTurn").innerText=mapTurn;if(mapTurn%3===0){activeEventsCount++;document.getElementById("activeEvents").innerText=activeEventsCount;}}
+function addCurrentHeroToMap(){let n=document.getElementById("name").innerText;if(n==="--"){alert("Generate a hero first.");return;}mapCharacters.push({name:n,heroClass:document.getElementById("heroClass").innerText,rank:document.getElementById("rank").innerText,location:currentMapLocation||"Nexus City",health:100,injuries:"None"});updateMapCharacters();}
+function updateMapCharacters(){let html="";mapCharacters.forEach((x,i)=>{html+="<div class='character-card'><strong>"+x.name+"</strong><br>Class: "+x.heroClass+"<br>Rank: "+x.rank+"<br>Location: "+x.location+"<br>Health: "+x.health+"%<div class='health-bar'><div class='health-fill' style='width:"+x.health+"%'></div></div>Injuries: "+x.injuries+"<br><button onclick='damageCharacter("+i+")'>Damage</button><button onclick='healCharacter("+i+")'>Heal</button><button onclick='moveCharacterToSelected("+i+")'>Move Here</button></div>";});document.getElementById("mapCharactersDisplay").innerHTML=html||"No characters on map.";}
+function damageCharacter(i){mapCharacters[i].health=Math.max(0,mapCharacters[i].health-20);mapCharacters[i].injuries=mapCharacters[i].health<=0?"Defeated":mapCharacters[i].health<=30?"Serious Injury":mapCharacters[i].health<=60?"Minor Injury":"None";updateMapCharacters();}
+function healCharacter(i){mapCharacters[i].health=Math.min(100,mapCharacters[i].health+20);mapCharacters[i].injuries=mapCharacters[i].health>60?"None":mapCharacters[i].health>30?"Minor Injury":"Serious Injury";updateMapCharacters();}
+function moveCharacterToSelected(i){if(!currentMapLocation){alert("Select a location first.");return;}mapCharacters[i].location=currentMapLocation;updateMapCharacters();}
 
 function generateFullMission(){
-
-    let location =
-        currentMapLocation || "Nexus City";
-
-    document.getElementById("missionLocation").innerText =
-        location;
-
-    let objective =
-        pick(missionObjectives);
-
-    let threat =
-        pick(missionThreats);
-
-    let reward =
-        pick(rewards);
-
-    let consequence =
-        pick(missionConsequences);
-
-    let difficulty =
-        pick(missionDifficulties);
-
-    let villain =
-        document.getElementById("villainName").innerText;
-
-    if(villain === "--"){
-        villain = pick(villainNames);
-    }
-
-    document.getElementById("fullMissionResult").innerHTML =
-        "<strong>Location:</strong> " + location + "<br><br>" +
-        "<strong>Difficulty:</strong> " + difficulty + "<br><br>" +
-        "<strong>Threat:</strong> " + threat + "<br><br>" +
-        "<strong>Objective:</strong> " + objective + "<br><br>" +
-        "<strong>Villain:</strong> " + villain + "<br><br>" +
-        "<strong>Reward:</strong> " + reward + "<br><br>" +
-        "<strong>If Heroes Fail:</strong> " + consequence;
+let loc=currentMapLocation||"Nexus City";
+let objectives=["Rescue civilians","Defeat the villain","Protect the location","Recover a stolen artifact","Stop an invasion","Investigate strange activity","Escort an important target","Survive an ambush","Destroy an enemy base","Close a dangerous portal"];
+let threats=["Street criminals","Mutant outbreak","Rogue robot squad","Alien scouts","Dark magic cult","Corrupt soldiers","Dimensional creatures","Super villain attack","Cosmic energy storm","Nexus-level anomaly"];
+let consequences=["Public trust drops","The villain escapes","The location is damaged","A new enemy is revealed","The team loses resources","The threat spreads","A portal becomes unstable","The villain gains power"];
+let villain=document.getElementById("villainName").innerText;if(villain==="--")villain=pick(villainNames);
+document.getElementById("missionLocation").innerText=loc;
+document.getElementById("fullMissionResult").innerHTML="<strong>Location:</strong> "+loc+"<br><br><strong>Threat:</strong> "+pick(threats)+"<br><br><strong>Objective:</strong> "+pick(objectives)+"<br><br><strong>Villain:</strong> "+villain+"<br><br><strong>Reward:</strong> "+pick(rewards)+"<br><br><strong>If Heroes Fail:</strong> "+pick(consequences);
 }
-
-let currentMapLocation = null;
-let currentMapType = null;
-let mapTurn = 1;
-let activeEventsCount = 0;
-let mapCharacters = [];
-
-function selectMapLocation(name, type, details){
-
-    currentMapLocation = name;
-    currentMapType = type;
-
-    document.getElementById("selectedMapLocation").innerText =
-        name;
-
-    document.getElementById("selectedMapType").innerText =
-        type;
-
-    document.getElementById("mapLocationDetails").innerText =
-        details;
-
-    if(document.getElementById("missionLocation")){
-        document.getElementById("missionLocation").innerText =
-            name;
-    }
-}
-
-function nextWorldTurn(){
-
-    mapTurn++;
-
-    document.getElementById("worldTurn").innerText =
-        mapTurn;
-
-    if(mapTurn % 3 === 0){
-        activeEventsCount++;
-
-        document.getElementById("activeEvents").innerText =
-            activeEventsCount;
-    }
-}
-
-function addCurrentHeroToMap(){
-
-    let heroName =
-        document.getElementById("name").innerText;
-
-    if(heroName === "--"){
-        alert("Generate a hero first.");
-        return;
-    }
-
-    let heroClass =
-        document.getElementById("heroClass").innerText;
-
-    let heroRank =
-        document.getElementById("rank").innerText;
-
-    let location =
-        currentMapLocation || "Nexus City";
-
-    let character = {
-        name: heroName,
-        heroClass: heroClass,
-        rank: heroRank,
-        location: location,
-        health: 100,
-        injuries: "None"
-    };
-
-    mapCharacters.push(character);
-
-    updateMapCharacters();
-}
-
-function updateMapCharacters(){
-
-    let display =
-        document.getElementById("mapCharactersDisplay");
-
-    if(mapCharacters.length === 0){
-        display.innerHTML =
-            "No characters on map.";
-        return;
-    }
-
-    let html = "";
-
-    mapCharacters.forEach((character, index) => {
-
-        html +=
-        "<div class='character-card'>" +
-        "<strong>" + character.name + "</strong><br>" +
-        "Class: " + character.heroClass + "<br>" +
-        "Rank: " + character.rank + "<br>" +
-        "Location: " + character.location + "<br>" +
-        "Health: " + character.health + "%<br>" +
-        "<div class='health-bar'>" +
-        "<div class='health-fill' style='width:" + character.health + "%'></div>" +
-        "</div>" +
-        "Injuries: " + character.injuries + "<br><br>" +
-
-        "<button onclick='damageCharacter(" + index + ")'>Damage</button>" +
-        "<button onclick='healCharacter(" + index + ")'>Heal</button>" +
-        "<button onclick='moveCharacterToSelected(" + index + ")'>Move Here</button>" +
-
-        "</div>";
-    });
-
-    display.innerHTML = html;
-}
-
-function damageCharacter(index){
-
-    mapCharacters[index].health -= 20;
-
-    if(mapCharacters[index].health < 0){
-        mapCharacters[index].health = 0;
-    }
-
-    if(mapCharacters[index].health <= 60){
-        mapCharacters[index].injuries =
-            "Minor Injury";
-    }
-
-    if(mapCharacters[index].health <= 30){
-        mapCharacters[index].injuries =
-            "Serious Injury";
-    }
-
-    if(mapCharacters[index].health <= 0){
-        mapCharacters[index].injuries =
-            "Defeated";
-    }
-
-    updateMapCharacters();
-}
-
-function healCharacter(index){
-
-    mapCharacters[index].health += 20;
-
-    if(mapCharacters[index].health > 100){
-        mapCharacters[index].health = 100;
-    }
-
-    if(mapCharacters[index].health > 60){
-        mapCharacters[index].injuries =
-            "None";
-    }
-
-    if(mapCharacters[index].health <= 60 &&
-       mapCharacters[index].health > 30){
-        mapCharacters[index].injuries =
-            "Minor Injury";
-    }
-
-    if(mapCharacters[index].health <= 30){
-        mapCharacters[index].injuries =
-            "Serious Injury";
-    }
-
-    updateMapCharacters();
-}
-
-function moveCharacterToSelected(index){
-
-    if(!currentMapLocation){
-        alert("Select a map location first.");
-        return;
-    }
-
-    mapCharacters[index].location =
-        currentMapLocation;
-
-    updateMapCharacters();
-}
-    
 </script>
 
 </body>
