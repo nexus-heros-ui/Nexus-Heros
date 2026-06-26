@@ -253,9 +253,17 @@ input{
 </div>
 
 <div class="card">
-<h2>Mission</h2>
-<div id="missionResult">--</div>
-<div id="rewardResult">--</div>
+<h2>Mission Generator</h2>
+
+<p><strong>Selected Location:</strong></p>
+<div id="missionLocation">No location selected</div>
+
+<button onclick="generateFullMission()">
+📜 Generate Full Mission
+</button>
+
+<h3>Mission Brief</h3>
+<div id="fullMissionResult">--</div>
 </div>
 
 <div class="card">
@@ -1408,7 +1416,7 @@ function updateWorldPlayers(){
 let currentMapLocation = null;
 
 function selectMapLocation(name, details){
-
+    
     currentMapLocation = name;
 
     document.getElementById("selectedMapLocation").innerText =
@@ -1416,6 +1424,8 @@ function selectMapLocation(name, details){
 
     document.getElementById("mapLocationDetails").innerText =
         details;
+
+    document.getElementById("missionLocation").innerText = name;
 }
 
 function generateMapEvent(){
@@ -1440,6 +1450,93 @@ function generateMapEvent(){
 
     document.getElementById("mapEventResult").innerText =
         currentMapLocation + ": " + pick(mapEvents);
+}
+
+const missionObjectives = [
+    "Rescue civilians",
+    "Defeat the villain",
+    "Protect the location",
+    "Recover a stolen artifact",
+    "Stop an invasion",
+    "Investigate strange activity",
+    "Escort an important target",
+    "Survive an ambush",
+    "Destroy an enemy base",
+    "Close a dangerous portal"
+];
+
+const missionThreats = [
+    "Street criminals",
+    "Mutant outbreak",
+    "Rogue robot squad",
+    "Alien scouts",
+    "Dark magic cult",
+    "Corrupt soldiers",
+    "Dimensional creatures",
+    "Super villain attack",
+    "Cosmic energy storm",
+    "Nexus-level anomaly"
+];
+
+const missionConsequences = [
+    "Public trust drops",
+    "The villain escapes",
+    "The location is damaged",
+    "A new enemy is revealed",
+    "The team loses resources",
+    "The threat spreads to another location",
+    "A civilian group turns against heroes",
+    "A portal becomes unstable",
+    "The villain gains power",
+    "The next mission becomes harder"
+];
+
+const missionDifficulties = [
+    "Easy",
+    "Normal",
+    "Hard",
+    "Boss",
+    "Nexus Crisis"
+];
+
+function generateFullMission(){
+
+    let location =
+        currentMapLocation || "Nexus City";
+
+    document.getElementById("missionLocation").innerText =
+        location;
+
+    let objective =
+        pick(missionObjectives);
+
+    let threat =
+        pick(missionThreats);
+
+    let reward =
+        pick(rewards);
+
+    let consequence =
+        pick(missionConsequences);
+
+    let difficulty =
+        pick(missionDifficulties);
+
+    let villain =
+        document.getElementById("villainName").innerText;
+
+    if(villain === "--"){
+        villain = pick(villainNames);
+    }
+
+    document.getElementById("fullMissionResult").innerHTML =
+        "<strong>Location:</strong> " + location + "<br><br>" +
+        "<strong>Difficulty:</strong> " + difficulty + "<br><br>" +
+        "<strong>Threat:</strong> " + threat + "<br><br>" +
+        "<strong>Objective:</strong> " + objective + "<br><br>" +
+        "<strong>Villain:</strong> " + villain + "<br><br>" +
+        "<strong>Reward:</strong> " + reward + "<br><br>" +
+        "<strong>If Heroes Fail:</strong> " + consequence;
 }
     
 </script>
