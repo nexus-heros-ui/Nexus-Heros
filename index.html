@@ -11,17 +11,28 @@ h1{color:#3B82F6;}
 button{background:#1F2937;color:white;border:none;padding:12px 20px;margin:5px;border-radius:10px;cursor:pointer;font-size:15px;}
 button:hover{background:#3B82F6;}
 input{padding:10px;border-radius:8px;border:none;margin:5px;}
-.card{background:#1F2937;max-width:700px;margin:20px auto;padding:20px;border-radius:15px;}
+.card{
+    background:#1F2937;
+    width:95%;
+    max-width:1400px;
+    margin:20px auto;
+    padding:20px;
+    border-radius:15px;
+}
 .result{min-height:24px;color:#93C5FD;margin:8px 0;}
 .rulebook-item{text-align:left;background:#111827;padding:12px;margin:8px 0;border-radius:8px;}
 .world-map{
     position:relative;
-    width:1100px;
-    height:700px;
+
+    width:100%;
+    max-width:700px;
+
+    aspect-ratio:16 / 10;
+
     margin:auto;
 
     background-image:url("map2.png");
-    background-size:cover;
+    background-size:contain;
     background-position:center;
     background-repeat:no-repeat;
 
@@ -45,38 +56,18 @@ input{padding:10px;border-radius:8px;border:none;margin:5px;}
 
 .mapMarker{
     position:absolute;
-    width:42px;
-    height:42px;
+    width:28px;
+    height:28px;
 
     border:none;
     border-radius:50%;
 
-    cursor:pointer;
-
-    font-size:22px;
+    font-size:16px;
 
     background:#2563EB;
     color:white;
-}
 
-.city{
-    left:48%;
-    top:56%;
-}
-
-.harbor{
-    left:72%;
-    top:73%;
-}
-
-.prison{
-    left:82%;
-    top:44%;
-}
-
-.ruins{
-    left:27%;
-    top:32%;
+    cursor:pointer;
 }
   
 </style>
