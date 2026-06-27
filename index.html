@@ -23,51 +23,66 @@ input{padding:10px;border-radius:8px;border:none;margin:5px;}
 .rulebook-item{text-align:left;background:#111827;padding:12px;margin:8px 0;border-radius:8px;}
 .world-map{
     position:relative;
-
     width:100%;
-    max-width:700px;
-
-    aspect-ratio:16 / 10;
+    max-width:1200px;
+    aspect-ratio:16/9;
 
     margin:auto;
 
     background-image:url("map2.png");
-    background-size:contain;
+    background-size:100% 100%;
     background-position:center;
     background-repeat:no-repeat;
 
     border-radius:20px;
     overflow:hidden;
+
+    box-shadow:0 0 30px rgba(0,0,0,.6);
 }
 .map-title{color:#60A5FA;font-size:32px;letter-spacing:3px;}
-.map-layout{display:grid;grid-template-columns:2fr 1fr;gap:15px;}
-.map-board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.map-zone{background:#111827;border:2px solid #374151;border-radius:14px;padding:18px;min-height:85px;cursor:pointer;}
-.map-zone:hover{background:#1D4ED8;}
-.safe-zone{border-color:#22C55E;}
-.mission-zone{border-color:#F97316;}
-.danger-zone{border-color:#EF4444;}
-.mystery-zone{border-color:#A855F7;}
-.boss-zone{border-color:#EAB308;}
-.map-panel{background:#111827;border:1px solid #3B82F6;border-radius:14px;padding:15px;text-align:left;}
+
+.map-panel{
+    position:absolute;
+
+    right:20px;
+    top:20px;
+
+    width:280px;
+
+    background:rgba(10,20,35,.90);
+
+    border:2px solid #3B82F6;
+
+    border-radius:15px;
+
+    padding:15px;
+}
 .character-card{background:#0F172A;border:1px solid #60A5FA;padding:10px;margin:8px 0;border-radius:10px;}
 .health-bar{background:#374151;height:14px;border-radius:10px;overflow:hidden;}
 .health-fill{background:#22C55E;height:100%;width:100%;}
 
 .mapMarker{
     position:absolute;
-    width:28px;
-    height:28px;
 
-    border:none;
+    width:34px;
+    height:34px;
+
     border-radius:50%;
-
-    font-size:16px;
+    border:2px solid white;
 
     background:#2563EB;
+
     color:white;
 
     cursor:pointer;
+
+    font-size:18px;
+
+    transition:.2s;
+}
+
+.mapMarker:hover{
+    transform:scale(1.2);
 }
   
 </style>
