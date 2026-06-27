@@ -14,7 +14,20 @@ input{padding:10px;border-radius:8px;border:none;margin:5px;}
 .card{background:#1F2937;max-width:700px;margin:20px auto;padding:20px;border-radius:15px;}
 .result{min-height:24px;color:#93C5FD;margin:8px 0;}
 .rulebook-item{text-align:left;background:#111827;padding:12px;margin:8px 0;border-radius:8px;}
-.world-map{background:#050B18;border:2px solid #2563EB;border-radius:18px;padding:15px;max-width:1100px;margin:auto;}
+.world-map{
+    position:relative;
+    width:1100px;
+    height:700px;
+    margin:auto;
+
+    background-image:url("map2.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    border-radius:20px;
+    overflow:hidden;
+}
 .map-title{color:#60A5FA;font-size:32px;letter-spacing:3px;}
 .map-layout{display:grid;grid-template-columns:2fr 1fr;gap:15px;}
 .map-board{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
@@ -29,6 +42,43 @@ input{padding:10px;border-radius:8px;border:none;margin:5px;}
 .character-card{background:#0F172A;border:1px solid #60A5FA;padding:10px;margin:8px 0;border-radius:10px;}
 .health-bar{background:#374151;height:14px;border-radius:10px;overflow:hidden;}
 .health-fill{background:#22C55E;height:100%;width:100%;}
+
+.mapMarker{
+    position:absolute;
+    width:42px;
+    height:42px;
+
+    border:none;
+    border-radius:50%;
+
+    cursor:pointer;
+
+    font-size:22px;
+
+    background:#2563EB;
+    color:white;
+}
+
+.city{
+    left:48%;
+    top:56%;
+}
+
+.harbor{
+    left:72%;
+    top:73%;
+}
+
+.prison{
+    left:82%;
+    top:44%;
+}
+
+.ruins{
+    left:27%;
+    top:32%;
+}
+  
 </style>
 </head>
 
@@ -194,21 +244,25 @@ input{padding:10px;border-radius:8px;border:none;margin:5px;}
 <div class="world-map">
 <div class="map-title">NEXUS WORLD</div>
 <div class="map-layout">
-<div class="map-board">
-<div class="map-zone safe-zone" onclick="selectMapLocation('Nexus City','Safe Zone','Main city. Heroes, shops, missions, civilians.')">🏙<br><strong>Nexus City</strong><br>Safe Zone</div>
-<div class="map-zone mission-zone" onclick="selectMapLocation('Harbor District','Mission Zone','Trade, ships, smuggling, sea threats.')">⚓<br><strong>Harbor District</strong><br>Mission Zone</div>
-<div class="map-zone danger-zone" onclick="selectMapLocation('Blackgate Prison','Danger Zone','Villains, escapes, prison breaks.')">🚔<br><strong>Blackgate Prison</strong><br>Danger Zone</div>
-<div class="map-zone mystery-zone" onclick="selectMapLocation('Omega Labs','Mystery Zone','Experiments, mutants, strange science.')">🧪<br><strong>Omega Labs</strong><br>Mystery Zone</div>
-<div class="map-zone danger-zone" onclick="selectMapLocation('Crash Site','Danger Zone','Aliens, unknown tech, unstable signals.')">🛸<br><strong>Crash Site</strong><br>Danger Zone</div>
-<div class="map-zone mission-zone" onclick="selectMapLocation('Ancient Ruins','Mission Zone','Lost tech, secrets, relics.')">🏛<br><strong>Ancient Ruins</strong><br>Mission Zone</div>
-<div class="map-zone danger-zone" onclick="selectMapLocation('Wasteland Desert','Danger Zone','Bandits, scavengers, harsh travel.')">🏜<br><strong>Wasteland Desert</strong><br>Danger Zone</div>
-<div class="map-zone safe-zone" onclick="selectMapLocation('Hidden Sanctuary','Safe Zone','Peace, healing, training, upgrades.')">🛡<br><strong>Hidden Sanctuary</strong><br>Safe Zone</div>
-<div class="map-zone boss-zone" onclick="selectMapLocation('Titan Fortress','Boss Zone','Elite guards, bosses, legendary threats.')">🏰<br><strong>Titan Fortress</strong><br>Boss Zone</div>
-<div class="map-zone mystery-zone" onclick="selectMapLocation('Dimensional Portal','Mystery Zone','Travel, unstable reality, portals.')">🌀<br><strong>Dimensional Portal</strong><br>Mystery Zone</div>
-<div class="map-zone danger-zone" onclick="selectMapLocation('Power Plant','Danger Zone','Energy core, danger, sabotage.')">⚡<br><strong>Power Plant</strong><br>Danger Zone</div>
-<div class="map-zone boss-zone" onclick="selectMapLocation('Shadow Realm','Boss Zone','Dark magic, demons, final threats.')">💀<br><strong>Shadow Realm</strong><br>Boss Zone</div>
-</div>
+<button class="mapMarker city"
+onclick="selectMapLocation('Nexus City')">
+🏙
+</button>
 
+<button class="mapMarker harbor"
+onclick="selectMapLocation('Harbor District')">
+⚓
+</button>
+
+<button class="mapMarker prison"
+onclick="selectMapLocation('Blackgate Prison')">
+🚔
+</button>
+
+<button class="mapMarker ruins"
+onclick="selectMapLocation('Ancient Ruins')">
+🏛
+</button>
 <div class="map-panel">
 <h3>Location Info</h3>
 <p><strong>Name:</strong> <span id="selectedMapLocation">None</span></p>
