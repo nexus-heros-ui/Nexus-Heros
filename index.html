@@ -483,41 +483,203 @@ input{
 <div id="rulebookPortal" class="portal">
 
 <div class="card">
-<h2>Nexus Heroes Rulebook</h2>
+<h2>📖 Nexus Heroes Game Manual</h2>
 
-<h3>Goal</h3>
-<div class="rulebook-item">
-Create heroes, build teams, complete missions, fight villains, earn rewards, and grow stronger through the campaign.
+<button onclick="showManualSection('quickStart')">Quick Start</button>
+<button onclick="showManualSection('playerHandbook')">Player Handbook</button>
+<button onclick="showManualSection('gmHandbook')">GM Handbook</button>
+<button onclick="showManualSection('combatGuide')">Combat</button>
+<button onclick="showManualSection('worldGuide')">World & Travel</button>
+<button onclick="showManualSection('missionGuide')">Missions</button>
+<button onclick="showManualSection('powersGuide')">Powers</button>
+<button onclick="showManualSection('equipmentGuide')">Equipment</button>
+<button onclick="showManualSection('faqGuide')">Help / FAQ</button>
 </div>
 
-<h3>Hero Creation</h3>
+<div class="card manualSection" id="quickStart">
+<h2>⚡ Quick Start Guide</h2>
+
 <div class="rulebook-item">
-1. Create or randomize a name.<br>
-2. Spin Species, Origin, and Alignment.<br>
-3. Spin Power Chance.<br>
-4. If powers are granted, spin Power Count.<br>
-5. Spin Power Wheel until all power slots are filled.<br>
-6. Spin stats, equipment, and weaknesses.<br>
-7. Generate the hero.
+<strong>Goal:</strong><br>
+Create heroes, join a world, travel across the map, complete missions, fight villains, earn rewards, and grow stronger.
 </div>
 
-<h3>Combat</h3>
 <div class="rulebook-item">
-Combat is turn-based. Each character gets one turn per round. On your turn, choose Attack, Defend, Use Power, Use Equipment, Help Ally, or Move.
+<strong>First Time Setup:</strong><br><br>
+1. GM opens the website.<br>
+2. GM clicks <strong>World Map</strong>.<br>
+3. GM creates a World Code.<br>
+4. Players create heroes in Player Portal.<br>
+5. Players join the world using the code.<br>
+6. GM adds heroes to the map.<br>
+7. GM starts Turn 1.
+</div>
 </div>
 
-<h3>Combat Rolls</h3>
+<div class="card manualSection" id="playerHandbook" style="display:none;">
+<h2>🦸 Player Handbook</h2>
+
 <div class="rulebook-item">
-Use Strength for melee, Speed for dodging, Combat for fighting skill, Power Control for powers, and Intelligence for tactics or tech. The GM decides difficulty.
+<strong>Hero Creation Order:</strong><br><br>
+1. Type a hero name or press Random Name.<br>
+2. Spin Species.<br>
+3. Spin Origin.<br>
+4. Spin Alignment.<br>
+5. Spin Power Chance.<br>
+6. If powers are granted, spin Power Count.<br>
+7. Spin Power until all slots are filled.<br>
+8. Spin all 7 stats.<br>
+9. Spin Equipment Chance.<br>
+10. Spin Equipment Count and Equipment if granted.<br>
+11. Spin Weakness Count and Weaknesses.<br>
+12. Press Generate Hero.<br>
+13. Press Save Hero.
 </div>
 
-<h3>Damage</h3>
 <div class="rulebook-item">
-Compare the attacker’s stat against the defender’s Durability, Speed, or defensive power. The GM decides light, serious, critical, or battle-ending damage.
+<strong>Stats:</strong><br><br>
+Strength = melee power and lifting.<br>
+Speed = movement and dodging.<br>
+Durability = defense and damage resistance.<br>
+Intelligence = tactics, tech, and problem solving.<br>
+Combat = fighting skill.<br>
+Stamina = endurance and long battles.<br>
+Power Control = accuracy and control with powers.
 </div>
 
-<h3>Power Rarity</h3>
 <div class="rulebook-item">
+<strong>Ranks:</strong><br><br>
+Street Hero<br>
+Enhanced Hero<br>
+Super Hero<br>
+Champion<br>
+Omega Hero<br>
+Cosmic Hero<br>
+Nexus Ascendant
+</div>
+</div>
+
+<div class="card manualSection" id="gmHandbook" style="display:none;">
+<h2>🎲 Game Master Handbook</h2>
+
+<div class="rulebook-item">
+<strong>GM Job:</strong><br>
+The GM controls the world, villains, missions, rewards, consequences, events, NPCs, and unclear rules.
+</div>
+
+<div class="rulebook-item">
+<strong>How To Start A Game:</strong><br><br>
+1. Click World Map.<br>
+2. Type a world name.<br>
+3. Press Create World Code.<br>
+4. Give the code to players.<br>
+5. Decide Team Mode or Solo Mode.<br>
+6. Add heroes to the map.<br>
+7. Generate a mission.<br>
+8. Begin Turn 1.
+</div>
+
+<div class="rulebook-item">
+<strong>Turn Order:</strong><br><br>
+1. World Events happen.<br>
+2. GM moves NPCs and villains.<br>
+3. Player 1 takes a turn.<br>
+4. Player 2 takes a turn.<br>
+5. Continue until all players act.<br>
+6. Enemies act.<br>
+7. GM presses Next Turn.
+</div>
+</div>
+
+<div class="card manualSection" id="combatGuide" style="display:none;">
+<h2>⚔ Combat Guide</h2>
+
+<div class="rulebook-item">
+<strong>Combat is turn-based.</strong><br><br>
+On your turn you may do one main action:<br><br>
+Attack<br>
+Defend<br>
+Use Power<br>
+Use Equipment<br>
+Help Ally<br>
+Interact<br>
+Move
+</div>
+
+<div class="rulebook-item">
+<strong>How Attacks Work:</strong><br><br>
+1. Choose an attack or power.<br>
+2. Pick the best stat for it.<br>
+3. Compare it against the enemy defense.<br>
+4. GM decides if it hits.<br>
+5. Apply damage or effects.
+</div>
+
+<div class="rulebook-item">
+<strong>Defeat:</strong><br>
+Defeated does not always mean dead. A character may be knocked out, captured, injured, forced to retreat, or removed from the fight.
+</div>
+</div>
+
+<div class="card manualSection" id="worldGuide" style="display:none;">
+<h2>🌍 World & Travel Guide</h2>
+
+<div class="rulebook-item">
+<strong>Adding Heroes To The Map:</strong><br><br>
+1. Generate a hero.<br>
+2. Go to World Map.<br>
+3. Click a location.<br>
+4. Press Add Current Hero To Map.
+</div>
+
+<div class="rulebook-item">
+<strong>Travel:</strong><br><br>
+1. Click a location dot.<br>
+2. Press Travel Here.<br>
+3. Your hero moves to that location.<br>
+4. A travel event may happen.
+</div>
+
+<div class="rulebook-item">
+<strong>Travel Events:</strong><br><br>
+Safe Travel<br>
+Random Event<br>
+Villain Encounter<br>
+Merchant Found<br>
+Hidden Treasure<br>
+World Boss Appears
+</div>
+</div>
+
+<div class="card manualSection" id="missionGuide" style="display:none;">
+<h2>📜 Mission Guide</h2>
+
+<div class="rulebook-item">
+<strong>How To Generate A Mission:</strong><br><br>
+1. Click a map location.<br>
+2. Press Generate Mission Here.<br>
+3. Read the mission objective.<br>
+4. Travel to the location.<br>
+5. Complete the mission.<br>
+6. Earn the reward or suffer consequences.
+</div>
+
+<div class="rulebook-item">
+<strong>Missions Include:</strong><br><br>
+Location<br>
+Threat<br>
+Objective<br>
+Villain<br>
+Reward<br>
+Failure Consequence
+</div>
+</div>
+
+<div class="card manualSection" id="powersGuide" style="display:none;">
+<h2>✨ Power Encyclopedia</h2>
+
+<div class="rulebook-item">
+<strong>Power Rarity:</strong><br><br>
 Common: 50%<br>
 Uncommon: 30%<br>
 Rare: 14%<br>
@@ -526,11 +688,61 @@ Legendary: 1.3%<br>
 Nexus: 0.2%
 </div>
 
-<h3>GM Final Rule</h3>
 <div class="rulebook-item">
-The GM has final say on unclear rules, power limits, mission results, rewards, and campaign consequences.
+<strong>Power Rules:</strong><br>
+Powers can be used for combat, defense, travel, investigation, support, and roleplay. Stronger powers require better Power Control.
+</div>
 </div>
 
+<div class="card manualSection" id="equipmentGuide" style="display:none;">
+<h2>🎒 Equipment Encyclopedia</h2>
+
+<div class="rulebook-item">
+<strong>Equipment Rules:</strong><br><br>
+You only get equipment if Equipment Chance grants it.<br>
+Then spin Equipment Count.<br>
+Then spin Equipment once per slot.
+</div>
+
+<div class="rulebook-item">
+<strong>Equipment Types:</strong><br><br>
+Weapons<br>
+Armor<br>
+Relics<br>
+Artifacts<br>
+Shields<br>
+Tools<br>
+Energy Cores
+</div>
+</div>
+
+<div class="card manualSection" id="faqGuide" style="display:none;">
+<h2>❓ Help / FAQ</h2>
+
+<div class="rulebook-item">
+<strong>How do I add players?</strong><br>
+Players create heroes, join the world code, then the GM adds their hero to the map.
+</div>
+
+<div class="rulebook-item">
+<strong>How do turns work?</strong><br>
+Each player acts once. Then enemies act. Then GM presses Next Turn.
+</div>
+
+<div class="rulebook-item">
+<strong>How do I move?</strong><br>
+Click a map location, then press Travel Here.
+</div>
+
+<div class="rulebook-item">
+<strong>How do I save?</strong><br>
+Press Save Hero after generating your hero.
+</div>
+
+<div class="rulebook-item">
+<strong>What does the GM do?</strong><br>
+The GM controls missions, enemies, rewards, consequences, world events, and final rulings.
+</div>
 </div>
 
 </div>
@@ -1544,6 +1756,15 @@ function travelSelectedHero(){
         event;
 
     updateMapCharacters();
+}
+
+function showManualSection(sectionId){
+
+    document.querySelectorAll(".manualSection").forEach(section => {
+        section.style.display = "none";
+    });
+
+    document.getElementById(sectionId).style.display = "block";
 }
     
 </script>
