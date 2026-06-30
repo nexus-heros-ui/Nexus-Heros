@@ -461,9 +461,14 @@ input{
 <p><strong>Turn:</strong> <span id="worldTurn">1</span></p>
 
 <button onclick="generateFullMission()">📜 Generate Mission Here</button>
+<button onclick="travelSelectedHero()">🚶 Travel Here</button>
 <button onclick="nextWorldTurn()">➡ Next Turn</button>
+
 </div>
-</div>
+</div>   
+    
+<h3>Travel Event</h3>
+<div id="travelEventResult">No travel yet.</div>
 
 <div class="card">
 <h2>Map Characters</h2>
@@ -1509,6 +1514,38 @@ function generateFullMission(){
         "<br><br><strong>If Heroes Fail:</strong> " + pick(consequences);
 }
 
+let selectedMapHeroIndex = 0;
+
+function travelSelectedHero(){
+
+    if(mapCharacters.length === 0){
+        alert("Add a hero to the map first.");
+        return;
+    }
+
+    if(!currentMapLocation){
+        alert("Click a map location first.");
+        return;
+    }
+
+    mapCharacters[selectedMapHeroIndex].location =
+        currentMapLocation;
+
+    let roll = Math.random() * 100;
+    let event = "Safe travel. Nothing happens.";
+
+    if(roll > 55) event = "Random event on the road.";
+    if(roll > 75) event = "Villain encounter!";
+    if(roll > 85) event = "Traveling merchant found.";
+    if(roll > 93) event = "Hidden treasure discovered.";
+    if(roll > 98) event = "World Boss appears nearby!";
+
+    document.getElementById("travelEventResult").innerText =
+        event;
+
+    updateMapCharacters();
+}
+    
 </script>
 
 </body>
