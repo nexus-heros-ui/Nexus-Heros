@@ -1847,8 +1847,12 @@ function updatePlayerManager(){
         "<p><strong>Status:</strong> " + player.status + "</p>" +
         "<p><strong>Turn:</strong> " + player.turn + "</p>" +
 
-        "<button onclick='damageManagedPlayer(" + index + ")'>Damage</button>" +
-        "<button onclick='healManagedPlayer(" + index + ")'>Heal</button>" +
+       "<button onclick='changePlayerHealth(" + index + ", -5)'>-5 HP</button>" +
+"<button onclick='changePlayerHealth(" + index + ", -10)'>-10 HP</button>" +
+"<button onclick='changePlayerHealth(" + index + ", -25)'>-25 HP</button>" +
+"<button onclick='changePlayerHealth(" + index + ", 5)'>+5 HP</button>" +
+"<button onclick='changePlayerHealth(" + index + ", 10)'>+10 HP</button>" +
+"<button onclick='changePlayerHealth(" + index + ", 25)'>+25 HP</button>" +
         "<button onclick='restoreEnergy(" + index + ")'>Restore Energy</button>" +
         "<button onclick='knockOutPlayer(" + index + ")'>Knock Out</button>" +
         "<button onclick='revivePlayer(" + index + ")'>Revive</button>" +
