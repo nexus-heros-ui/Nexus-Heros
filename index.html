@@ -491,6 +491,18 @@ input{
 <div id="mapCharactersDisplay">No characters on map.</div>
 </div>
 
+<hr>
+
+<h2>Player Manager</h2>
+
+<button onclick="addCurrentHeroToPlayerManager()">
+➕ Add Current Hero To Player Manager
+</button>
+
+<div id="playerManagerDisplay">
+No players added.
+</div>
+    
 </div>
 
 <div id="rulebookPortal" class="portal">
@@ -1778,6 +1790,145 @@ function showManualSection(sectionId){
     });
 
     document.getElementById(sectionId).style.display = "block";
+}
+
+let managedPlayers = [];
+
+function addCurrentHeroToPlayerManager(){
+
+    let heroName = document.getElementById("name").innerText;
+
+    if(heroName === "--"){
+        alert("Generate a hero first.");
+        return;
+    }
+
+    let player = {
+        name: heroName,
+        heroClass: document.getElementById("heroClass").innerText,
+        rank: document.getElementById("rank").innerText,
+        location: currentMapLocation || "Nexus City",
+        health: 100,
+        energy: 100,
+        shield: 0,
+        injuries: "None",
+        status: "Ready",
+        turn: "Waiting"
+    };
+
+    managedPlayers.push(player);
+
+    updatePlayerManager();
+}
+
+function updatePlayerManager(){
+
+    let display = document.getElementById("playerManagerDisplay");
+
+    if(managedPlayers.length === 0){
+        display.innerHTML = "No players added.";
+        return;
+    }
+
+    let html = "";
+
+    managedPlayers.forEach((player, index) => {
+
+        html +=
+        "<div class='player-manager-card'>" +
+        "<h3>🦸 " + player.name + "</h3>" +
+        "<p><strong>Class:</strong> " + player.heroClass + "</p>" +
+        "<p><strong>Rank:</strong> " + player.rank + "</p>" +
+        "<p><strong>Location:</strong> " + player.location + "</p>" +
+        "<p><strong>Health:</strong> ❤️ " + player.health + "/100</p>" +
+        "<p><strong>Energy:</strong> ⚡ " + player.energy + "/100</p>" +
+        "<p><strong>Shield:</strong> 🛡 " + player.shield + "</p>" +
+        "<p><strong>Injuries:</strong> " + player.injuries + "</p>" +
+        "<p><strong>Status:</strong> " + player.status + "</p>" +
+        "<p><strong>Turn:</strong> " + player.turn + "</p>" +
+
+        "<button onclick='damageManagedPlayer(" + index + ")'>Damage</button>" +
+        "<button onclick='healManagedPlayer(" + index + ")'>Heal</button>" +
+        "<button onclick='restoreEnergy(" + index + ")'>Restore Energy</button>" +
+        "<button onclick='knockOutPlayer(" + index + ")'>Knock Out</button>" +
+        "<button onclick='revivePlayer(" + index + ")'>Revive</button>" +
+        "</div>";
+    });
+
+    display.innerHTML = html;
+}
+
+function damageManagedPlayer(index){
+
+    managedPlayers[index].health -= 20;
+
+    if(managedPlayers[index].health < 0){
+        managedPlayers[index].health = 0;
+    }
+
+    if(managedPlayers[index].health === 0){
+        managedPlayers[index].status = "Knocked Out";
+        managedPlayers[index].injuries = "Defeated";
+    }
+    else if(managedPlayers[index].health <= 30){
+        managedPlayers[index].injuries = "Serious Injury";
+    }
+    else if(managedPlayers[index].health <= 60){
+        managedPlayers[index].injuries = "Minor Injury";
+    }
+
+    updatePlayerManager();
+}
+
+function healManagedPlayer(index){
+
+    managedPlayers[index].health += 20;
+
+    if(managedPlayers[index].health > 100){
+        managedPlayers[index].health = 100;
+    }
+
+    if(managedPlayers[index].health > 60){
+        managedPlayers[index].injuries = "None";
+    }
+
+    if(managedPlayers[index].health > 0){
+        managedPlayers[index].status = "Ready";
+    }
+
+    updatePlayerManager();
+}
+
+function restoreEnergy(index){
+
+    managedPlayers[index].energy += 25;
+
+    if(managedPlayers[index].energy > 100){
+        managedPlayers[index].energy = 100;
+    }
+
+    updatePlayerManager();
+}
+
+function knockOutPlayer(index){
+
+    managedPlayers[index].health = 0;
+    managedPlayers[index].status = "Knocked Out";
+    managedPlayers[index].injuries = "Defeated";
+    managedPlayers[index].turn = "Skipped";
+
+    updatePlayerManager();
+}
+
+function revivePlayer(index){
+
+    managedPlayers[index].health = 50;
+    managedPlayers[index].energy = 50;
+    managedPlayers[index].status = "Ready";
+    managedPlayers[index].injuries = "Minor Injury";
+    managedPlayers[index].turn = "Waiting";
+
+    updatePlayerManager();
 }
     
 </script>
