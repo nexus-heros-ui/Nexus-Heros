@@ -436,6 +436,17 @@ input, select{
 </div>
 
 <div class="card">
+<h2>Enemy Manager</h2>
+
+<button onclick="generateVillain()">😈 Generate Villain</button>
+<button onclick="addGeneratedVillainToEnemies()">➕ Add Villain To Enemy Manager</button>
+<button onclick="addMinion()">➕ Spawn Minion</button>
+<button onclick="addElite()">⭐ Spawn Elite</button>
+
+<div id="enemyManagerDisplay">No enemies added.</div>
+</div>
+    
+<div class="card">
 <h2>Mission Generator</h2>
 
 <p><strong>Selected Location:</strong></p>
@@ -2353,6 +2364,161 @@ function combatDefend(){
     updatePlayerManager();
     updateEnemyManager();
 }    
+
+let enemies = [];
+
+function generateVillain(){
+    let score = 0;
+
+    for(let i = 0; i < 7; i++){
+        score += statRoll();
+    }
+
+    document.getElementById("villainName").innerText = pick(villainNames);
+    document.getElementById("villainSpecies").innerText = pick(species);
+    document.getElementById("villainOrigin").innerText = pick(origins);
+    document.getElementById("threatLevel").innerText = pick(threatLevels);
+    document.getElementById("villainClass").innerText = "Villain";
+    document.getElementById("villainScore").innerText = score;
+    document.getElementById("villainRank").innerText =
+        getRank(score).replace("Hero", "Villain");
+
+    currentVillainScore = score;
+}
+
+function addGeneratedVillainToEnemies(){
+    let name = document.getElementById("villainName").innerText;
+
+    if(name === "--"){
+        alert("Generate a villain first.");
+        return;
+    }
+
+    enemies.push({
+        name: name,
+        type: "Villain",
+        location: currentMapLocation || "Unknown",
+        health: 120,
+        energy: 100,
+        intent: "Control the battlefield",
+        status: "Ready"
+    });
+
+    updateEnemyManager();
+}
+
+function addMinion(){
+    enemies.push({
+        name: "Minion " + (enemies.length + 1),
+        type: "Minion",
+        location: currentMapLocation || "Unknown",
+        health: 40,
+        energy: 30,
+        intent: "Attack nearest hero",
+        status: "Ready"
+    });
+
+    updateEnemyManager();
+}
+
+function addElite(){
+    enemies.push({
+        name: "Elite Enemy " + (enemies.length + 1),
+        type: "Elite",
+        location: currentMapLocation || "Unknown",
+        health: 80,
+        energy: 60,
+        intent: "Protect the villain",
+        status: "Ready"
+    });
+
+    updateEnemyManager();
+}
+
+function updateEnemyManager(){
+    let display = document.getElementById("enemyManagerDisplay");
+
+    if(enemies.length === 0){
+        display.innerHTML = "No enemies added.";
+        return;
+    }
+
+    let html = "";
+
+    enemies.forEach((enemy, index) => {
+        html +=
+        "<div class='enemy-card'>" +
+        "<h3>👹 " + enemy.name + "</h3>" +
+        "<p><strong>Type:</strong> " + enemy.type + "</p>" +
+        "<p><strong>Location:</strong> " + enemy.location + "</p>" +
+        "<p><strong>Health:</strong> " + enemy.health + "</p>" +
+        "<p><strong>Energy:</strong> " + enemy.energy + "</p>" +
+        "<p><strong>Intent:</strong> " + enemy.intent + "</p>" +
+        "<p><strong>Status:</strong> " + enemy.status + "</p>" +
+        "<button onclick='changeEnemyHealth(" + index + ", -10)'>-10 HP</button>" +
+        "<button onclick='changeEnemyHealth(" + index + ", -25)'>-25 HP</button>" +
+        "<button onclick='changeEnemyHealth(" + index + ", 10)'>+10 HP</button>" +
+        "<button onclick='changeEnemyHealth(" + index + ", 25)'>+25 HP</button>" +
+        "<button onclick='moveEnemyToSelected(" + index + ")'>Move Here</button>" +
+        "<button onclick='rollEnemyAI(" + index + ")'>Roll AI Action</button>" +
+        "<button onclick='removeEnemy(" + index + ")'>Remove</button>" +
+        "</div>";
+    });
+
+    display.innerHTML = html;
+}
+
+function changeEnemyHealth(index, amount){
+    enemies[index].health += amount;
+
+    if(enemies[index].health < 0){
+        enemies[index].health = 0;
+    }
+
+    if(enemies[index].health === 0){
+        enemies[index].status = "Defeated";
+        enemies[index].intent = "None";
+    }
+    else if(enemies[index].health <= 30){
+        enemies[index].status = "Badly Injured";
+    }
+    else{
+        enemies[index].status = "Ready";
+    }
+
+    updateEnemyManager();
+}
+
+function moveEnemyToSelected(index){
+    if(!currentMapLocation){
+        alert("Select a map location first.");
+        return;
+    }
+
+    enemies[index].location = currentMapLocation;
+    updateEnemyManager();
+}
+
+function rollEnemyAI(index){
+    let actions = [
+        "Attack nearest hero",
+        "Defend this turn",
+        "Use strongest power",
+        "Call for minions",
+        "Retreat to safer location",
+        "Target weakest hero",
+        "Protect the villain",
+        "Destroy the objective"
+    ];
+
+    enemies[index].intent = pick(actions);
+    updateEnemyManager();
+}
+
+function removeEnemy(index){
+    enemies.splice(index, 1);
+    updateEnemyManager();
+}  
 </script>
 
 </body>
