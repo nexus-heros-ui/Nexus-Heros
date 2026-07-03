@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Nexus Heroes Beta</title>
 
 <style>
@@ -35,7 +36,7 @@ button:hover{
     background:#2563EB;
 }
 
-input{
+input, select{
     padding:10px;
     border-radius:8px;
     border:none;
@@ -71,10 +72,12 @@ input{
     max-width:1200px;
     aspect-ratio:16/9;
     margin:auto;
+
     background-image:url("map2.png");
     background-size:100% 100%;
     background-position:center;
     background-repeat:no-repeat;
+
     border:3px solid #60A5FA;
     border-radius:20px;
     overflow:hidden;
@@ -83,13 +86,13 @@ input{
 
 .mapMarker{
     position:absolute;
-    width:38px;
-    height:38px;
+    width:32px;
+    height:32px;
     border-radius:50%;
     border:2px solid white;
     background:#2563EB;
     color:white;
-    font-size:20px;
+    font-size:16px;
     cursor:pointer;
     z-index:5;
 }
@@ -117,10 +120,6 @@ input{
     filter:drop-shadow(0 0 1px black);
 }
 
-.mapMarker{
-    z-index:5;
-}
-
 .city{left:42%;top:26%;}
 .harbor{left:21%;top:76%;}
 .prison{left:59%;top:36%;}
@@ -133,7 +132,7 @@ input{
 .portalMarker{left:72%;top:80%;}
 .powerplant{left:20%;top:40%;}
 .shadow{left:82%;top:54%;}
-    
+
 .map-panel{
     background:#111827;
     border:2px solid #3B82F6;
@@ -143,27 +142,21 @@ input{
     text-align:left;
 }
 
-.character-card{
+.character-card,
+.player-manager-card,
+.enemy-card{
     background:#0F172A;
     border:1px solid #60A5FA;
     border-radius:10px;
     padding:12px;
     margin:10px 0;
-}
-
-.player-manager-card{
-    background:#0F172A;
-    border:2px solid #3B82F6;
-    border-radius:12px;
-    padding:15px;
-    margin:12px 0;
     text-align:left;
 }
 
-.status-ready{color:#22C55E;}
-.status-waiting{color:#FACC15;}
-.status-ko{color:#EF4444;}
-    
+.enemy-card{
+    border-color:#EF4444;
+}
+
 .health-bar{
     background:#374151;
     height:14px;
@@ -176,12 +169,21 @@ input{
     height:100%;
 }
 
+.enemy-health-fill{
+    background:#EF4444;
+    height:100%;
+}
+
 .rulebook-item{
     background:#111827;
     text-align:left;
     padding:12px;
     margin:8px 0;
     border-radius:8px;
+}
+
+.manualSection{
+    display:none;
 }
 </style>
 </head>
@@ -192,8 +194,7 @@ input{
 
 <button onclick="showPortal('playerPortal')">Player Portal</button>
 <button onclick="showPortal('gmPortal')">GM Portal</button>
-<button onclick="showPortal('worldPortal')">World Map</button>
-<button onclick="showPortal('rulebookPortal')">Rulebook</button>
+<button onclick="showPortal('rulebookPortal')">Game Manual</button>
 
 <div id="playerPortal" class="portal">
 
@@ -208,6 +209,18 @@ input{
 <button onclick="generateHero()">⚡ Generate Hero</button>
 <button onclick="saveHero()">💾 Save Hero</button>
 <button onclick="loadHero()">📂 Load Hero</button>
+</div>
+
+<div class="card">
+<h2>Join World</h2>
+
+<input id="joinWorldInput" placeholder="Enter World Code">
+
+<br>
+
+<button onclick="joinWorld()">🚪 Join World</button>
+
+<div id="joinedWorldDisplay">Not Joined</div>
 </div>
 
 <div class="card">
@@ -251,7 +264,7 @@ input{
 <button onclick="spinStatWheel('Power Control', powerControlLevels, 'currentPowerControl', 'powerControlWheelResult')">🎡 Spin Power Control</button>
 </div>
 
-<div class="card">
+ <div class="card">
 <h2>Additional Wheels</h2>
 
 <h3>Species</h3>
@@ -320,95 +333,23 @@ input{
 <div id="weaknesses">--</div>
 </div>
 
-<div class="card">
-<h2>Team Builder</h2>
-
-<input id="teamName" placeholder="Enter Team Name">
-
-<br>
-
-<button onclick="addToTeam()">➕ Add Current Hero</button>
-<button onclick="clearTeam()">🗑 Clear Team</button>
-
-<h3>Team Members</h3>
-<div id="teamMembers">No Members</div>
-</div>
-
 </div>
 
 <div id="gmPortal" class="portal">
 
 <div class="card">
-<h2>GM Portal</h2>
+<h2>GM Control Room</h2>
 
-<button onclick="generateVillain()">😈 Generate Villain</button>
-<button onclick="generateFullMission()">📜 Generate Mission</button>
-<button onclick="simulateBattle()">⚔ Battle Simulator</button>
-</div>
-
-<div class="card">
-<h2>Villain Sheet</h2>
-
-<p><strong>Name:</strong> <span id="villainName">--</span></p>
-<p><strong>Species:</strong> <span id="villainSpecies">--</span></p>
-<p><strong>Origin:</strong> <span id="villainOrigin">--</span></p>
-<p><strong>Threat Level:</strong> <span id="threatLevel">--</span></p>
-<p><strong>Class:</strong> <span id="villainClass">--</span></p>
-<p><strong>Power Score:</strong> <span id="villainScore">--</span></p>
-<p><strong>Rank:</strong> <span id="villainRank">--</span></p>
-</div>
-
-<div class="card">
-<h2>Mission Generator</h2>
-
-<p><strong>Selected Location:</strong></p>
-<div id="missionLocation">No location selected</div>
-
-<button onclick="generateFullMission()">📜 Generate Full Mission</button>
-
-<h3>Mission Brief</h3>
-<div id="fullMissionResult">--</div>
-</div>
-
-<div class="card">
-<h2>Battle Result</h2>
-<div id="battleResult">--</div>
-</div>
-
-</div>
-
-<div id="worldPortal" class="portal">
-
-<div class="card">
-<h2>World Creator</h2>
-
+<h3>Create World</h3>
 <input id="worldNameInput" placeholder="World Name">
-
-<br>
-
 <button onclick="createWorldCode()">🌍 Create World Code</button>
 
 <h3>World Code</h3>
 <div id="worldCodeDisplay">--</div>
-</div>
 
-<div class="card">
-<h2>Join World</h2>
-
-<input id="joinWorldInput" placeholder="Enter World Code">
-
-<br>
-
-<button onclick="joinWorld()">🚪 Join World</button>
-
-<div id="joinedWorldDisplay">Not Joined</div>
-</div>
-
-<div class="card">
-<h2>GM Team Control</h2>
+<hr>
 
 <button onclick="toggleTeamMode()">🔁 Toggle Team / Solo</button>
-
 <div id="teamModeDisplay">Mode: Solo</div>
 
 <br>
@@ -425,37 +366,28 @@ input{
 <div class="world-map">
 
 <svg class="roadLayer" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path class="roadPath" d="M48 52 L65 67 L72 75 L84 82" />
-    <path class="roadPath" d="M48 52 L58 60 L72 75" />
-    <path class="roadPath" d="M48 52 L78 46" />
-    <path class="roadPath" d="M48 52 L60 31 L75 20" />
-    <path class="roadPath" d="M48 52 L41 24" />
-    <path class="roadPath" d="M48 52 L29 56 L21 76" />
-    <path class="roadPath" d="M48 52 L51 78" />
+    <path class="roadPath" d="M45 29 L47 13" />
+    <path class="roadPath" d="M45 29 L21 43" />
+    <path class="roadPath" d="M45 29 L21 78" />
+    <path class="roadPath" d="M45 29 L61 39" />
+    <path class="roadPath" d="M61 39 L78 24" />
+    <path class="roadPath" d="M61 39 L85 57" />
+    <path class="roadPath" d="M45 29 L48 59" />
+    <path class="roadPath" d="M48 59 L50 86" />
+    <path class="roadPath" d="M48 59 L73 82" />
 </svg>
 
 <button class="mapMarker city" onclick="selectMapLocation('Nexus City','Safe Zone','Main city. Heroes, shops, missions, civilians.')">🏙</button>
-
 <button class="mapMarker harbor" onclick="selectMapLocation('Harbor District','Mission Zone','Trade, ships, smuggling, sea threats.')">⚓</button>
-
 <button class="mapMarker prison" onclick="selectMapLocation('Blackgate Prison','Danger Zone','Villains, escapes, prison breaks.')">🚔</button>
-
 <button class="mapMarker labs" onclick="selectMapLocation('Omega Labs','Mystery Zone','Experiments, mutants, strange science.')">🧪</button>
-
 <button class="mapMarker crash" onclick="selectMapLocation('Crash Site','Danger Zone','Aliens, unknown tech, unstable signals.')">🛸</button>
-
 <button class="mapMarker ruins" onclick="selectMapLocation('Ancient Ruins','Mission Zone','Lost tech, secrets, relics.')">🏛</button>
-
 <button class="mapMarker wasteland" onclick="selectMapLocation('Wasteland Desert','Danger Zone','Bandits, scavengers, harsh travel.')">🏜</button>
-
 <button class="mapMarker sanctuary" onclick="selectMapLocation('Hidden Sanctuary','Safe Zone','Peace, healing, training, upgrades.')">🛡</button>
-
 <button class="mapMarker fortress" onclick="selectMapLocation('Titan Fortress','Boss Zone','Elite guards, bosses, legendary threats.')">🏰</button>
-
 <button class="mapMarker portalMarker" onclick="selectMapLocation('Dimensional Portal','Mystery Zone','Travel, unstable reality, portals.')">🌀</button>
-
 <button class="mapMarker powerplant" onclick="selectMapLocation('Power Plant','Danger Zone','Energy core, danger, sabotage.')">⚡</button>
-
 <button class="mapMarker shadow" onclick="selectMapLocation('Shadow Realm','Boss Zone','Dark magic, demons, final threats.')">💀</button>
 
 </div>
@@ -477,32 +409,100 @@ input{
 <button onclick="travelSelectedHero()">🚶 Travel Here</button>
 <button onclick="nextWorldTurn()">➡ Next Turn</button>
 
-</div>
-</div>   
-    
 <h3>Travel Event</h3>
 <div id="travelEventResult">No travel yet.</div>
+</div>
+</div>
 
 <div class="card">
-<h2>Map Characters</h2>
-
-<button onclick="addCurrentHeroToMap()">➕ Add Current Hero To Map</button>
-
-<div id="mapCharactersDisplay">No characters on map.</div>
-</div>
-
-<hr>
-
 <h2>Player Manager</h2>
 
-<button onclick="addCurrentHeroToPlayerManager()">
-➕ Add Current Hero To Player Manager
-</button>
+<button onclick="addCurrentHeroToMap()">➕ Add Current Hero To Map</button>
+<button onclick="addCurrentHeroToPlayerManager()">➕ Add Current Hero To Player Manager</button>
 
-<div id="playerManagerDisplay">
-No players added.
+<div id="mapCharactersDisplay">No characters on map.</div>
+<div id="playerManagerDisplay">No players added.</div>
+</div>
+
+<div class="card">
+<h2>Enemy Manager</h2>
+
+<button onclick="generateVillain()">😈 Generate Villain</button>
+<button onclick="addGeneratedVillainToEnemies()">➕ Add Villain To Enemy Manager</button>
+<button onclick="addMinion()">➕ Add Minion</button>
+<button onclick="addElite()">➕ Add Elite</button>
+
+<div id="enemyManagerDisplay">No enemies added.</div>
+</div>
+
+<div class="card">
+<h2>Mission Generator</h2>
+
+<p><strong>Selected Location:</strong></p>
+<div id="missionLocation">No location selected</div>
+
+<button onclick="generateFullMission()">📜 Generate Full Mission</button>
+
+<h3>Mission Brief</h3>
+<div id="fullMissionResult">--</div>
+</div>
+
+<div class="card">
+<h2>Battle Tools</h2>
+
+<button onclick="simulateBattle()">⚔ Quick Battle Simulator</button>
+
+<h3>Battle Result</h3>
+<div id="battleResult">--</div>
+</div>
+
+<div class="card">
+<h2>Turn Tracker</h2>
+
+<button onclick="startTurns()">▶ Start Turns</button>
+<button onclick="endCurrentTurn()">⏭ End Current Turn</button>
+<button onclick="resetTurns()">🔄 Reset Turns</button>
+
+<div id="turnTrackerDisplay">
+No turn order started.
+</div>
+</div>
+
+<div class="card">
+
+<h2>Combat Engine</h2>
+
+<button onclick="refreshCombatSelectors()">🔄 Refresh Combat Units</button>
+
+<h3>Attacker</h3>
+<select id="combatAttacker"></select>
+
+<h3>Target</h3>
+<select id="combatTarget"></select>
+
+<br>
+
+<button onclick="combatAttack()">⚔ Attack</button>
+<button onclick="combatHeal()">💚 Heal Target</button>
+<button onclick="combatDefend()">🛡 Defend Target</button>
+
+<h3>Combat Log</h3>
+<div id="combatLog">No combat yet.</div>
+
 </div>
     
+<div class="card">
+<h2>Villain Sheet</h2>
+
+<p><strong>Name:</strong> <span id="villainName">--</span></p>
+<p><strong>Species:</strong> <span id="villainSpecies">--</span></p>
+<p><strong>Origin:</strong> <span id="villainOrigin">--</span></p>
+<p><strong>Threat Level:</strong> <span id="threatLevel">--</span></p>
+<p><strong>Class:</strong> <span id="villainClass">--</span></p>
+<p><strong>Power Score:</strong> <span id="villainScore">--</span></p>
+<p><strong>Rank:</strong> <span id="villainRank">--</span></p>
+</div>
+
 </div>
 
 <div id="rulebookPortal" class="portal">
@@ -516,257 +516,133 @@ No players added.
 <button onclick="showManualSection('combatGuide')">Combat</button>
 <button onclick="showManualSection('worldGuide')">World & Travel</button>
 <button onclick="showManualSection('missionGuide')">Missions</button>
+<button onclick="showManualSection('enemyGuide')">Villains & Minions</button>
 <button onclick="showManualSection('powersGuide')">Powers</button>
 <button onclick="showManualSection('equipmentGuide')">Equipment</button>
 <button onclick="showManualSection('faqGuide')">Help / FAQ</button>
 </div>
 
-<div class="card manualSection" id="quickStart">
-<h2>⚡ Quick Start Guide</h2>
-
+<div class="card manualSection" id="quickStart" style="display:block;">
+<h2>⚡ Quick Start</h2>
 <div class="rulebook-item">
 <strong>Goal:</strong><br>
 Create heroes, join a world, travel across the map, complete missions, fight villains, earn rewards, and grow stronger.
 </div>
-
 <div class="rulebook-item">
-<strong>First Time Setup:</strong><br><br>
-1. GM opens the website.<br>
-2. GM clicks <strong>World Map</strong>.<br>
+<strong>Fast Setup:</strong><br><br>
+1. Players create heroes in Player Portal.<br>
+2. GM opens GM Portal.<br>
 3. GM creates a World Code.<br>
-4. Players create heroes in Player Portal.<br>
-5. Players join the world using the code.<br>
-6. GM adds heroes to the map.<br>
-7. GM starts Turn 1.
+4. Players join using the code.<br>
+5. GM adds heroes to the world, map, and Player Manager.<br>
+6. GM generates a mission.<br>
+7. Everyone takes turns.
 </div>
 </div>
 
-<div class="card manualSection" id="playerHandbook" style="display:none;">
+<div class="card manualSection" id="playerHandbook">
 <h2>🦸 Player Handbook</h2>
-
 <div class="rulebook-item">
 <strong>Hero Creation Order:</strong><br><br>
-1. Type a hero name or press Random Name.<br>
-2. Spin Species.<br>
-3. Spin Origin.<br>
-4. Spin Alignment.<br>
-5. Spin Power Chance.<br>
-6. If powers are granted, spin Power Count.<br>
-7. Spin Power until all slots are filled.<br>
-8. Spin all 7 stats.<br>
-9. Spin Equipment Chance.<br>
-10. Spin Equipment Count and Equipment if granted.<br>
-11. Spin Weakness Count and Weaknesses.<br>
-12. Press Generate Hero.<br>
-13. Press Save Hero.
+1. Name hero.<br>
+2. Spin Species, Origin, Alignment.<br>
+3. Spin Power Chance.<br>
+4. If powers are granted, spin Power Count.<br>
+5. Spin Power until all slots are filled.<br>
+6. Spin all stats.<br>
+7. Spin Equipment and Weaknesses.<br>
+8. Press Generate Hero.<br>
+9. Press Save Hero.
+</div>
 </div>
 
+<div class="card manualSection" id="gmHandbook">
+<h2>🎲 GM Handbook</h2>
 <div class="rulebook-item">
-<strong>Stats:</strong><br><br>
-Strength = melee power and lifting.<br>
-Speed = movement and dodging.<br>
-Durability = defense and damage resistance.<br>
-Intelligence = tactics, tech, and problem solving.<br>
-Combat = fighting skill.<br>
-Stamina = endurance and long battles.<br>
-Power Control = accuracy and control with powers.
+<strong>GM Controls:</strong><br><br>
+Create world codes, manage teams, move players, control health, generate enemies, create missions, run turns, and decide final rulings.
 </div>
-
-<div class="rulebook-item">
-<strong>Ranks:</strong><br><br>
-Street Hero<br>
-Enhanced Hero<br>
-Super Hero<br>
-Champion<br>
-Omega Hero<br>
-Cosmic Hero<br>
-Nexus Ascendant
-</div>
-</div>
-
-<div class="card manualSection" id="gmHandbook" style="display:none;">
-<h2>🎲 Game Master Handbook</h2>
-
-<div class="rulebook-item">
-<strong>GM Job:</strong><br>
-The GM controls the world, villains, missions, rewards, consequences, events, NPCs, and unclear rules.
-</div>
-
-<div class="rulebook-item">
-<strong>How To Start A Game:</strong><br><br>
-1. Click World Map.<br>
-2. Type a world name.<br>
-3. Press Create World Code.<br>
-4. Give the code to players.<br>
-5. Decide Team Mode or Solo Mode.<br>
-6. Add heroes to the map.<br>
-7. Generate a mission.<br>
-8. Begin Turn 1.
-</div>
-
 <div class="rulebook-item">
 <strong>Turn Order:</strong><br><br>
-1. World Events happen.<br>
-2. GM moves NPCs and villains.<br>
-3. Player 1 takes a turn.<br>
-4. Player 2 takes a turn.<br>
-5. Continue until all players act.<br>
-6. Enemies act.<br>
-7. GM presses Next Turn.
+1. World events happen.<br>
+2. GM controls enemies.<br>
+3. Each player acts once.<br>
+4. Enemies act.<br>
+5. GM presses Next Turn.
 </div>
 </div>
 
-<div class="card manualSection" id="combatGuide" style="display:none;">
+<div class="card manualSection" id="combatGuide">
 <h2>⚔ Combat Guide</h2>
-
 <div class="rulebook-item">
-<strong>Combat is turn-based.</strong><br><br>
-On your turn you may do one main action:<br><br>
-Attack<br>
-Defend<br>
-Use Power<br>
-Use Equipment<br>
-Help Ally<br>
-Interact<br>
-Move
+Each turn a character may Attack, Defend, Move, Use Power, Use Equipment, Help Ally, or Interact.
 </div>
-
 <div class="rulebook-item">
-<strong>How Attacks Work:</strong><br><br>
-1. Choose an attack or power.<br>
-2. Pick the best stat for it.<br>
-3. Compare it against the enemy defense.<br>
-4. GM decides if it hits.<br>
-5. Apply damage or effects.
+The GM compares the attacker’s best stat against the defender’s best defensive stat. Damage can be light, serious, critical, or battle-ending.
+</div>
 </div>
 
+<div class="card manualSection" id="worldGuide">
+<h2>🌍 World & Travel</h2>
 <div class="rulebook-item">
-<strong>Defeat:</strong><br>
-Defeated does not always mean dead. A character may be knocked out, captured, injured, forced to retreat, or removed from the fight.
+<strong>To move:</strong><br>
+Click a location dot, then press Travel Here. A random travel event may happen.
 </div>
-</div>
-
-<div class="card manualSection" id="worldGuide" style="display:none;">
-<h2>🌍 World & Travel Guide</h2>
-
 <div class="rulebook-item">
-<strong>Adding Heroes To The Map:</strong><br><br>
-1. Generate a hero.<br>
-2. Go to World Map.<br>
-3. Click a location.<br>
-4. Press Add Current Hero To Map.
+<strong>Travel Events:</strong><br>
+Safe Travel, Random Event, Villain Encounter, Merchant, Hidden Treasure, or World Boss.
+</div>
 </div>
 
+<div class="card manualSection" id="missionGuide">
+<h2>📜 Missions</h2>
 <div class="rulebook-item">
-<strong>Travel:</strong><br><br>
-1. Click a location dot.<br>
-2. Press Travel Here.<br>
-3. Your hero moves to that location.<br>
-4. A travel event may happen.
+Missions include a location, threat, objective, villain, reward, and failure consequence.
+</div>
 </div>
 
+<div class="card manualSection" id="enemyGuide">
+<h2>👹 Villains & Minions</h2>
 <div class="rulebook-item">
-<strong>Travel Events:</strong><br><br>
-Safe Travel<br>
-Random Event<br>
-Villain Encounter<br>
-Merchant Found<br>
-Hidden Treasure<br>
-World Boss Appears
+<strong>Enemy Types:</strong><br><br>
+Minion = weak enemy.<br>
+Elite = stronger enemy.<br>
+Villain = main enemy.<br>
+World Boss = huge team threat.
 </div>
-</div>
-
-<div class="card manualSection" id="missionGuide" style="display:none;">
-<h2>📜 Mission Guide</h2>
-
 <div class="rulebook-item">
-<strong>How To Generate A Mission:</strong><br><br>
-1. Click a map location.<br>
-2. Press Generate Mission Here.<br>
-3. Read the mission objective.<br>
-4. Travel to the location.<br>
-5. Complete the mission.<br>
-6. Earn the reward or suffer consequences.
+The GM controls enemies manually, but can press Roll AI Action for a fair suggested enemy move.
+</div>
 </div>
 
+<div class="card manualSection" id="powersGuide">
+<h2>✨ Powers</h2>
 <div class="rulebook-item">
-<strong>Missions Include:</strong><br><br>
-Location<br>
-Threat<br>
-Objective<br>
-Villain<br>
-Reward<br>
-Failure Consequence
+<strong>Rarity:</strong><br>
+Common 50%, Uncommon 30%, Rare 14%, Epic 4.5%, Legendary 1.3%, Nexus 0.2%.
 </div>
 </div>
 
-<div class="card manualSection" id="powersGuide" style="display:none;">
-<h2>✨ Power Encyclopedia</h2>
-
+<div class="card manualSection" id="equipmentGuide">
+<h2>🎒 Equipment</h2>
 <div class="rulebook-item">
-<strong>Power Rarity:</strong><br><br>
-Common: 50%<br>
-Uncommon: 30%<br>
-Rare: 14%<br>
-Epic: 4.5%<br>
-Legendary: 1.3%<br>
-Nexus: 0.2%
-</div>
-
-<div class="rulebook-item">
-<strong>Power Rules:</strong><br>
-Powers can be used for combat, defense, travel, investigation, support, and roleplay. Stronger powers require better Power Control.
+Equipment is gained only if Equipment Chance grants it. Then spin Equipment Count and Equipment.
 </div>
 </div>
 
-<div class="card manualSection" id="equipmentGuide" style="display:none;">
-<h2>🎒 Equipment Encyclopedia</h2>
-
-<div class="rulebook-item">
-<strong>Equipment Rules:</strong><br><br>
-You only get equipment if Equipment Chance grants it.<br>
-Then spin Equipment Count.<br>
-Then spin Equipment once per slot.
-</div>
-
-<div class="rulebook-item">
-<strong>Equipment Types:</strong><br><br>
-Weapons<br>
-Armor<br>
-Relics<br>
-Artifacts<br>
-Shields<br>
-Tools<br>
-Energy Cores
-</div>
-</div>
-
-<div class="card manualSection" id="faqGuide" style="display:none;">
+<div class="card manualSection" id="faqGuide">
 <h2>❓ Help / FAQ</h2>
-
 <div class="rulebook-item">
 <strong>How do I add players?</strong><br>
-Players create heroes, join the world code, then the GM adds their hero to the map.
+Generate a hero, then GM adds that hero to World, Map, and Player Manager.
 </div>
-
+<div class="rulebook-item">
+<strong>How do enemies work?</strong><br>
+GM adds Minions, Elites, or Villains in the Enemy Manager. GM can control them manually or roll AI actions.
+</div>
 <div class="rulebook-item">
 <strong>How do turns work?</strong><br>
-Each player acts once. Then enemies act. Then GM presses Next Turn.
-</div>
-
-<div class="rulebook-item">
-<strong>How do I move?</strong><br>
-Click a map location, then press Travel Here.
-</div>
-
-<div class="rulebook-item">
-<strong>How do I save?</strong><br>
-Press Save Hero after generating your hero.
-</div>
-
-<div class="rulebook-item">
-<strong>What does the GM do?</strong><br>
-The GM controls missions, enemies, rewards, consequences, world events, and final rulings.
+Each player acts once, enemies act, then GM presses Next Turn.
 </div>
 </div>
 
@@ -786,60 +662,137 @@ function showPortal(id){
     document.getElementById(id).style.display = "block";
 }
 
+function showManualSection(sectionId){
+    document.querySelectorAll(".manualSection").forEach(section => {
+        section.style.display = "none";
+    });
+
+    document.getElementById(sectionId).style.display = "block";
+}
+
 const names = [
 "Nova Strike","Void Hunter","Solar Sentinel","Titan Blade","Shadow Pulse",
 "Iron Phantom","Quantum Knight","Starbreaker","Nexus Reaper","Eclipse Guardian",
 "Solar Warden","Night Spark","Omega Falcon","Blue Comet","Crimson Shield",
-"Vortex Knight","Silver Ghost","Thunder Lynx","Cyber Saint","Astro Wolf"
+"Vortex Knight","Silver Ghost","Thunder Lynx","Cyber Saint","Astro Wolf",
+"Void Falcon","Storm Breaker","Iron Halo","Lunar Fang","Star Pulse"
 ];
 
 const species = [
-"Human","Mutant","Enhanced Human","Inhuman","Alien","Synthetic","Ascended Being"
+"Human",
+"Mutant",
+"Enhanced Human",
+"Inhuman",
+"Alien",
+"Synthetic",
+"Ascended Being"
 ];
 
 const origins = [
-"Natural Birth","Scientific Accident","Artificial Enhancement","Technology",
-"Magic","Cosmic Energy","Elite Training"
+"Natural Birth",
+"Scientific Accident",
+"Artificial Enhancement",
+"Technology",
+"Magic",
+"Cosmic Energy",
+"Elite Training"
 ];
 
 const alignments = [
-"Pure Hero","Idealistic Hero","Traditional Hero","Reluctant Hero","Anti-Hero",
-"Independent Hero","Neutral","Mercenary","Morally Gray","Anti-Villain",
-"Villain With Code","Opportunistic Villain","Pure Villain","Cosmic Evil"
+"Pure Hero",
+"Idealistic Hero",
+"Traditional Hero",
+"Reluctant Hero",
+"Anti-Hero",
+"Independent Hero",
+"Neutral",
+"Mercenary",
+"Morally Gray",
+"Anti-Villain",
+"Villain With Code",
+"Opportunistic Villain",
+"Pure Villain",
+"Cosmic Evil"
 ];
 
 const commonPowers = [
-"Enhanced Strength","Enhanced Speed","Flight","Regeneration","Invulnerability",
-"Force Fields","Fire Manipulation","Ice Manipulation","Energy Projection",
-"Shapeshifting","Wall Crawling","Enhanced Senses","Night Vision","Elasticity"
+"Enhanced Strength",
+"Enhanced Speed",
+"Flight",
+"Regeneration",
+"Invulnerability",
+"Force Fields",
+"Fire Manipulation",
+"Ice Manipulation",
+"Energy Projection",
+"Shapeshifting",
+"Wall Crawling",
+"Enhanced Senses",
+"Night Vision",
+"Elasticity"
 ];
 
 const uncommonPowers = [
-"Super Strength","Super Speed","Telepathy","Telekinesis","Technopathy",
-"Teleportation","Combat Instinct","Animal Control","Sonic Blast",
-"Light Manipulation","Electric Control","Poison Immunity","Camouflage"
+"Super Strength",
+"Super Speed",
+"Telepathy",
+"Telekinesis",
+"Technopathy",
+"Teleportation",
+"Combat Instinct",
+"Animal Control",
+"Sonic Blast",
+"Light Manipulation",
+"Electric Control",
+"Poison Immunity",
+"Camouflage"
 ];
 
 const rarePowers = [
-"Gravity Manipulation","Weather Control","Shadow Manipulation","Metal Manipulation",
-"Plant Control","Mind Control","Invisibility","Intangibility","Size Changing",
-"Energy Absorption","Illusion Casting","Magnetism","Healing Touch"
+"Gravity Manipulation",
+"Weather Control",
+"Shadow Manipulation",
+"Metal Manipulation",
+"Plant Control",
+"Mind Control",
+"Invisibility",
+"Intangibility",
+"Size Changing",
+"Energy Absorption",
+"Illusion Casting",
+"Magnetism",
+"Healing Touch"
 ];
 
 const epicPowers = [
-"Time Manipulation","Dimensional Travel","Cosmic Energy","Matter Manipulation",
-"Probability Manipulation","Soul Manipulation","Power Absorption",
-"Portal Creation","Dream Walking"
+"Time Manipulation",
+"Dimensional Travel",
+"Cosmic Energy",
+"Matter Manipulation",
+"Probability Manipulation",
+"Soul Manipulation",
+"Power Absorption",
+"Portal Creation",
+"Dream Walking"
 ];
 
 const legendaryPowers = [
-"Reality Warping","Immortality","Universal Energy Control","Space Manipulation",
-"Creation Powers","Absolute Regeneration","Concept Control"
+"Reality Warping",
+"Immortality",
+"Universal Energy Control",
+"Space Manipulation",
+"Creation Powers",
+"Absolute Regeneration",
+"Concept Control"
 ];
 
 const nexusPowers = [
-"Existence Erasure","Nexus Authority","Infinite Evolution","Omnipresence",
-"Omniscience","Multiversal Control"
+"Existence Erasure",
+"Nexus Authority",
+"Infinite Evolution",
+"Omnipresence",
+"Omniscience",
+"Multiversal Control"
 ];
 
 const equipmentList = [
@@ -860,10 +813,22 @@ const equipmentList = [
 ];
 
 const weaknesses = [
-"Power Instability","Energy Drain","Public Distrust","Fear","Overconfidence",
-"Secret Identity","Power Overload","Unstable Mutation","Magic Weakness",
-"Technology Weakness","Limited Stamina","Emotional Weakness","Solar Dependency",
-"Cold Weakness","Fire Weakness","Mental Strain"
+"Power Instability",
+"Energy Drain",
+"Public Distrust",
+"Fear",
+"Overconfidence",
+"Secret Identity",
+"Power Overload",
+"Unstable Mutation",
+"Magic Weakness",
+"Technology Weakness",
+"Limited Stamina",
+"Emotional Weakness",
+"Solar Dependency",
+"Cold Weakness",
+"Fire Weakness",
+"Mental Strain"
 ];
 
 const strengthLevels = [
@@ -918,21 +883,44 @@ const powerControlLevels = [
 ];
 
 const villainNames = [
-"Void Tyrant","Dread King","Shadow Lord","Iron Reaper","Blood Phantom",
-"Chaos Bringer","Omega Beast","Nexus Destroyer","Dark Sentinel",
-"Cosmic Warlord","Null Baron","Red Wraith","Iron Vandal","Star Devourer"
+"Void Tyrant",
+"Dread King",
+"Shadow Lord",
+"Iron Reaper",
+"Blood Phantom",
+"Chaos Bringer",
+"Omega Beast",
+"Nexus Destroyer",
+"Dark Sentinel",
+"Cosmic Warlord",
+"Null Baron",
+"Red Wraith",
+"Iron Vandal",
+"Star Devourer"
 ];
 
 const rewards = [
-"Credits","Rare Equipment","Epic Equipment","Legendary Equipment",
-"Artifact","Relic","Power Upgrade","Reputation",
-"Bonus Stat Point","Team Resource"
+"Credits",
+"Rare Equipment",
+"Epic Equipment",
+"Legendary Equipment",
+"Artifact",
+"Relic",
+"Power Upgrade",
+"Reputation",
+"Bonus Stat Point",
+"Team Resource"
 ];
 
 const threatLevels = [
-"Street Threat","City Threat","National Threat","Planetary Threat",
-"Galactic Threat","Universal Threat","Nexus Threat"
-];
+"Street Threat",
+"City Threat",
+"National Threat",
+"Planetary Threat",
+"Galactic Threat",
+"Universal Threat",
+"Nexus Threat"
+];    
 
 let selectedPowers = [];
 let powerSpinsRemaining = 0;
@@ -972,6 +960,10 @@ let currentMapType = null;
 let mapTurn = 1;
 let activeEventsCount = 0;
 let mapCharacters = [];
+
+let selectedMapHeroIndex = 0;
+let managedPlayers = [];
+let enemies = [];
 
 function getWeightedPower(){
     let roll = Math.random() * 100;
@@ -1033,8 +1025,7 @@ function getEquipmentCount(){
 }
 
 function generateRandomName(){
-    document.getElementById("customName").value =
-        pick(names);
+    document.getElementById("customName").value = pick(names);
 }
 
 function spinPowerChanceWheel(){
@@ -1423,88 +1414,6 @@ function loadHero(){
     alert("Hero Loaded!");
 }
 
-function addToTeam(){
-    let name = document.getElementById("name").innerText;
-
-    if(name === "--"){
-        alert("Generate a hero first.");
-        return;
-    }
-
-    if(team.length >= 5){
-        alert("Team is full.");
-        return;
-    }
-
-    team.push(
-        name +
-        " | " +
-        document.getElementById("heroClass").innerText +
-        " | " +
-        document.getElementById("rank").innerText
-    );
-
-    updateTeamDisplay();
-}
-
-function clearTeam(){
-    team = [];
-    updateTeamDisplay();
-}
-
-function updateTeamDisplay(){
-    document.getElementById("teamMembers").innerHTML =
-        team.length ? team.join("<br><br>") : "No Members";
-}
-
-function generateVillain(){
-    let score = 0;
-
-    for(let i = 0; i < 7; i++){
-        score += statRoll();
-    }
-
-    document.getElementById("villainName").innerText = pick(villainNames);
-    document.getElementById("villainSpecies").innerText = pick(species);
-    document.getElementById("villainOrigin").innerText = pick(origins);
-    document.getElementById("threatLevel").innerText = pick(threatLevels);
-    document.getElementById("villainClass").innerText = "Villain";
-    document.getElementById("villainScore").innerText = score;
-    document.getElementById("villainRank").innerText =
-        getRank(score).replace("Hero", "Villain");
-
-    currentVillainScore = score;
-}
-
-function simulateBattle(){
-    if(!currentHeroScore){
-        alert("Generate a hero first.");
-        return;
-    }
-
-    if(!currentVillainScore){
-        alert("Generate a villain first.");
-        return;
-    }
-
-    let heroBattleScore =
-        currentHeroScore + Math.floor(Math.random() * 20);
-
-    let villainBattleScore =
-        currentVillainScore + Math.floor(Math.random() * 20);
-
-    let result = "⚔ DRAW";
-
-    if(heroBattleScore > villainBattleScore){
-        result = "🏆 HERO VICTORY";
-    }
-    else if(villainBattleScore > heroBattleScore){
-        result = "💀 VILLAIN VICTORY";
-    }
-
-    document.getElementById("battleResult").innerText = result;
-}
-
 function createWorldCode(){
     let worldName =
         document.getElementById("worldNameInput").value.trim() ||
@@ -1578,7 +1487,6 @@ function selectMapLocation(name, type, details){
     document.getElementById("selectedMapLocation").innerText = name;
     document.getElementById("selectedMapType").innerText = type;
     document.getElementById("mapLocationDetails").innerText = details;
-
     document.getElementById("missionLocation").innerText = name;
 }
 
@@ -1621,7 +1529,7 @@ function updateMapCharacters(){
     mapCharacters.forEach((character, index) => {
         html +=
         "<div class='character-card'>" +
-        "<strong>" + character.name + "</strong><br>" +
+        "<strong>🧍 " + character.name + "</strong><br>" +
         "Class: " + character.heroClass + "<br>" +
         "Rank: " + character.rank + "<br>" +
         "Location: " + character.location + "<br>" +
@@ -1694,6 +1602,350 @@ function moveCharacterToSelected(index){
     updateMapCharacters();
 }
 
+function travelSelectedHero(){
+    if(mapCharacters.length === 0){
+        alert("Add a hero to the map first.");
+        return;
+    }
+
+    if(!currentMapLocation){
+        alert("Click a map location first.");
+        return;
+    }
+
+    mapCharacters[selectedMapHeroIndex].location =
+        currentMapLocation;
+
+    let roll = Math.random() * 100;
+    let event = "Safe travel. Nothing happens.";
+
+    if(roll > 55) event = "Random event on the road.";
+    if(roll > 75) event = "Villain encounter!";
+    if(roll > 85) event = "Traveling merchant found.";
+    if(roll > 93) event = "Hidden treasure discovered.";
+    if(roll > 98) event = "World Boss appears nearby!";
+
+    document.getElementById("travelEventResult").innerText =
+        event;
+
+    updateMapCharacters();
+}
+
+function addCurrentHeroToPlayerManager(){
+    let heroName = document.getElementById("name").innerText;
+
+    if(heroName === "--"){
+        alert("Generate a hero first.");
+        return;
+    }
+
+    let player = {
+        name: heroName,
+        heroClass: document.getElementById("heroClass").innerText,
+        rank: document.getElementById("rank").innerText,
+        location: currentMapLocation || "Nexus City",
+        health: 100,
+        energy: 100,
+        shield: 0,
+        injuries: "None",
+        status: "Ready",
+        turn: "Waiting"
+    };
+
+    managedPlayers.push(player);
+
+    updatePlayerManager();
+}
+
+function updatePlayerManager(){
+    let display = document.getElementById("playerManagerDisplay");
+
+    if(managedPlayers.length === 0){
+        display.innerHTML = "No players added.";
+        return;
+    }
+
+    let html = "";
+
+    managedPlayers.forEach((player, index) => {
+        html +=
+        "<div class='player-manager-card'>" +
+        "<h3>🦸 " + player.name + "</h3>" +
+        "<p><strong>Class:</strong> " + player.heroClass + "</p>" +
+        "<p><strong>Rank:</strong> " + player.rank + "</p>" +
+        "<p><strong>Location:</strong> " + player.location + "</p>" +
+        "<p><strong>Health:</strong> ❤️ " + player.health + "/100</p>" +
+        "<div class='health-bar'>" +
+        "<div class='health-fill' style='width:" + player.health + "%'></div>" +
+        "</div>" +
+        "<p><strong>Energy:</strong> ⚡ " + player.energy + "/100</p>" +
+        "<p><strong>Shield:</strong> 🛡 " + player.shield + "</p>" +
+        "<p><strong>Injuries:</strong> " + player.injuries + "</p>" +
+        "<p><strong>Status:</strong> " + player.status + "</p>" +
+        "<p><strong>Turn:</strong> " + player.turn + "</p>" +
+
+        "<button onclick='changePlayerHealth(" + index + ", -5)'>-5 HP</button>" +
+        "<button onclick='changePlayerHealth(" + index + ", -10)'>-10 HP</button>" +
+        "<button onclick='changePlayerHealth(" + index + ", -25)'>-25 HP</button>" +
+        "<button onclick='changePlayerHealth(" + index + ", 5)'>+5 HP</button>" +
+        "<button onclick='changePlayerHealth(" + index + ", 10)'>+10 HP</button>" +
+        "<button onclick='changePlayerHealth(" + index + ", 25)'>+25 HP</button>" +
+        "<button onclick='restoreEnergy(" + index + ")'>Restore Energy</button>" +
+        "<button onclick='knockOutPlayer(" + index + ")'>Knock Out</button>" +
+        "<button onclick='revivePlayer(" + index + ")'>Revive</button>" +
+        "</div>";
+    });
+
+    display.innerHTML = html;
+}
+
+function changePlayerHealth(index, amount){
+    managedPlayers[index].health += amount;
+
+    if(managedPlayers[index].health > 100){
+        managedPlayers[index].health = 100;
+    }
+
+    if(managedPlayers[index].health < 0){
+        managedPlayers[index].health = 0;
+    }
+
+    if(managedPlayers[index].health === 0){
+        managedPlayers[index].status = "Knocked Out";
+        managedPlayers[index].injuries = "Defeated";
+    }
+    else if(managedPlayers[index].health <= 30){
+        managedPlayers[index].status = "Injured";
+        managedPlayers[index].injuries = "Serious Injury";
+    }
+    else if(managedPlayers[index].health <= 60){
+        managedPlayers[index].status = "Injured";
+        managedPlayers[index].injuries = "Minor Injury";
+    }
+    else{
+        managedPlayers[index].status = "Ready";
+        managedPlayers[index].injuries = "None";
+    }
+
+    updatePlayerManager();
+}
+
+function restoreEnergy(index){
+    managedPlayers[index].energy += 25;
+
+    if(managedPlayers[index].energy > 100){
+        managedPlayers[index].energy = 100;
+    }
+
+    updatePlayerManager();
+}
+
+function knockOutPlayer(index){
+    managedPlayers[index].health = 0;
+    managedPlayers[index].status = "Knocked Out";
+    managedPlayers[index].injuries = "Defeated";
+    managedPlayers[index].turn = "Skipped";
+
+    updatePlayerManager();
+}
+
+function revivePlayer(index){
+    managedPlayers[index].health = 50;
+    managedPlayers[index].energy = 50;
+    managedPlayers[index].status = "Ready";
+    managedPlayers[index].injuries = "Minor Injury";
+    managedPlayers[index].turn = "Waiting";
+
+    updatePlayerManager();
+}
+
+ function generateVillain(){
+    let score = 0;
+
+    for(let i = 0; i < 7; i++){
+        score += statRoll();
+    }
+
+    document.getElementById("villainName").innerText = pick(villainNames);
+    document.getElementById("villainSpecies").innerText = pick(species);
+    document.getElementById("villainOrigin").innerText = pick(origins);
+    document.getElementById("threatLevel").innerText = pick(threatLevels);
+    document.getElementById("villainClass").innerText = "Villain";
+    document.getElementById("villainScore").innerText = score;
+    document.getElementById("villainRank").innerText =
+        getRank(score).replace("Hero", "Villain");
+
+    currentVillainScore = score;
+}
+
+function addGeneratedVillainToEnemies(){
+    let name = document.getElementById("villainName").innerText;
+
+    if(name === "--"){
+        alert("Generate a villain first.");
+        return;
+    }
+
+    enemies.push({
+        name: name,
+        type: "Villain",
+        location: currentMapLocation || "Unknown",
+        health: 120,
+        energy: 100,
+        intent: "Control the battlefield",
+        status: "Ready"
+    });
+
+    updateEnemyManager();
+}
+
+function addMinion(){
+    enemies.push({
+        name: "Minion " + (enemies.length + 1),
+        type: "Minion",
+        location: currentMapLocation || "Unknown",
+        health: 40,
+        energy: 30,
+        intent: "Attack nearest hero",
+        status: "Ready"
+    });
+
+    updateEnemyManager();
+}
+
+function addElite(){
+    enemies.push({
+        name: "Elite Enemy " + (enemies.length + 1),
+        type: "Elite",
+        location: currentMapLocation || "Unknown",
+        health: 80,
+        energy: 60,
+        intent: "Protect the villain",
+        status: "Ready"
+    });
+
+    updateEnemyManager();
+}
+
+function updateEnemyManager(){
+    let display = document.getElementById("enemyManagerDisplay");
+
+    if(enemies.length === 0){
+        display.innerHTML = "No enemies added.";
+        return;
+    }
+
+    let html = "";
+
+    enemies.forEach((enemy, index) => {
+        html +=
+        "<div class='enemy-card'>" +
+        "<h3>👹 " + enemy.name + "</h3>" +
+        "<p><strong>Type:</strong> " + enemy.type + "</p>" +
+        "<p><strong>Location:</strong> " + enemy.location + "</p>" +
+        "<p><strong>Health:</strong> " + enemy.health + "</p>" +
+        "<div class='health-bar'>" +
+        "<div class='enemy-health-fill' style='width:" + Math.min(enemy.health,100) + "%'></div>" +
+        "</div>" +
+        "<p><strong>Energy:</strong> " + enemy.energy + "</p>" +
+        "<p><strong>Intent:</strong> " + enemy.intent + "</p>" +
+        "<p><strong>Status:</strong> " + enemy.status + "</p>" +
+
+        "<button onclick='changeEnemyHealth(" + index + ", -10)'>-10 HP</button>" +
+        "<button onclick='changeEnemyHealth(" + index + ", -25)'>-25 HP</button>" +
+        "<button onclick='changeEnemyHealth(" + index + ", 10)'>+10 HP</button>" +
+        "<button onclick='changeEnemyHealth(" + index + ", 25)'>+25 HP</button>" +
+        "<button onclick='moveEnemyToSelected(" + index + ")'>Move Here</button>" +
+        "<button onclick='rollEnemyAI(" + index + ")'>Roll AI Action</button>" +
+        "<button onclick='removeEnemy(" + index + ")'>Remove</button>" +
+        "</div>";
+    });
+
+    display.innerHTML = html;
+}
+
+function changeEnemyHealth(index, amount){
+    enemies[index].health += amount;
+
+    if(enemies[index].health < 0){
+        enemies[index].health = 0;
+    }
+
+    if(enemies[index].health === 0){
+        enemies[index].status = "Defeated";
+        enemies[index].intent = "None";
+    }
+    else if(enemies[index].health <= 30){
+        enemies[index].status = "Badly Injured";
+    }
+    else{
+        enemies[index].status = "Ready";
+    }
+
+    updateEnemyManager();
+}
+
+function moveEnemyToSelected(index){
+    if(!currentMapLocation){
+        alert("Select a map location first.");
+        return;
+    }
+
+    enemies[index].location = currentMapLocation;
+    updateEnemyManager();
+}
+
+function rollEnemyAI(index){
+    let actions = [
+        "Attack nearest hero",
+        "Defend this turn",
+        "Use strongest power",
+        "Call for minions",
+        "Retreat to safer location",
+        "Target weakest hero",
+        "Protect the villain",
+        "Destroy the objective"
+    ];
+
+    enemies[index].intent = pick(actions);
+
+    updateEnemyManager();
+}
+
+function removeEnemy(index){
+    enemies.splice(index, 1);
+    updateEnemyManager();
+}
+
+function simulateBattle(){
+    if(!currentHeroScore){
+        alert("Generate a hero first.");
+        return;
+    }
+
+    if(!currentVillainScore){
+        alert("Generate a villain first.");
+        return;
+    }
+
+    let heroBattleScore =
+        currentHeroScore + Math.floor(Math.random() * 20);
+
+    let villainBattleScore =
+        currentVillainScore + Math.floor(Math.random() * 20);
+
+    let result = "⚔ DRAW";
+
+    if(heroBattleScore > villainBattleScore){
+        result = "🏆 HERO VICTORY";
+    }
+    else if(villainBattleScore > heroBattleScore){
+        result = "💀 VILLAIN VICTORY";
+    }
+
+    document.getElementById("battleResult").innerText = result;
+}
+
 function generateFullMission(){
     let location = currentMapLocation || "Nexus City";
 
@@ -1751,191 +2003,357 @@ function generateFullMission(){
         "<br><br><strong>If Heroes Fail:</strong> " + pick(consequences);
 }
 
-let selectedMapHeroIndex = 0;
+let turnOrder = [];
+let currentTurnIndex = 0;
+let combatRound = 1;
+let combatActive = false;
 
-function travelSelectedHero(){
+function buildTurnOrder(){
 
-    if(mapCharacters.length === 0){
-        alert("Add a hero to the map first.");
-        return;
-    }
-
-    if(!currentMapLocation){
-        alert("Click a map location first.");
-        return;
-    }
-
-    mapCharacters[selectedMapHeroIndex].location =
-        currentMapLocation;
-
-    let roll = Math.random() * 100;
-    let event = "Safe travel. Nothing happens.";
-
-    if(roll > 55) event = "Random event on the road.";
-    if(roll > 75) event = "Villain encounter!";
-    if(roll > 85) event = "Traveling merchant found.";
-    if(roll > 93) event = "Hidden treasure discovered.";
-    if(roll > 98) event = "World Boss appears nearby!";
-
-    document.getElementById("travelEventResult").innerText =
-        event;
-
-    updateMapCharacters();
-}
-
-function showManualSection(sectionId){
-
-    document.querySelectorAll(".manualSection").forEach(section => {
-        section.style.display = "none";
-    });
-
-    document.getElementById(sectionId).style.display = "block";
-}
-
-let managedPlayers = [];
-
-function addCurrentHeroToPlayerManager(){
-
-    let heroName = document.getElementById("name").innerText;
-
-    if(heroName === "--"){
-        alert("Generate a hero first.");
-        return;
-    }
-
-    let player = {
-        name: heroName,
-        heroClass: document.getElementById("heroClass").innerText,
-        rank: document.getElementById("rank").innerText,
-        location: currentMapLocation || "Nexus City",
-        health: 100,
-        energy: 100,
-        shield: 0,
-        injuries: "None",
-        status: "Ready",
-        turn: "Waiting"
-    };
-
-    managedPlayers.push(player);
-
-    updatePlayerManager();
-}
-
-function updatePlayerManager(){
-
-    let display = document.getElementById("playerManagerDisplay");
-
-    if(managedPlayers.length === 0){
-        display.innerHTML = "No players added.";
-        return;
-    }
-
-    let html = "";
+    turnOrder = [];
 
     managedPlayers.forEach((player, index) => {
+        if(player.status !== "Knocked Out"){
+            turnOrder.push({
+                type: "Player",
+                name: player.name,
+                index: index,
+                status: "Waiting"
+            });
+        }
+    });
+
+    enemies.forEach((enemy, index) => {
+        if(enemy.status !== "Defeated"){
+            turnOrder.push({
+                type: "Enemy",
+                name: enemy.name,
+                index: index,
+                status: "Waiting"
+            });
+        }
+    });
+}
+
+function startTurns(){
+
+    buildTurnOrder();
+
+    if(turnOrder.length === 0){
+        alert("Add players or enemies first.");
+        return;
+    }
+
+    combatActive = true;
+    combatRound = 1;
+    currentTurnIndex = 0;
+
+    turnOrder[0].status = "Active";
+
+    updateTurnTracker();
+}
+
+function endCurrentTurn(){
+
+    if(!combatActive){
+        alert("Start turns first.");
+        return;
+    }
+
+    turnOrder[currentTurnIndex].status = "Done";
+
+    currentTurnIndex++;
+
+    if(currentTurnIndex >= turnOrder.length){
+        combatRound++;
+        currentTurnIndex = 0;
+
+        turnOrder.forEach(unit => {
+            unit.status = "Waiting";
+        });
+    }
+
+    turnOrder[currentTurnIndex].status = "Active";
+
+    updateTurnTracker();
+}
+
+function resetTurns(){
+
+    turnOrder = [];
+    currentTurnIndex = 0;
+    combatRound = 1;
+    combatActive = false;
+
+    updateTurnTracker();
+}
+
+function updateTurnTracker(){
+
+    let display = document.getElementById("turnTrackerDisplay");
+
+    if(!display){
+        return;
+    }
+
+    if(turnOrder.length === 0){
+        display.innerHTML = "No turn order started.";
+        return;
+    }
+
+    let html =
+        "<h3>Round " + combatRound + "</h3>";
+
+    turnOrder.forEach(unit => {
+
+        let symbol = "○";
+
+        if(unit.status === "Active") symbol = "▶";
+        if(unit.status === "Done") symbol = "✓";
 
         html +=
-        "<div class='player-manager-card'>" +
-        "<h3>🦸 " + player.name + "</h3>" +
-        "<p><strong>Class:</strong> " + player.heroClass + "</p>" +
-        "<p><strong>Rank:</strong> " + player.rank + "</p>" +
-        "<p><strong>Location:</strong> " + player.location + "</p>" +
-        "<p><strong>Health:</strong> ❤️ " + player.health + "/100</p>" +
-        "<p><strong>Energy:</strong> ⚡ " + player.energy + "/100</p>" +
-        "<p><strong>Shield:</strong> 🛡 " + player.shield + "</p>" +
-        "<p><strong>Injuries:</strong> " + player.injuries + "</p>" +
-        "<p><strong>Status:</strong> " + player.status + "</p>" +
-        "<p><strong>Turn:</strong> " + player.turn + "</p>" +
-
-       "<button onclick='changePlayerHealth(" + index + ", -5)'>-5 HP</button>" +
-"<button onclick='changePlayerHealth(" + index + ", -10)'>-10 HP</button>" +
-"<button onclick='changePlayerHealth(" + index + ", -25)'>-25 HP</button>" +
-"<button onclick='changePlayerHealth(" + index + ", 5)'>+5 HP</button>" +
-"<button onclick='changePlayerHealth(" + index + ", 10)'>+10 HP</button>" +
-"<button onclick='changePlayerHealth(" + index + ", 25)'>+25 HP</button>" +
-        "<button onclick='restoreEnergy(" + index + ")'>Restore Energy</button>" +
-        "<button onclick='knockOutPlayer(" + index + ")'>Knock Out</button>" +
-        "<button onclick='revivePlayer(" + index + ")'>Revive</button>" +
-        "</div>";
+            "<p>" +
+            symbol +
+            " " +
+            unit.type +
+            ": " +
+            unit.name +
+            " - " +
+            unit.status +
+            "</p>";
     });
 
     display.innerHTML = html;
+} 
+
+let lastCombatLog = "";
+
+function getCombatUnits(){
+
+    let units = [];
+
+    managedPlayers.forEach((player, index) => {
+        if(player.status !== "Knocked Out"){
+            units.push({
+                type: "Player",
+                name: player.name,
+                index: index
+            });
+        }
+    });
+
+    enemies.forEach((enemy, index) => {
+        if(enemy.status !== "Defeated"){
+            units.push({
+                type: "Enemy",
+                name: enemy.name,
+                index: index
+            });
+        }
+    });
+
+    return units;
 }
 
-function damageManagedPlayer(index){
+function refreshCombatSelectors(){
 
-    managedPlayers[index].health -= 20;
+    let attackerSelect = document.getElementById("combatAttacker");
+    let targetSelect = document.getElementById("combatTarget");
 
-    if(managedPlayers[index].health < 0){
-        managedPlayers[index].health = 0;
+    if(!attackerSelect || !targetSelect){
+        return;
     }
 
-    if(managedPlayers[index].health === 0){
-        managedPlayers[index].status = "Knocked Out";
-        managedPlayers[index].injuries = "Defeated";
+    let units = getCombatUnits();
+
+    attackerSelect.innerHTML = "";
+    targetSelect.innerHTML = "";
+
+    units.forEach((unit, i) => {
+        let option1 = document.createElement("option");
+        option1.value = i;
+        option1.textContent = unit.type + ": " + unit.name;
+        attackerSelect.appendChild(option1);
+
+        let option2 = document.createElement("option");
+        option2.value = i;
+        option2.textContent = unit.type + ": " + unit.name;
+        targetSelect.appendChild(option2);
+    });
+}
+
+function rollD20(){
+    return Math.floor(Math.random() * 20) + 1;
+}
+
+function combatAttack(){
+
+    let units = getCombatUnits();
+
+    if(units.length < 2){
+        alert("You need at least 2 combat units.");
+        return;
     }
-    else if(managedPlayers[index].health <= 30){
-        managedPlayers[index].injuries = "Serious Injury";
+
+    let attackerIndex = Number(document.getElementById("combatAttacker").value);
+    let targetIndex = Number(document.getElementById("combatTarget").value);
+
+    if(attackerIndex === targetIndex){
+        alert("Attacker and target cannot be the same.");
+        return;
     }
-    else if(managedPlayers[index].health <= 60){
-        managedPlayers[index].injuries = "Minor Injury";
+
+    let attacker = units[attackerIndex];
+    let target = units[targetIndex];
+
+    let attackRoll = rollD20();
+    let damage = Math.floor(Math.random() * 16) + 5;
+
+    if(attackRoll === 20){
+        damage *= 2;
+    }
+
+    let hit = attackRoll >= 8;
+
+    if(hit){
+        applyCombatDamage(target, damage);
+    }
+
+    lastCombatLog =
+        attacker.name +
+        " attacks " +
+        target.name +
+        "<br>Roll: " +
+        attackRoll +
+        "<br>" +
+        (hit ? "Hit!" : "Miss!") +
+        "<br>Damage: " +
+        (hit ? damage : 0);
+
+    document.getElementById("combatLog").innerHTML =
+        lastCombatLog;
+
+    refreshCombatSelectors();
+}
+
+function applyCombatDamage(target, damage){
+
+    if(target.type === "Player"){
+        managedPlayers[target.index].health -= damage;
+
+        if(managedPlayers[target.index].health < 0){
+            managedPlayers[target.index].health = 0;
+        }
+
+        if(managedPlayers[target.index].health === 0){
+            managedPlayers[target.index].status = "Knocked Out";
+            managedPlayers[target.index].injuries = "Defeated";
+        }
+        else if(managedPlayers[target.index].health <= 30){
+            managedPlayers[target.index].status = "Injured";
+            managedPlayers[target.index].injuries = "Serious Injury";
+        }
+        else if(managedPlayers[target.index].health <= 60){
+            managedPlayers[target.index].status = "Injured";
+            managedPlayers[target.index].injuries = "Minor Injury";
+        }
+    }
+
+    if(target.type === "Enemy"){
+        enemies[target.index].health -= damage;
+
+        if(enemies[target.index].health < 0){
+            enemies[target.index].health = 0;
+        }
+
+        if(enemies[target.index].health === 0){
+            enemies[target.index].status = "Defeated";
+            enemies[target.index].intent = "None";
+        }
+        else if(enemies[target.index].health <= 30){
+            enemies[target.index].status = "Badly Injured";
+        }
+        else{
+            enemies[target.index].status = "Ready";
+        }
     }
 
     updatePlayerManager();
+    updateEnemyManager();
 }
 
-function healManagedPlayer(index){
+function combatHeal(){
 
-    managedPlayers[index].health += 20;
+    let units = getCombatUnits();
 
-    if(managedPlayers[index].health > 100){
-        managedPlayers[index].health = 100;
+    if(units.length === 0){
+        alert("No combat units.");
+        return;
     }
 
-    if(managedPlayers[index].health > 60){
-        managedPlayers[index].injuries = "None";
+    let targetIndex = Number(document.getElementById("combatTarget").value);
+    let target = units[targetIndex];
+
+    let heal = Math.floor(Math.random() * 16) + 5;
+
+    if(target.type === "Player"){
+        managedPlayers[target.index].health += heal;
+
+        if(managedPlayers[target.index].health > 100){
+            managedPlayers[target.index].health = 100;
+        }
+
+        if(managedPlayers[target.index].health > 60){
+            managedPlayers[target.index].status = "Ready";
+            managedPlayers[target.index].injuries = "None";
+        }
     }
 
-    if(managedPlayers[index].health > 0){
-        managedPlayers[index].status = "Ready";
+    if(target.type === "Enemy"){
+        enemies[target.index].health += heal;
+
+        if(enemies[target.index].health > 120){
+            enemies[target.index].health = 120;
+        }
+
+        enemies[target.index].status = "Ready";
     }
 
+    document.getElementById("combatLog").innerHTML =
+        target.name + " healed for " + heal + " HP.";
+
     updatePlayerManager();
+    updateEnemyManager();
+    refreshCombatSelectors();
 }
 
-function restoreEnergy(index){
+function combatDefend(){
 
-    managedPlayers[index].energy += 25;
+    let units = getCombatUnits();
 
-    if(managedPlayers[index].energy > 100){
-        managedPlayers[index].energy = 100;
+    if(units.length === 0){
+        alert("No combat units.");
+        return;
     }
 
-    updatePlayerManager();
-}
+    let targetIndex = Number(document.getElementById("combatTarget").value);
+    let target = units[targetIndex];
 
-function knockOutPlayer(index){
+    if(target.type === "Player"){
+        managedPlayers[target.index].shield += 10;
+    }
 
-    managedPlayers[index].health = 0;
-    managedPlayers[index].status = "Knocked Out";
-    managedPlayers[index].injuries = "Defeated";
-    managedPlayers[index].turn = "Skipped";
+    if(target.type === "Enemy"){
+        enemies[target.index].energy += 10;
+    }
 
-    updatePlayerManager();
-}
-
-function revivePlayer(index){
-
-    managedPlayers[index].health = 50;
-    managedPlayers[index].energy = 50;
-    managedPlayers[index].status = "Ready";
-    managedPlayers[index].injuries = "Minor Injury";
-    managedPlayers[index].turn = "Waiting";
+    document.getElementById("combatLog").innerHTML =
+        target.name + " defends and gains protection.";
 
     updatePlayerManager();
-}
-    
+    updateEnemyManager();
+}    
 </script>
 
 </body>
-</html>    
+</html>   
