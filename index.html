@@ -185,6 +185,38 @@ input, select{
 .manualSection{
     display:none;
 }
+
+.combat-arena{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.combat-side{
+    background:#0F172A;
+    border:2px solid #3B82F6;
+    border-radius:15px;
+    padding:15px;
+}
+
+.enemy-side{
+    border-color:#EF4444;
+}
+
+.combat-log{
+    background:#020617;
+    border:1px solid #60A5FA;
+    border-radius:10px;
+    padding:12px;
+    min-height:80px;
+    text-align:left;
+}
+
+.big-action{
+    font-size:18px;
+    padding:14px 24px;
+}
+    
 </style>
 </head>
 
@@ -455,18 +487,50 @@ input, select{
 </div>
 
 <div class="card">
-<h2>Turns + Combat</h2>
+<h2>⚔ Combat Arena</h2>
 
 <button onclick="startTurns()">▶ Start Turns</button>
-<button onclick="endCurrentTurn()">⏭ End Current Turn</button>
+<button onclick="endCurrentTurn()">⏭ End Turn</button>
 <button onclick="resetTurns()">🔄 Reset Turns</button>
 
 <div id="turnTrackerDisplay">No turn order started.</div>
 
 <hr>
 
-<button onclick="refreshCombatSelectors()">🔄 Refresh Combat Units</button>
+<button onclick="refreshCombatSelectors()">🔄 Refresh Fighters</button>
 
+<div class="combat-arena">
+
+<div class="combat-side">
+<h2>🦸 Player Action</h2>
+
+<h3>Attacker</h3>
+<select id="combatAttacker"></select>
+
+<button class="big-action" onclick="combatAttack()">⚔ Attack</button>
+<button class="big-action" onclick="combatHeal()">💚 Heal</button>
+<button class="big-action" onclick="combatDefend()">🛡 Defend</button>
+</div>
+
+<div class="combat-side enemy-side">
+<h2>👹 Target</h2>
+
+<h3>Target</h3>
+<select id="combatTarget"></select>
+
+<button class="big-action" onclick="combatEnemyAttack()">👹 Enemy Attack</button>
+<button class="big-action" onclick="rollEnemyTurn()">🎲 Enemy AI Turn</button>
+</div>
+
+</div>
+
+<h3>Combat Log</h3>
+<div id="combatLog" class="combat-log">No combat yet.</div>
+
+<h3>Quick Battle Result</h3>
+<div id="battleResult">--</div>
+</div>
+     
 <h3>Attacker</h3>
 <select id="combatAttacker"></select>
 
@@ -2490,6 +2554,52 @@ function removeEnemy(index){
     enemies.splice(index, 1);
     updateEnemyManager();
 }  
+
+function combatEnemyAttack(){
+    refreshCombatSelectors();
+
+    let units = getCombatUnits();
+
+    let enemyIndex = units.findIndex(unit => unit.type === "Enemy");
+    let playerIndex = units.findIndex(unit => unit.type === "Player");
+
+    if(enemyIndex === -1 || playerIndex === -1){
+        alert("You need at least one enemy and one player.");
+        return;
+    }
+
+    document.getElementById("combatAttacker").value = enemyIndex;
+    document.getElementById("combatTarget").value = playerIndex;
+
+    combatAttack();
+}
+
+function rollEnemyTurn(){
+    if(enemies.length === 0){
+        alert("Add an enemy first.");
+        return;
+    }
+
+    let livingEnemies = enemies.filter(enemy => enemy.status !== "Defeated");
+
+    if(livingEnemies.length === 0){
+        alert("No active enemies.");
+        return;
+    }
+
+    let action = pick([
+        "Enemy attacks the closest hero.",
+        "Enemy defends and waits.",
+        "Enemy targets the weakest hero.",
+        "Enemy prepares a special attack.",
+        "Enemy calls for backup.",
+        "Enemy retreats to a better position."
+    ]);
+
+    document.getElementById("combatLog").innerHTML =
+        "<strong>Enemy AI:</strong><br>" + action;
+}
+    
 </script>
 
 </body>
