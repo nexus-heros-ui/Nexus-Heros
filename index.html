@@ -335,33 +335,23 @@ input, select{
 
 </div>
 
-<div id="gmPortal" class="portal">
+ <div id="gmPortal" class="portal">
 
 <div class="card">
-<h2>GM Control Room</h2>
+<h2>GM Dashboard</h2>
 
-<h3>Create World</h3>
 <input id="worldNameInput" placeholder="World Name">
 <button onclick="createWorldCode()">🌍 Create World Code</button>
-
-<h3>World Code</h3>
-<div id="worldCodeDisplay">--</div>
-
-<hr>
-
 <button onclick="toggleTeamMode()">🔁 Toggle Team / Solo</button>
-<div id="teamModeDisplay">Mode: Solo</div>
 
-<br>
+<p><strong>World Code:</strong> <span id="worldCodeDisplay">--</span></p>
+<p><strong>Mode:</strong> <span id="teamModeDisplay">Mode: Solo</span></p>
 
-<button onclick="addHeroToWorld()">➕ Add Current Hero To World</button>
-
-<h3>World Players</h3>
-<div id="worldPlayersDisplay">No Players</div>
+<button onclick="addHeroToWorld()">➕ Add Hero To World</button>
 </div>
 
 <div class="card">
-<h2>Interactive Nexus World Map</h2>
+<h2>World Map Control Center</h2>
 
 <div class="world-map">
 
@@ -393,21 +383,21 @@ input, select{
 </div>
 
 <div class="map-panel">
-<h3>Location Info</h3>
+<h3>Selected Location</h3>
 <p><strong>Name:</strong> <span id="selectedMapLocation">None</span></p>
 <p><strong>Type:</strong> <span id="selectedMapType">--</span></p>
 <p><strong>Details:</strong> <span id="mapLocationDetails">Click a location.</span></p>
 
 <hr>
 
-<h3>World Status</h3>
 <p><strong>Threat Level:</strong> <span id="worldThreatLevel">Moderate</span></p>
 <p><strong>Active Events:</strong> <span id="activeEvents">0</span></p>
 <p><strong>Turn:</strong> <span id="worldTurn">1</span></p>
 
-<button onclick="generateFullMission()">📜 Generate Mission Here</button>
+<button onclick="addCurrentHeroToMap()">➕ Add Hero To Map</button>
+<button onclick="addCurrentHeroToPlayerManager()">➕ Add Hero To Player Manager</button>
 <button onclick="travelSelectedHero()">🚶 Travel Here</button>
-<button onclick="nextWorldTurn()">➡ Next Turn</button>
+<button onclick="nextWorldTurn()">➡ Next World Turn</button>
 
 <h3>Travel Event</h3>
 <div id="travelEventResult">No travel yet.</div>
@@ -415,62 +405,65 @@ input, select{
 </div>
 
 <div class="card">
-<h2>Player Manager</h2>
+<h2>Mission + Enemy Control</h2>
 
-<button onclick="addCurrentHeroToMap()">➕ Add Current Hero To Map</button>
-<button onclick="addCurrentHeroToPlayerManager()">➕ Add Current Hero To Player Manager</button>
-
-<div id="mapCharactersDisplay">No characters on map.</div>
-<div id="playerManagerDisplay">No players added.</div>
-</div>
-
-<div class="card">
-<h2>Enemy Manager</h2>
-
-<button onclick="generateVillain()">😈 Generate Villain</button>
-<button onclick="addGeneratedVillainToEnemies()">➕ Add Villain To Enemy Manager</button>
-<button onclick="addMinion()">➕ Add Minion</button>
-<button onclick="addElite()">➕ Add Elite</button>
-
-<div id="enemyManagerDisplay">No enemies added.</div>
-</div>
-    
-<div class="card">
-<h2>Mission Generator</h2>
-
-<p><strong>Selected Location:</strong></p>
+<p><strong>Mission Location:</strong></p>
 <div id="missionLocation">No location selected</div>
 
-<button onclick="generateFullMission()">📜 Generate Full Mission</button>
+<button onclick="generateFullMission()">📜 Generate Mission</button>
 
 <h3>Mission Brief</h3>
 <div id="fullMissionResult">--</div>
+
+<hr>
+
+<button onclick="generateVillain()">😈 Generate Villain</button>
+<button onclick="addGeneratedVillainToEnemies()">➕ Add Villain</button>
+<button onclick="addMinion()">➕ Add Minion</button>
+<button onclick="addElite()">⭐ Add Elite</button>
+
+<h3>Villain Sheet</h3>
+<p><strong>Name:</strong> <span id="villainName">--</span></p>
+<p><strong>Species:</strong> <span id="villainSpecies">--</span></p>
+<p><strong>Origin:</strong> <span id="villainOrigin">--</span></p>
+<p><strong>Threat:</strong> <span id="threatLevel">--</span></p>
+<p><strong>Class:</strong> <span id="villainClass">--</span></p>
+<p><strong>Score:</strong> <span id="villainScore">--</span></p>
+<p><strong>Rank:</strong> <span id="villainRank">--</span></p>
 </div>
 
 <div class="card">
-<h2>Battle Tools</h2>
+<h2>Players + Enemies</h2>
 
-<button onclick="simulateBattle()">⚔ Quick Battle Simulator</button>
+<h3>World Players</h3>
+<div id="worldPlayersDisplay">No Players</div>
 
-<h3>Battle Result</h3>
-<div id="battleResult">--</div>
+<hr>
+
+<h3>Map Characters</h3>
+<div id="mapCharactersDisplay">No characters on map.</div>
+
+<hr>
+
+<h3>Player Manager</h3>
+<div id="playerManagerDisplay">No players added.</div>
+
+<hr>
+
+<h3>Enemy Manager</h3>
+<div id="enemyManagerDisplay">No enemies added.</div>
 </div>
 
 <div class="card">
-<h2>Turn Tracker</h2>
+<h2>Turns + Combat</h2>
 
 <button onclick="startTurns()">▶ Start Turns</button>
 <button onclick="endCurrentTurn()">⏭ End Current Turn</button>
 <button onclick="resetTurns()">🔄 Reset Turns</button>
 
-<div id="turnTrackerDisplay">
-No turn order started.
-</div>
-</div>
+<div id="turnTrackerDisplay">No turn order started.</div>
 
-<div class="card">
-
-<h2>Combat Engine</h2>
+<hr>
 
 <button onclick="refreshCombatSelectors()">🔄 Refresh Combat Units</button>
 
@@ -485,26 +478,17 @@ No turn order started.
 <button onclick="combatAttack()">⚔ Attack</button>
 <button onclick="combatHeal()">💚 Heal Target</button>
 <button onclick="combatDefend()">🛡 Defend Target</button>
+<button onclick="simulateBattle()">⚔ Quick Battle</button>
 
 <h3>Combat Log</h3>
 <div id="combatLog">No combat yet.</div>
 
+<h3>Quick Battle Result</h3>
+<div id="battleResult">--</div>
 </div>
+
+</div> 
     
-<div class="card">
-<h2>Villain Sheet</h2>
-
-<p><strong>Name:</strong> <span id="villainName">--</span></p>
-<p><strong>Species:</strong> <span id="villainSpecies">--</span></p>
-<p><strong>Origin:</strong> <span id="villainOrigin">--</span></p>
-<p><strong>Threat Level:</strong> <span id="threatLevel">--</span></p>
-<p><strong>Class:</strong> <span id="villainClass">--</span></p>
-<p><strong>Power Score:</strong> <span id="villainScore">--</span></p>
-<p><strong>Rank:</strong> <span id="villainRank">--</span></p>
-</div>
-
-</div>
-
 <div id="rulebookPortal" class="portal">
 
 <div class="card">
