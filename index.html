@@ -216,6 +216,29 @@ input, select{
     font-size:18px;
     padding:14px 24px;
 }
+
+.fighter-row{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.fighter-token{
+    background:#020617;
+    border:2px solid #60A5FA;
+    border-radius:14px;
+    padding:12px;
+    min-width:130px;
+}
+
+.enemy-token{
+    border-color:#EF4444;
+}
+
+.token-icon{
+    font-size:42px;
+}
     
 </style>
 </head>
@@ -504,6 +527,22 @@ input, select{
 <div class="combat-side">
 <h2>🦸 Player Action</h2>
 
+<h3>Fighters</h3>
+<div id="combatFighterDisplay" class="fighter-row">
+No fighters loaded.
+</div>
+
+<hr>
+
+<h3>Player Choice</h3>
+<button onclick="playerChooseAction('Attack')">⚔ Attack</button>
+<button onclick="playerChooseAction('Defend')">🛡 Defend</button>
+<button onclick="playerChooseAction('Heal')">💚 Heal</button>
+
+<p><strong>Chosen Action:</strong> <span id="chosenPlayerAction">None</span></p>
+
+<button onclick="gmApprovePlayerAction()">✅ GM Approve Action</button>
+    
 <h3>Attacker</h3>
 <select id="combatAttacker"></select>
 
@@ -2598,6 +2637,76 @@ function rollEnemyTurn(){
 
     document.getElementById("combatLog").innerHTML =
         "<strong>Enemy AI:</strong><br>" + action;
+}
+
+let chosenPlayerAction = null;
+
+function updateCombatFighters(){
+    let display = document.getElementById("combatFighterDisplay");
+
+    if(!display){
+        return;
+    }
+
+    let html = "";
+
+    managedPlayers.forEach(player => {
+        html +=
+        "<div class='fighter-token'>" +
+        "<div class='token-icon'>🦸</div>" +
+        "<strong>" + player.name + "</strong><br>" +
+        "HP: " + player.health + "/100<br>" +
+        "Energy: " + player.energy + "/100<br>" +
+        "Status: " + player.status +
+        "</div>";
+    });
+
+    enemies.forEach(enemy => {
+        html +=
+        "<div class='fighter-token enemy-token'>" +
+        "<div class='token-icon'>👹</div>" +
+        "<strong>" + enemy.name + "</strong><br>" +
+        "HP: " + enemy.health + "<br>" +
+        "Energy: " + enemy.energy + "<br>" +
+        "Status: " + enemy.status +
+        "</div>";
+    });
+
+    display.innerHTML = html || "No fighters loaded.";
+}
+
+function playerChooseAction(action){
+    chosenPlayerAction = action;
+
+    document.getElementById("chosenPlayerAction").innerText =
+        action;
+
+    document.getElementById("combatLog").innerHTML =
+        "Player chose: " + action + ". Waiting for GM approval.";
+}
+
+function gmApprovePlayerAction(){
+    if(!chosenPlayerAction){
+        alert("Player must choose an action first.");
+        return;
+    }
+
+    if(chosenPlayerAction === "Attack"){
+        combatAttack();
+    }
+
+    if(chosenPlayerAction === "Heal"){
+        combatHeal();
+    }
+
+    if(chosenPlayerAction === "Defend"){
+        combatDefend();
+    }
+
+    chosenPlayerAction = null;
+    document.getElementById("chosenPlayerAction").innerText = "None";
+
+    updateCombatFighters();
 }
     
 </script>
