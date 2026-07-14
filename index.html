@@ -439,6 +439,31 @@ No join request sent.
 
 <p><strong>World Code:</strong> <span id="worldCodeDisplay">--</span></p>
 <p><strong>Mode:</strong> <span id="teamModeDisplay">Mode: Solo</span></p>
+
+<hr>
+
+<h3>🌐 Multiplayer World Status</h3>
+
+<div id="gmMultiplayerStatus" class="result">
+No multiplayer world active.
+</div>
+
+<button onclick="startGMJoinRequestListener()">
+🔄 Refresh Join Requests
+</button>
+
+<h3>Pending Join Requests</h3>
+
+<div id="gmJoinRequestsDisplay" class="game-panel">
+No pending join requests.
+</div>
+
+<h3>Accepted Multiplayer Players</h3>
+
+<div id="multiplayerPlayersDisplay" class="game-panel">
+No multiplayer players accepted.
+</div>
+
 </div>
 
 <div class="card">
@@ -1033,6 +1058,9 @@ let multiplayerPlayerDocumentId = null;
 let playerJoinListener = null;
 let gmJoinRequestsListener = null;
 let multiplayerPlayersListener = null;
+
+let pendingJoinRequests = [];
+let acceptedMultiplayerPlayers = [];
     
 let currentMapLocation = null;
 let currentMapType = null;
@@ -1498,6 +1526,189 @@ function joinWorld(){
         "Joined World: " + code;
 }
 
+function stopGMJoinRequestListener(){
+    if(gmJoinRequestsListener){
+        gmJoinRequestsListener();
+        gmJoinRequestsListener = null;
+    }
+}
+
+function stopMultiplayerPlayersListener(){
+    if(multiplayerPlayersListener){
+        multiplayerPlayersListener();
+        multiplayerPlayersListener = null;
+    }
+}
+
+async function startGMJoinRequestListener(){
+    try{
+        const user = await waitForFirebaseUser();
+
+        if(!currentWorldCode){
+            alert("Create a multiplayer world first.");
+            return;
+        }
+
+        const worldRef =
+            firebaseDb.collection("worlds").doc(currentWorldCode);
+
+        const worldSnapshot = await worldRef.get();
+
+        if(!worldSnapshot.exists){
+            alert("This multiplayer world does not exist in Firebase yet.");
+            return;
+        }
+
+        const worldData = worldSnapshot.data();
+
+        if(worldData.gmId !== user.uid){
+            alert("Only the GM who created this world can manage join requests.");
+            return;
+        }
+
+        stopGMJoinRequestListener();
+        stopMultiplayerPlayersListener();
+
+        document.getElementById("gmMultiplayerStatus").innerText =
+            "🟢 Listening for players in " + currentWorldCode;
+
+        gmJoinRequestsListener = worldRef
+            .collection("joinRequests")
+            .where("status", "==", "pending")
+            .onSnapshot(snapshot => {
+                pendingJoinRequests = [];
+
+                snapshot.forEach(documentSnapshot => {
+                    pendingJoinRequests.push({
+                        id: documentSnapshot.id,
+                        ...documentSnapshot.data()
+                    });
+                });
+
+                updateGMJoinRequestsDisplay();
+            }, error => {
+                console.error("Join request listener failed:", error);
+
+                document.getElementById("gmMultiplayerStatus").innerText =
+                    "🔴 Join request listener failed.";
+            });
+
+        multiplayerPlayersListener = worldRef
+            .collection("players")
+            .onSnapshot(snapshot => {
+                acceptedMultiplayerPlayers = [];
+
+                snapshot.forEach(documentSnapshot => {
+                    acceptedMultiplayerPlayers.push({
+                        id: documentSnapshot.id,
+                        ...documentSnapshot.data()
+                    });
+                });
+
+                updateMultiplayerPlayersDisplay();
+            }, error => {
+                console.error("Player listener failed:", error);
+            });
+
+    }catch(error){
+        console.error("Could not start GM multiplayer listener:", error);
+        alert("Could not start multiplayer listener.");
+    }
+}
+
+function updateGMJoinRequestsDisplay(){
+    const display =
+        document.getElementById("gmJoinRequestsDisplay");
+
+    if(!display){
+        return;
+    }
+
+    if(pendingJoinRequests.length === 0){
+        display.innerHTML = "No pending join requests.";
+        return;
+    }
+
+    let html = "";
+
+    pendingJoinRequests.forEach(request => {
+        const hero = request.hero || {};
+
+        html +=
+            "<div class='player-manager-card'>" +
+            "<h3>🦸 " + escapeMultiplayerText(hero.name || "Unnamed Hero") + "</h3>" +
+            "<p><strong>Player:</strong> " +
+            escapeMultiplayerText(request.playerName || "Unknown Player") +
+            "</p>" +
+            "<p><strong>Class:</strong> " +
+            escapeMultiplayerText(hero.heroClass || "--") +
+            "</p>" +
+            "<p><strong>Rank:</strong> " +
+            escapeMultiplayerText(hero.rank || "--") +
+            "</p>" +
+            "<p><strong>Power Score:</strong> " +
+            escapeMultiplayerText(String(hero.powerScore || "--")) +
+            "</p>" +
+            "<button onclick=\"acceptMultiplayerJoinRequest('" +
+            request.id +
+            "')\">✅ Accept</button>" +
+            "<button onclick=\"declineMultiplayerJoinRequest('" +
+            request.id +
+            "')\">❌ Decline</button>" +
+            "</div>";
+    });
+
+    display.innerHTML = html;
+}
+
+function updateMultiplayerPlayersDisplay(){
+    const display =
+        document.getElementById("multiplayerPlayersDisplay");
+
+    if(!display){
+        return;
+    }
+
+    if(acceptedMultiplayerPlayers.length === 0){
+        display.innerHTML = "No multiplayer players accepted.";
+        return;
+    }
+
+    let html = "";
+
+    acceptedMultiplayerPlayers.forEach(player => {
+        const hero = player.hero || {};
+
+        html +=
+            "<div class='player-manager-card'>" +
+            "<h3>🟢 " +
+            escapeMultiplayerText(hero.name || "Unnamed Hero") +
+            "</h3>" +
+            "<p><strong>Player:</strong> " +
+            escapeMultiplayerText(player.playerName || "Unknown Player") +
+            "</p>" +
+            "<p><strong>Class:</strong> " +
+            escapeMultiplayerText(hero.heroClass || "--") +
+            "</p>" +
+            "<p><strong>Rank:</strong> " +
+            escapeMultiplayerText(hero.rank || "--") +
+            "</p>" +
+            "<p><strong>Status:</strong> Accepted</p>" +
+            "</div>";
+    });
+
+    display.innerHTML = html;
+}
+
+function escapeMultiplayerText(value){
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+    
 function toggleTeamMode(){
     teamMode = !teamMode;
 
