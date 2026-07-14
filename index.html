@@ -696,8 +696,102 @@ Campaign Save stores players, enemies, inventory, credits, world turn, active mi
 
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore-compat.js"></script>
+    
 <script>
 
+/* =========================================================
+   FIREBASE MULTIPLAYER CONNECTION
+   ========================================================= */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCqUR5Fli5DmYIu0dqEHi-IpK1SGA-CVGY",
+    authDomain: "nexus-heros.firebaseapp.com",
+    projectId: "nexus-heros",
+    storageBucket: "nexus-heros.firebasestorage.app",
+    messagingSenderId: "994912786329",
+    appId: "1:994912786329:web:68aa249e493002ae316508",
+    measurementId: "G-FBMRPEZ6MY"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const firebaseAuth = firebase.auth();
+const firebaseDb = firebase.firestore();
+
+let firebaseUser = null;
+let firebaseReady = false;
+
+firebaseAuth.onAuthStateChanged(user => {
+    if(user){
+        firebaseUser = user;
+        firebaseReady = true;
+
+        console.log(
+            "Nexus Heroes connected to Firebase.",
+            "User ID:",
+            user.uid
+        );
+
+        updateFirebaseConnectionStatus(
+            "🟢 Multiplayer Connected"
+        );
+    }
+});
+
+firebaseAuth.signInAnonymously().catch(error => {
+    console.error(
+        "Firebase anonymous sign-in failed:",
+        error
+    );
+
+    updateFirebaseConnectionStatus(
+        "🔴 Multiplayer Connection Failed"
+    );
+});
+
+function updateFirebaseConnectionStatus(message){
+    const display =
+        document.getElementById("firebaseConnectionStatus");
+
+    if(display){
+        display.innerText = message;
+    }
+}
+
+function waitForFirebaseUser(){
+    return new Promise((resolve, reject) => {
+        if(firebaseUser){
+            resolve(firebaseUser);
+            return;
+        }
+
+        let attempts = 0;
+
+        const checkUser = setInterval(() => {
+            attempts++;
+
+            if(firebaseUser){
+                clearInterval(checkUser);
+                resolve(firebaseUser);
+                return;
+            }
+
+            if(attempts >= 50){
+                clearInterval(checkUser);
+
+                reject(
+                    new Error(
+                        "Firebase authentication timed out."
+                    )
+                );
+            }
+        }, 100);
+    });
+}
+    
 function pick(array){
     return array[Math.floor(Math.random() * array.length)];
 }
