@@ -433,7 +433,71 @@ No join request sent.
 <h2>GM Dashboard</h2>
 
 <input id="worldNameInput" placeholder="World Name">
-<button onclick="createWorldCode()">🌍 Create World Code</button>
+<button onclick="createWorldCode(event)">
+🌍 Create Multiplayer World
+</button>
+
+async function restoreGMWorld(){
+    try{
+        const savedCode =
+            localStorage.getItem("nexusGMWorldCode");
+
+        if(!savedCode){
+            return;
+        }
+
+        const user = await waitForFirebaseUser();
+
+        const worldSnapshot = await firebaseDb
+            .collection("worlds")
+            .doc(savedCode)
+            .get();
+
+        if(!worldSnapshot.exists){
+            localStorage.removeItem("nexusGMWorldCode");
+            localStorage.removeItem("nexusGMWorldName");
+            return;
+        }
+
+        const worldData = worldSnapshot.data();
+
+        if(worldData.gmId !== user.uid){
+            return;
+        }
+
+        currentWorldCode = savedCode;
+        multiplayerWorldName =
+            worldData.name || "Nexus World";
+
+        document.getElementById(
+            "worldCodeDisplay"
+        ).innerText = savedCode;
+
+        document.getElementById(
+            "worldNameInput"
+        ).value = multiplayerWorldName;
+
+        document.getElementById(
+            "gmMultiplayerStatus"
+        ).innerHTML =
+            "🟢 Multiplayer world restored.<br>" +
+            "<strong>" +
+            escapeMultiplayerText(multiplayerWorldName) +
+            "</strong><br>" +
+            "World Code: <strong>" +
+            escapeMultiplayerText(savedCode) +
+            "</strong>";
+
+        startGMJoinRequestListener();
+
+    }catch(error){
+        console.error(
+            "Could not restore GM world:",
+            error
+        );
+    }
+}
+    
 <button onclick="toggleTeamMode()">🔁 Toggle Team / Solo</button>
 <button onclick="addHeroToWorld()">➕ Add Hero To World</button>
 
@@ -798,8 +862,12 @@ firebaseAuth.onAuthStateChanged(user => {
 
         updateFirebaseConnectionStatus(
             "🟢 Multiplayer Connected"
-        );
+        ); 
+
+        restoreGMWorld();
+        
     }
+    
 });
 
 firebaseAuth.signInAnonymously().catch(error => {
@@ -1492,24 +1560,129 @@ function loadHero(){
     alert("Hero Loaded!");
 }
 
-function createWorldCode(){
-    let worldName =
-        document.getElementById("worldNameInput").value.trim() ||
-        "Nexus World";
+async function createWorldCode(){
+    const button = event?.currentTarget || null;
 
-    let code =
-        worldName
-        .replace(/\s+/g, "")
-        .substring(0, 5)
-        .toUpperCase()
-        + "-"
-        + Math.floor(1000 + Math.random() * 9000);
+    try{
+        if(button){
+            button.disabled = true;
+            button.innerText = "Creating World...";
+        }
 
-    currentWorldCode = code;
+        const user = await waitForFirebaseUser();
 
-    document.getElementById("worldCodeDisplay").innerText = code;
+        const worldNameInput =
+            document.getElementById("worldNameInput");
 
-    alert("World Created: " + code);
+        const worldName =
+            worldNameInput.value.trim() || "Nexus World";
+
+        const codePrefix = worldName
+            .replace(/[^a-zA-Z0-9]/g, "")
+            .substring(0, 5)
+            .toUpperCase() || "NEXUS";
+
+        let code = "";
+        let worldRef = null;
+        let worldAlreadyExists = true;
+        let attempts = 0;
+
+        while(worldAlreadyExists && attempts < 10){
+            attempts++;
+
+            code =
+                codePrefix +
+                "-" +
+                Math.floor(1000 + Math.random() * 9000);
+
+            worldRef =
+                firebaseDb.collection("worlds").doc(code);
+
+            const existingWorld = await worldRef.get();
+
+            worldAlreadyExists = existingWorld.exists;
+        }
+
+        if(worldAlreadyExists || !worldRef){
+            throw new Error(
+                "Could not create a unique world code."
+            );
+        }
+
+        await worldRef.set({
+            code:code,
+            name:worldName,
+            gmId:user.uid,
+            gmName:"Game Master",
+            mode:teamMode ? "Team" : "Solo",
+            status:"open",
+            createdAt:
+                firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt:
+                firebase.firestore.FieldValue.serverTimestamp(),
+            worldTurn:mapTurn,
+            activeEvents:activeEventsCount
+        });
+
+        currentWorldCode = code;
+        multiplayerWorldName = worldName;
+
+        document.getElementById(
+            "worldCodeDisplay"
+        ).innerText = code;
+
+        document.getElementById(
+            "gmMultiplayerStatus"
+        ).innerHTML =
+            "🟢 Multiplayer world active.<br>" +
+            "<strong>" +
+            escapeMultiplayerText(worldName) +
+            "</strong><br>" +
+            "World Code: <strong>" +
+            escapeMultiplayerText(code) +
+            "</strong>";
+
+        localStorage.setItem(
+            "nexusGMWorldCode",
+            code
+        );
+
+        localStorage.setItem(
+            "nexusGMWorldName",
+            worldName
+        );
+
+        await startGMJoinRequestListener();
+
+        alert(
+            "Multiplayer world created!\n\n" +
+            "World: " + worldName + "\n" +
+            "Code: " + code + "\n\n" +
+            "Give this code to your players."
+        );
+
+    }catch(error){
+        console.error(
+            "Could not create multiplayer world:",
+            error
+        );
+
+        document.getElementById(
+            "gmMultiplayerStatus"
+        ).innerText =
+            "🔴 Could not create multiplayer world.";
+
+        alert(
+            "The world could not be created.\n\n" +
+            error.message
+        );
+
+    }finally{
+        if(button){
+            button.disabled = false;
+            button.innerText = "🌍 Create World Code";
+        }
+    }
 }
 
 function joinWorld(){
