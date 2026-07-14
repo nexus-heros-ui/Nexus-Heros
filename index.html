@@ -276,15 +276,43 @@ input,select{
 </div>
 
 <div class="card">
-<h2>Join World</h2>
+<h2>🌍 Join Multiplayer World</h2>
 
-<input id="joinWorldInput" placeholder="Enter World Code">
+<p>
+Create or load your hero first. Then enter the world code the GM gave you.
+</p>
+
+<input
+    id="multiplayerPlayerName"
+    placeholder="Enter Your Player Name"
+    maxlength="30"
+>
 
 <br>
 
-<button onclick="joinWorld()">🚪 Join World</button>
+<input
+    id="joinWorldInput"
+    placeholder="Enter World Code"
+    maxlength="20"
+>
 
-<div id="joinedWorldDisplay">Not Joined</div>
+<br>
+
+<button onclick="checkMultiplayerWorld()">
+🔎 Check World
+</button>
+
+<button onclick="sendHeroJoinRequest()">
+📨 Send Hero To GM
+</button>
+
+<div id="joinedWorldDisplay" class="result">
+Not connected to a world.
+</div>
+
+<div id="playerJoinStatus" class="game-panel">
+No join request sent.
+</div>
 </div>
 
 <div class="card">
@@ -998,6 +1026,14 @@ let joinedWorldCode = null;
 let worldPlayers = [];
 let teamMode = false;
 
+let multiplayerWorldName = null;
+let multiplayerJoinRequestId = null;
+let multiplayerPlayerDocumentId = null;
+
+let playerJoinListener = null;
+let gmJoinRequestsListener = null;
+let multiplayerPlayersListener = null;
+    
 let currentMapLocation = null;
 let currentMapType = null;
 let mapTurn = 1;
