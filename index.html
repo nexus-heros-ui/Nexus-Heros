@@ -804,12 +804,10 @@ firebaseAuth.onAuthStateChanged(user => {
         ); 
 
         restoreGMWorld();
-        
+        restorePlayerMultiplayerSession();
     }
     
 });
-
-restorePlayerMultiplayerSession();
     
 firebaseAuth.signInAnonymously().catch(error => {
     console.error(
