@@ -1624,6 +1624,68 @@ async function createWorldCode(){
     }
 }
 
+async function restoreGMWorld(){
+    try{
+        const savedWorldCode =
+            localStorage.getItem("nexusGMWorldCode");
+
+        const savedWorldName =
+            localStorage.getItem("nexusGMWorldName");
+
+        if(!savedWorldCode){
+            return;
+        }
+
+        const user = await waitForFirebaseUser();
+
+        const worldSnapshot = await firebaseDb
+            .collection("worlds")
+            .doc(savedWorldCode)
+            .get();
+
+        if(!worldSnapshot.exists){
+            localStorage.removeItem("nexusGMWorldCode");
+            localStorage.removeItem("nexusGMWorldName");
+            return;
+        }
+
+        const worldData = worldSnapshot.data();
+
+        if(worldData.gmId !== user.uid){
+            return;
+        }
+
+        currentWorldCode = savedWorldCode;
+        multiplayerWorldName =
+            worldData.name ||
+            savedWorldName ||
+            "Nexus World";
+
+        document.getElementById(
+            "worldCodeDisplay"
+        ).innerText = currentWorldCode;
+
+        document.getElementById(
+            "gmMultiplayerStatus"
+        ).innerHTML =
+            "🟢 Multiplayer world restored.<br>" +
+            "<strong>" +
+            escapeMultiplayerText(multiplayerWorldName) +
+            "</strong><br>" +
+            "World Code: <strong>" +
+            escapeMultiplayerText(currentWorldCode) +
+            "</strong>";
+
+        startGMJoinRequestListener();
+
+    }catch(error){
+        console.error(
+            "Could not restore GM world:",
+            error
+        );
+    }
+}
+    
 function normalizeWorldCode(value){
     return String(value || "")
         .trim()
