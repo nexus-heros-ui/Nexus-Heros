@@ -809,6 +809,8 @@ firebaseAuth.onAuthStateChanged(user => {
     
 });
 
+restorePlayerMultiplayerSession();
+    
 firebaseAuth.signInAnonymously().catch(error => {
     console.error(
         "Firebase anonymous sign-in failed:",
