@@ -1685,18 +1685,427 @@ async function createWorldCode(){
     }
 }
 
-function joinWorld(){
-    let code = document.getElementById("joinWorldInput").value.trim();
+function normalizeWorldCode(value){
+    return String(value || "")
+        .trim()
+        .toUpperCase()
+        .replace(/\s+/g, "");
+}
 
-    if(!code){
-        alert("Enter a world code first.");
-        return;
+function getCurrentHeroForMultiplayer(){
+    const heroName =
+        document.getElementById("name").innerText.trim();
+
+    if(!heroName || heroName === "--"){
+        return null;
     }
 
-    joinedWorldCode = code;
+    return {
+        name:heroName,
+        species:document.getElementById("species").innerText,
+        origin:document.getElementById("origin").innerText,
+        alignment:document.getElementById("alignment").innerText,
+        powerCount:document.getElementById("powerCount").innerText,
 
-    document.getElementById("joinedWorldDisplay").innerText =
-        "Joined World: " + code;
+        strength:document.getElementById("strength").innerText,
+        speed:document.getElementById("speed").innerText,
+        durability:document.getElementById("durability").innerText,
+        intelligence:document.getElementById("intelligence").innerText,
+        combat:document.getElementById("combat").innerText,
+        stamina:document.getElementById("stamina").innerText,
+        powerControl:document.getElementById("powerControl").innerText,
+
+        powerScore:document.getElementById("powerScore").innerText,
+        archetype:document.getElementById("archetype").innerText,
+        heroClass:document.getElementById("heroClass").innerText,
+        rank:document.getElementById("rank").innerText,
+
+        powers:document.getElementById("powers").innerText,
+        equipment:document.getElementById("equipment").innerText,
+        weaknesses:document.getElementById("weaknesses").innerText
+    };
+}
+
+async function checkMultiplayerWorld(){
+    const statusDisplay =
+        document.getElementById("joinedWorldDisplay");
+
+    try{
+        await waitForFirebaseUser();
+
+        const codeInput =
+            document.getElementById("joinWorldInput");
+
+        const code =
+            normalizeWorldCode(codeInput.value);
+
+        if(!code){
+            alert("Enter a world code first.");
+            return;
+        }
+
+        statusDisplay.innerText =
+            "🔎 Checking world...";
+
+        const worldSnapshot = await firebaseDb
+            .collection("worlds")
+            .doc(code)
+            .get();
+
+        if(!worldSnapshot.exists){
+            joinedWorldCode = null;
+            multiplayerWorldName = null;
+
+            statusDisplay.innerText =
+                "🔴 World not found. Check the code and try again.";
+
+            return;
+        }
+
+        const worldData = worldSnapshot.data();
+
+        if(worldData.status === "closed"){
+            joinedWorldCode = null;
+            multiplayerWorldName = null;
+
+            statusDisplay.innerText =
+                "🔴 This world is currently closed.";
+
+            return;
+        }
+
+        joinedWorldCode = code;
+        multiplayerWorldName =
+            worldData.name || "Nexus World";
+
+        codeInput.value = code;
+
+        statusDisplay.innerHTML =
+            "🟢 World found.<br>" +
+            "<strong>" +
+            escapeMultiplayerText(multiplayerWorldName) +
+            "</strong><br>" +
+            "Code: " +
+            escapeMultiplayerText(code) +
+            "<br>Now press Send Hero To GM.";
+
+        localStorage.setItem(
+            "nexusJoinedWorldCode",
+            code
+        );
+
+        localStorage.setItem(
+            "nexusJoinedWorldName",
+            multiplayerWorldName
+        );
+
+    }catch(error){
+        console.error(
+            "Could not check multiplayer world:",
+            error
+        );
+
+        statusDisplay.innerText =
+            "🔴 Could not check the world.";
+
+        alert(
+            "World check failed.\n\n" +
+            error.message
+        );
+    }
+}
+
+async function sendHeroJoinRequest(){
+    const joinStatus =
+        document.getElementById("playerJoinStatus");
+
+    try{
+        const user = await waitForFirebaseUser();
+
+        const playerName =
+            document
+            .getElementById("multiplayerPlayerName")
+            .value
+            .trim();
+
+        const code =
+            normalizeWorldCode(
+                document.getElementById("joinWorldInput").value
+            );
+
+        const hero = getCurrentHeroForMultiplayer();
+
+        if(!playerName){
+            alert("Enter your player name first.");
+            return;
+        }
+
+        if(!code){
+            alert("Enter the GM's world code first.");
+            return;
+        }
+
+        if(!hero){
+            alert(
+                "Generate or load your hero before sending a join request."
+            );
+            return;
+        }
+
+        joinStatus.innerText =
+            "📨 Sending hero to GM...";
+
+        const worldRef =
+            firebaseDb.collection("worlds").doc(code);
+
+        const worldSnapshot =
+            await worldRef.get();
+
+        if(!worldSnapshot.exists){
+            joinStatus.innerText =
+                "🔴 World not found.";
+
+            alert("That multiplayer world does not exist.");
+            return;
+        }
+
+        const worldData =
+            worldSnapshot.data();
+
+        if(worldData.status === "closed"){
+            joinStatus.innerText =
+                "🔴 This world is closed.";
+
+            return;
+        }
+
+        joinedWorldCode = code;
+        multiplayerWorldName =
+            worldData.name || "Nexus World";
+
+        multiplayerJoinRequestId =
+            user.uid;
+
+        const requestRef = worldRef
+            .collection("joinRequests")
+            .doc(multiplayerJoinRequestId);
+
+        await requestRef.set({
+            playerId:user.uid,
+            playerName:playerName,
+            hero:hero,
+            status:"pending",
+            worldCode:code,
+            worldName:multiplayerWorldName,
+            requestedAt:
+                firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt:
+                firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        localStorage.setItem(
+            "nexusMultiplayerPlayerName",
+            playerName
+        );
+
+        localStorage.setItem(
+            "nexusJoinedWorldCode",
+            code
+        );
+
+        joinStatus.innerHTML =
+            "🟡 Join request sent.<br>" +
+            "Hero: <strong>" +
+            escapeMultiplayerText(hero.name) +
+            "</strong><br>" +
+            "Waiting for the GM to accept or decline.";
+
+        startPlayerJoinStatusListener(
+            code,
+            multiplayerJoinRequestId
+        );
+
+    }catch(error){
+        console.error(
+            "Could not send hero join request:",
+            error
+        );
+
+        joinStatus.innerText =
+            "🔴 Join request failed.";
+
+        alert(
+            "Could not send your hero to the GM.\n\n" +
+            error.message
+        );
+    }
+}
+
+function stopPlayerJoinStatusListener(){
+    if(playerJoinListener){
+        playerJoinListener();
+        playerJoinListener = null;
+    }
+}
+
+function startPlayerJoinStatusListener(
+    worldCode,
+    requestId
+){
+    stopPlayerJoinStatusListener();
+
+    const requestRef = firebaseDb
+        .collection("worlds")
+        .doc(worldCode)
+        .collection("joinRequests")
+        .doc(requestId);
+
+    playerJoinListener =
+        requestRef.onSnapshot(snapshot => {
+            const display =
+                document.getElementById("playerJoinStatus");
+
+            if(!snapshot.exists){
+                display.innerText =
+                    "No active join request.";
+                return;
+            }
+
+            const request =
+                snapshot.data();
+
+            if(request.status === "pending"){
+                display.innerHTML =
+                    "🟡 Waiting for GM approval.<br>" +
+                    "World: <strong>" +
+                    escapeMultiplayerText(
+                        request.worldName || worldCode
+                    ) +
+                    "</strong>";
+            }
+
+            if(request.status === "accepted"){
+                multiplayerPlayerDocumentId =
+                    request.playerId;
+
+                display.innerHTML =
+                    "🟢 You were accepted!<br>" +
+                    "Your hero is now part of the GM's world.";
+
+                document.getElementById(
+                    "joinedWorldDisplay"
+                ).innerHTML =
+                    "🟢 Joined: <strong>" +
+                    escapeMultiplayerText(
+                        request.worldName || worldCode
+                    ) +
+                    "</strong>";
+
+                localStorage.setItem(
+                    "nexusAcceptedWorldCode",
+                    worldCode
+                );
+            }
+
+            if(request.status === "declined"){
+                display.innerHTML =
+                    "🔴 The GM declined this join request.<br>" +
+                    "You may edit your hero and send another request.";
+            }
+
+        }, error => {
+            console.error(
+                "Player join listener failed:",
+                error
+            );
+
+            document.getElementById(
+                "playerJoinStatus"
+            ).innerText =
+                "🔴 Could not receive the GM's response.";
+        });
+}
+
+async function restorePlayerMultiplayerSession(){
+    try{
+        const savedPlayerName =
+            localStorage.getItem(
+                "nexusMultiplayerPlayerName"
+            );
+
+        const savedWorldCode =
+            localStorage.getItem(
+                "nexusJoinedWorldCode"
+            );
+
+        if(savedPlayerName){
+            const playerNameInput =
+                document.getElementById(
+                    "multiplayerPlayerName"
+                );
+
+            if(playerNameInput){
+                playerNameInput.value =
+                    savedPlayerName;
+            }
+        }
+
+        if(!savedWorldCode){
+            return;
+        }
+
+        const user =
+            await waitForFirebaseUser();
+
+        joinedWorldCode =
+            normalizeWorldCode(savedWorldCode);
+
+        const codeInput =
+            document.getElementById(
+                "joinWorldInput"
+            );
+
+        if(codeInput){
+            codeInput.value =
+                joinedWorldCode;
+        }
+
+        const worldSnapshot =
+            await firebaseDb
+            .collection("worlds")
+            .doc(joinedWorldCode)
+            .get();
+
+        if(!worldSnapshot.exists){
+            return;
+        }
+
+        const worldData =
+            worldSnapshot.data();
+
+        multiplayerWorldName =
+            worldData.name || "Nexus World";
+
+        document.getElementById(
+            "joinedWorldDisplay"
+        ).innerHTML =
+            "🟢 World restored: <strong>" +
+            escapeMultiplayerText(
+                multiplayerWorldName
+            ) +
+            "</strong>";
+
+        startPlayerJoinStatusListener(
+            joinedWorldCode,
+            user.uid
+        );
+
+    }catch(error){
+        console.error(
+            "Could not restore player multiplayer session:",
+            error
+        );
+    }
 }
 
 function stopGMJoinRequestListener(){
