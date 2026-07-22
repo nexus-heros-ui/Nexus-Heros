@@ -436,67 +436,6 @@ No join request sent.
 <button onclick="createWorldCode(event)">
 🌍 Create Multiplayer World
 </button>
-
-async function restoreGMWorld(){
-    try{
-        const savedCode =
-            localStorage.getItem("nexusGMWorldCode");
-
-        if(!savedCode){
-            return;
-        }
-
-        const user = await waitForFirebaseUser();
-
-        const worldSnapshot = await firebaseDb
-            .collection("worlds")
-            .doc(savedCode)
-            .get();
-
-        if(!worldSnapshot.exists){
-            localStorage.removeItem("nexusGMWorldCode");
-            localStorage.removeItem("nexusGMWorldName");
-            return;
-        }
-
-        const worldData = worldSnapshot.data();
-
-        if(worldData.gmId !== user.uid){
-            return;
-        }
-
-        currentWorldCode = savedCode;
-        multiplayerWorldName =
-            worldData.name || "Nexus World";
-
-        document.getElementById(
-            "worldCodeDisplay"
-        ).innerText = savedCode;
-
-        document.getElementById(
-            "worldNameInput"
-        ).value = multiplayerWorldName;
-
-        document.getElementById(
-            "gmMultiplayerStatus"
-        ).innerHTML =
-            "🟢 Multiplayer world restored.<br>" +
-            "<strong>" +
-            escapeMultiplayerText(multiplayerWorldName) +
-            "</strong><br>" +
-            "World Code: <strong>" +
-            escapeMultiplayerText(savedCode) +
-            "</strong>";
-
-        startGMJoinRequestListener();
-
-    }catch(error){
-        console.error(
-            "Could not restore GM world:",
-            error
-        );
-    }
-}
     
 <button onclick="toggleTeamMode()">🔁 Toggle Team / Solo</button>
 <button onclick="addHeroToWorld()">➕ Add Hero To World</button>
