@@ -2283,6 +2283,127 @@ function updateMultiplayerPlayersDisplay(){
     display.innerHTML = html;
 }
 
+async function acceptMultiplayerJoinRequest(requestId){
+    try{
+        const user = await waitForFirebaseUser();
+
+        if(!currentWorldCode){
+            alert("No multiplayer world is active.");
+            return;
+        }
+
+        const worldRef =
+            firebaseDb.collection("worlds").doc(currentWorldCode);
+
+        const worldSnapshot = await worldRef.get();
+
+        if(!worldSnapshot.exists){
+            alert("The multiplayer world could not be found.");
+            return;
+        }
+
+        if(worldSnapshot.data().gmId !== user.uid){
+            alert("Only the GM who created this world can accept players.");
+            return;
+        }
+
+        const requestRef =
+            worldRef.collection("joinRequests").doc(requestId);
+
+        const requestSnapshot = await requestRef.get();
+
+        if(!requestSnapshot.exists){
+            alert("Join request not found.");
+            return;
+        }
+
+        const request = requestSnapshot.data();
+
+        await worldRef
+            .collection("players")
+            .doc(request.playerId)
+            .set({
+                playerId:request.playerId,
+                playerName:request.playerName,
+                hero:request.hero,
+                health:100,
+                maxHealth:100,
+                energy:100,
+                shield:0,
+                status:"Ready",
+                injuries:"None",
+                location:"Nexus City",
+                joinedAt:
+                    firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        await requestRef.update({
+            status:"accepted",
+            updatedAt:
+                firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        alert(request.playerName + " joined the world!");
+
+    }catch(error){
+        console.error(
+            "Could not accept multiplayer player:",
+            error
+        );
+
+        alert(
+            "Could not accept the player.\n\n" +
+            error.message
+        );
+    }
+}
+
+async function declineMultiplayerJoinRequest(requestId){
+    try{
+        const user = await waitForFirebaseUser();
+
+        if(!currentWorldCode){
+            alert("No multiplayer world is active.");
+            return;
+        }
+
+        const worldRef =
+            firebaseDb.collection("worlds").doc(currentWorldCode);
+
+        const worldSnapshot = await worldRef.get();
+
+        if(!worldSnapshot.exists){
+            alert("The multiplayer world could not be found.");
+            return;
+        }
+
+        if(worldSnapshot.data().gmId !== user.uid){
+            alert("Only the GM who created this world can decline players.");
+            return;
+        }
+
+        await worldRef
+            .collection("joinRequests")
+            .doc(requestId)
+            .update({
+                status:"declined",
+                updatedAt:
+                    firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+    }catch(error){
+        console.error(
+            "Could not decline multiplayer player:",
+            error
+        );
+
+        alert(
+            "Could not decline the player.\n\n" +
+            error.message
+        );
+    }
+}
+        
 function escapeMultiplayerText(value){
     return String(value)
         .replaceAll("&", "&amp;")
