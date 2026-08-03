@@ -1600,28 +1600,20 @@ async function createWorldCode(){
             "Give this code to your players."
         );
 
-    }catch(error){
-        console.error(
-            "Could not create multiplayer world:",
-            error
-        );
+   }catch(error){
+    console.error(
+        "Could not check multiplayer world:",
+        error
+    );
 
-        document.getElementById(
-            "gmMultiplayerStatus"
-        ).innerText =
-            "🔴 Could not create multiplayer world.";
+    statusDisplay.innerText =
+        "🔴 Could not check the world: " +
+        error.message;
 
-        alert(
-            "The world could not be created.\n\n" +
-            error.message
-        );
-
-    }finally{
-        if(button){
-            button.disabled = false;
-            button.innerText = "🌍 Create World Code";
-        }
-    }
+    alert(
+        "World check failed.\n\n" +
+        error.message
+    );
 }
 
 async function restoreGMWorld(){
