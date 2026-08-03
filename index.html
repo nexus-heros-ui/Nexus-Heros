@@ -760,9 +760,9 @@ Campaign Save stores players, enemies, inventory, credits, world turn, active mi
 
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     
 <script>
 
@@ -780,46 +780,79 @@ const firebaseConfig = {
     measurementId: "G-FBMRPEZ6MY"
 };
 
-firebase.initializeApp(firebaseConfig);
-
-const firebaseAuth = firebase.auth();
-const firebaseDb = firebase.firestore();
-
+let firebaseAuth = null;
+let firebaseDb = null;
 let firebaseUser = null;
 let firebaseReady = false;
 
-firebaseAuth.onAuthStateChanged(user => {
-    if(user){
-        firebaseUser = user;
-        firebaseReady = true;
+function startFirebase(){
+    try{
+        if(typeof firebase === "undefined"){
+            throw new Error("Firebase files did not load.");
+        }
 
-        console.log(
-            "Nexus Heroes connected to Firebase.",
-            "User ID:",
-            user.uid
+        if(!firebase.apps.length){
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        firebaseAuth = firebase.auth();
+        firebaseDb = firebase.firestore();
+
+        firebaseAuth.onAuthStateChanged(user => {
+            if(user){
+                firebaseUser = user;
+                firebaseReady = true;
+
+                console.log(
+                    "Nexus Heroes connected to Firebase.",
+                    "User ID:",
+                    user.uid
+                );
+
+                updateFirebaseConnectionStatus(
+                    "🟢 Multiplayer Connected"
+                );
+
+                restoreGMWorld();
+                restorePlayerMultiplayerSession();
+
+            }else{
+                firebaseUser = null;
+                firebaseReady = false;
+
+                updateFirebaseConnectionStatus(
+                    "🟡 Signing into multiplayer..."
+                );
+            }
+        });
+
+        firebaseAuth.signInAnonymously().catch(error => {
+            console.error(
+                "Firebase anonymous sign-in failed:",
+                error
+            );
+
+            updateFirebaseConnectionStatus(
+                "🔴 Multiplayer failed: " +
+                error.message
+            );
+        });
+
+    }catch(error){
+        console.error(
+            "Firebase startup failed:",
+            error
         );
 
         updateFirebaseConnectionStatus(
-            "🟢 Multiplayer Connected"
-        ); 
-
-        restoreGMWorld();
-        restorePlayerMultiplayerSession();
+            "🔴 Firebase failed: " +
+            error.message
+        );
     }
-    
-});
-    
-firebaseAuth.signInAnonymously().catch(error => {
-    console.error(
-        "Firebase anonymous sign-in failed:",
-        error
-    );
+}
 
-    updateFirebaseConnectionStatus(
-        "🔴 Multiplayer Connection Failed"
-    );
-});
-
+startFirebase();
+    
 function updateFirebaseConnectionStatus(message){
     const display =
         document.getElementById("firebaseConnectionStatus");
