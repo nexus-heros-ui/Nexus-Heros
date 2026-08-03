@@ -1499,7 +1499,7 @@ function loadHero(){
     alert("Hero Loaded!");
 }
 
-async function createWorldCode(){
+    async function createWorldCode(event){
     const button = event?.currentTarget || null;
 
     try{
@@ -1600,20 +1600,29 @@ async function createWorldCode(){
             "Give this code to your players."
         );
 
-   }catch(error){
-    console.error(
-        "Could not check multiplayer world:",
-        error
-    );
+    }catch(error){
+        console.error(
+            "Could not create multiplayer world:",
+            error
+        );
 
-    statusDisplay.innerText =
-        "🔴 Could not check the world: " +
-        error.message;
+        document.getElementById(
+            "gmMultiplayerStatus"
+        ).innerText =
+            "🔴 Could not create multiplayer world: " +
+            error.message;
 
-    alert(
-        "World check failed.\n\n" +
-        error.message
-    );
+        alert(
+            "The world could not be created.\n\n" +
+            error.message
+        );
+
+    }finally{
+        if(button){
+            button.disabled = false;
+            button.innerText = "🌍 Create Multiplayer World";
+        }
+    }
 }
 
 async function restoreGMWorld(){
@@ -1792,21 +1801,22 @@ async function checkMultiplayerWorld(){
             multiplayerWorldName
         );
 
-    }catch(error){
+          }catch(error){
         console.error(
             "Could not check multiplayer world:",
             error
         );
 
         statusDisplay.innerText =
-            "🔴 Could not check the world.";
+            "🔴 Could not check the world: " +
+            error.message;
 
         alert(
             "World check failed.\n\n" +
             error.message
         );
     }
-}
+}    
 
 async function sendHeroJoinRequest(){
     const joinStatus =
