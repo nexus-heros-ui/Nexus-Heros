@@ -424,6 +424,70 @@ input,select{
     display:none;
 }
     
+
+
+/* =========================================================
+   NEXUS HEROES ALPHA 2.0 — SHARED LIVE WORLD
+   ========================================================= */
+.shared-world-toolbar{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin:10px 0;
+}
+.shared-world-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:12px;
+    margin-top:12px;
+}
+.shared-world-panel{
+    background:#020617;
+    border:1px solid #334155;
+    border-radius:12px;
+    padding:12px;
+    text-align:left;
+}
+.world-feed{
+    max-height:240px;
+    overflow-y:auto;
+    background:#020617;
+    border:1px solid #334155;
+    border-radius:10px;
+    padding:10px;
+    text-align:left;
+}
+.world-feed-entry{
+    border-bottom:1px solid #1E293B;
+    padding:7px 2px;
+}
+.world-feed-entry:last-child{border-bottom:none;}
+.online-dot{
+    display:inline-block;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#22C55E;
+    margin-right:6px;
+}
+.npc-marker{
+    box-shadow:0 0 0 2px rgba(250,204,21,.55);
+}
+.npc-marker .marker-name{border-color:#FACC15;}
+.action-request-card{
+    background:#111827;
+    border:1px solid #A855F7;
+    border-radius:10px;
+    padding:10px;
+    margin:8px 0;
+}
+.small-muted{color:#94A3B8;font-size:13px;}
+@media (max-width:700px){
+    .character-map-marker{width:36px;height:36px;font-size:20px;}
+    .marker-name{top:39px;font-size:10px;}
+}
+
 </style>
 </head>
 
@@ -3677,13 +3741,13 @@ function startPlayerJoinStatusListener(
                     "nexusAcceptedWorldCode",
                     worldCode
                 );
+
+                startPlayerWorldView(
+                    worldCode,
+                    request.playerId
+                );
             }
 
-                 startPlayerWorldView(
-                      worldCode,
-                      request.playerId
-                   );
-            
             if(request.status === "declined"){
                 display.innerHTML =
                     "🔴 The GM declined this join request.<br>" +
@@ -5016,6 +5080,660 @@ function simulateBattle(){
     document.getElementById("battleResult").innerText = result;
 }
 
+
+
+/* =========================================================
+   NEXUS HEROES ALPHA 2.0 — COMPLETE SHARED WORLD ENGINE
+   Keeps the project in one HTML file while connecting the
+   player map, GM map, enemies, NPCs, missions, movement,
+   actions, world feed, combat state, and persistence.
+   ========================================================= */
+
+let sharedWorldUnsubscribers = [];
+let sharedWorldPlayers = [];
+let sharedWorldEnemies = [];
+let sharedWorldNPCs = [];
+let sharedWorldMission = null;
+let sharedWorldFeed = [];
+let sharedWorldCombat = null;
+let sharedWorldActionRequests = [];
+let sharedWorldCode = null;
+let sharedWorldRole = "guest";
+let sharedWorldPlayerId = null;
+let sharedWorldSyncReady = false;
+
+function safeTimestampValue(value){
+    if(!value) return 0;
+    if(typeof value.toMillis === "function") return value.toMillis();
+    if(value.seconds) return value.seconds * 1000;
+    return Number(value) || 0;
+}
+
+function clearSharedWorldListeners(){
+    sharedWorldUnsubscribers.forEach(unsubscribe => {
+        try{ unsubscribe(); }catch(error){ console.warn(error); }
+    });
+    sharedWorldUnsubscribers = [];
+    sharedWorldSyncReady = false;
+}
+
+function getSharedWorldRef(){
+    if(!firebaseDb || !sharedWorldCode) return null;
+    return firebaseDb.collection("worlds").doc(sharedWorldCode);
+}
+
+async function addWorldFeedEvent(message, category="world"){
+    const worldRef = getSharedWorldRef();
+    if(!worldRef || !firebaseUser) return;
+    try{
+        await worldRef.collection("feed").add({
+            message:String(message).slice(0,500),
+            category,
+            actorId:firebaseUser.uid,
+            createdAt:firebase.firestore.FieldValue.serverTimestamp()
+        });
+    }catch(error){
+        console.error("Could not write world feed event:", error);
+    }
+}
+
+function ensureSharedWorldUI(){
+    const playerView = document.getElementById("playerWorldView");
+    if(playerView && !document.getElementById("playerSharedControls")){
+        const controls=document.createElement("div");
+        controls.id="playerSharedControls";
+        controls.className="shared-world-grid";
+        controls.innerHTML=`
+            <div class="shared-world-panel">
+                <h3>🎯 Current Mission</h3>
+                <div id="playerMissionDisplay">No active mission.</div>
+            </div>
+            <div class="shared-world-panel">
+                <h3>👥 Online Heroes</h3>
+                <div id="playerOnlineHeroes">No heroes online.</div>
+            </div>
+            <div class="shared-world-panel">
+                <h3>👹 Nearby Threats</h3>
+                <div id="playerNearbyThreats">No nearby threats.</div>
+            </div>
+            <div class="shared-world-panel">
+                <h3>⚔ Submit an Action</h3>
+                <label for="playerActionType">Action</label>
+                <select id="playerActionType">
+                    <option value="Move">Move</option>
+                    <option value="Attack">Attack</option>
+                    <option value="Power">Power</option>
+                    <option value="Defend">Defend</option>
+                    <option value="Heal">Heal</option>
+                    <option value="Interact">Interact</option>
+                    <option value="Use Item">Use Item</option>
+                </select>
+                <br>
+                <label for="playerActionTarget">Target or destination</label>
+                <input id="playerActionTarget" placeholder="Enemy, NPC, location, or object">
+                <br>
+                <label for="playerActionDescription">Description</label>
+                <input id="playerActionDescription" placeholder="Describe what your hero does">
+                <br>
+                <button type="button" onclick="submitPlayerWorldAction()">📨 Send Action to GM</button>
+                <div id="playerActionStatus" class="result"></div>
+            </div>
+        `;
+        playerView.appendChild(controls);
+
+        const feed=document.createElement("div");
+        feed.className="game-panel";
+        feed.innerHTML=`<h3>📡 World Feed</h3><div id="playerWorldFeed" class="world-feed">No world events yet.</div>`;
+        playerView.appendChild(feed);
+    }
+
+    const gmPortal=document.getElementById("gmPortal");
+    const mapCard=gmPortal?.querySelector(".card:nth-of-type(2)");
+    if(mapCard && !document.getElementById("gmSharedWorldControls")){
+        const controls=document.createElement("div");
+        controls.id="gmSharedWorldControls";
+        controls.className="game-panel";
+        controls.innerHTML=`
+            <h3>🌐 Shared World Controls</h3>
+            <div class="shared-world-toolbar">
+                <button type="button" onclick="syncCurrentWorldNow()">☁ Sync World Now</button>
+                <button type="button" onclick="spawnSharedNPC()">🧑 Spawn NPC</button>
+                <button type="button" onclick="runSharedNPCTurn()">🎲 Run NPC Turn</button>
+                <button type="button" onclick="clearDefeatedSharedEnemies()">🧹 Clear Defeated</button>
+            </div>
+            <div class="shared-world-grid">
+                <div class="shared-world-panel">
+                    <h3>Mission State</h3>
+                    <div id="gmSharedMissionDisplay">No active mission.</div>
+                    <button type="button" onclick="completeSharedMission()">✅ Complete Mission</button>
+                </div>
+                <div class="shared-world-panel">
+                    <h3>NPCs</h3>
+                    <div id="gmSharedNPCDisplay">No NPCs.</div>
+                </div>
+                <div class="shared-world-panel">
+                    <h3>Player Action Requests</h3>
+                    <div id="gmActionRequestsDisplay">No pending actions.</div>
+                </div>
+            </div>
+            <h3>📡 World Feed</h3>
+            <div id="gmWorldFeed" class="world-feed">No world events yet.</div>
+        `;
+        mapCard.appendChild(controls);
+    }
+}
+
+function startPlayerWorldView(worldCode, playerId){
+    const code=normalizeWorldCode(worldCode);
+    if(!code || !firebaseDb) return;
+    sharedWorldRole="player";
+    sharedWorldPlayerId=playerId || firebaseUser?.uid || null;
+    connectSharedWorld(code,"player",sharedWorldPlayerId);
+    const view=document.getElementById("playerWorldView");
+    if(view) view.style.display="block";
+    const status=document.getElementById("playerWorldStatus");
+    if(status) status.innerText="🟢 Connected to world: "+code;
+}
+
+function stopPlayerWorldView(){
+    clearSharedWorldListeners();
+}
+
+function connectSharedWorld(worldCode, role="player", playerId=null){
+    const code=normalizeWorldCode(worldCode);
+    if(!code || !firebaseDb) return;
+    if(sharedWorldCode===code && sharedWorldRole===role && sharedWorldSyncReady) return;
+    clearSharedWorldListeners();
+    sharedWorldCode=code;
+    sharedWorldRole=role;
+    sharedWorldPlayerId=playerId || firebaseUser?.uid || null;
+    const worldRef=firebaseDb.collection("worlds").doc(code);
+
+    sharedWorldUnsubscribers.push(worldRef.onSnapshot(snapshot=>{
+        if(!snapshot.exists) return;
+        const world=snapshot.data();
+        mapTurn=world.worldTurn ?? mapTurn ?? 1;
+        activeEventsCount=world.activeEvents ?? activeEventsCount ?? 0;
+        const playerTurn=document.getElementById("playerWorldTurn");
+        if(playerTurn) playerTurn.innerText=mapTurn;
+        const gmTurn=document.getElementById("worldTurn");
+        if(gmTurn) gmTurn.innerText=mapTurn;
+        const active=document.getElementById("activeEvents");
+        if(active) active.innerText=activeEventsCount;
+        if(world.currentMission) sharedWorldMission=world.currentMission;
+        if(world.combatState) sharedWorldCombat=world.combatState;
+        renderSharedWorldPanels();
+    },error=>console.error("World listener failed:",error)));
+
+    sharedWorldUnsubscribers.push(worldRef.collection("players").onSnapshot(snapshot=>{
+        sharedWorldPlayers=[];
+        snapshot.forEach(doc=>sharedWorldPlayers.push({id:doc.id,...doc.data()}));
+        acceptedMultiplayerPlayers=[...sharedWorldPlayers];
+        const own=sharedWorldPlayers.find(p=>p.id===sharedWorldPlayerId || p.playerId===sharedWorldPlayerId);
+        if(own) updatePlayerCharacterDisplay(own);
+        renderAllSharedMarkers();
+        updateMultiplayerPlayersDisplay();
+        renderSharedWorldPanels();
+    },error=>console.error("Players listener failed:",error)));
+
+    sharedWorldUnsubscribers.push(worldRef.collection("enemies").onSnapshot(snapshot=>{
+        sharedWorldEnemies=[];
+        snapshot.forEach(doc=>sharedWorldEnemies.push({id:doc.id,...doc.data()}));
+        enemies=sharedWorldEnemies.map(enemy=>({...enemy}));
+        updateEnemyManagerLocalOnly();
+        renderAllSharedMarkers();
+        renderSharedWorldPanels();
+    },error=>console.error("Enemies listener failed:",error)));
+
+    sharedWorldUnsubscribers.push(worldRef.collection("npcs").onSnapshot(snapshot=>{
+        sharedWorldNPCs=[];
+        snapshot.forEach(doc=>sharedWorldNPCs.push({id:doc.id,...doc.data()}));
+        renderAllSharedMarkers();
+        renderSharedWorldPanels();
+    },error=>console.error("NPC listener failed:",error)));
+
+    sharedWorldUnsubscribers.push(worldRef.collection("feed").orderBy("createdAt","desc").limit(50).onSnapshot(snapshot=>{
+        sharedWorldFeed=[];
+        snapshot.forEach(doc=>sharedWorldFeed.push({id:doc.id,...doc.data()}));
+        sharedWorldFeed.sort((a,b)=>safeTimestampValue(b.createdAt)-safeTimestampValue(a.createdAt));
+        renderSharedWorldFeed();
+    },error=>console.error("Feed listener failed:",error)));
+
+    sharedWorldUnsubscribers.push(worldRef.collection("actionRequests").orderBy("createdAt","desc").limit(50).onSnapshot(snapshot=>{
+        sharedWorldActionRequests=[];
+        snapshot.forEach(doc=>sharedWorldActionRequests.push({id:doc.id,...doc.data()}));
+        renderGMActionRequests();
+    },error=>console.error("Action listener failed:",error)));
+
+    sharedWorldSyncReady=true;
+    ensureSharedWorldUI();
+}
+
+function updatePlayerCharacterDisplay(player){
+    const values={
+        playerCurrentLocation:player.location||"Nexus City",
+        playerCurrentHealth:(player.health??100)+"/"+(player.maxHealth??100),
+        playerCurrentEnergy:player.energy??100,
+        playerCurrentShield:player.shield??0,
+        playerCurrentStatus:player.status||"Ready"
+    };
+    Object.entries(values).forEach(([id,value])=>{
+        const el=document.getElementById(id);
+        if(el) el.innerText=value;
+    });
+}
+
+function buildSharedCharacterList(){
+    const list=[];
+    sharedWorldPlayers.forEach(player=>{
+        const hero=player.hero||{};
+        list.push({
+            id:player.id,kind:"hero",name:hero.name||player.playerName||"Unnamed Hero",
+            type:hero.heroClass||"Hero",location:player.location||"Nexus City",
+            health:player.health??100,maxHealth:player.maxHealth??100,
+            status:player.status||"Ready",energy:player.energy??100,shield:player.shield??0,
+            markerStyle:hero.markerStyle||defaultHeroMarkerStyle
+        });
+    });
+    sharedWorldEnemies.forEach(enemy=>list.push({
+        id:enemy.id,kind:"enemy",name:enemy.name||"Unnamed Enemy",type:enemy.type||"Enemy",
+        location:enemy.location||"Unknown",health:enemy.health??0,maxHealth:enemy.maxHealth??100,
+        status:enemy.status||"Ready",energy:enemy.energy??0,shield:enemy.shield??0,
+        markerStyle:enemy.markerStyle||defaultEnemyMarkerStyle
+    }));
+    sharedWorldNPCs.forEach(npc=>list.push({
+        id:npc.id,kind:"npc",name:npc.name||"NPC",type:npc.type||"Civilian",
+        location:npc.location||"Nexus City",health:npc.health??50,maxHealth:npc.maxHealth??50,
+        status:npc.status||"Available",energy:0,shield:0,
+        markerStyle:npc.markerStyle||{icon:"🧑",color:"#CA8A04",borderColor:"#FFFFFF",shape:"circle"}
+    }));
+    return list;
+}
+
+function renderMarkersIntoLayer(layerId,popupId){
+    const layer=document.getElementById(layerId);
+    if(!layer) return;
+    layer.innerHTML="";
+    const counts={};
+    buildSharedCharacterList().forEach(character=>{
+        if(!mapLocationPositions[character.location]) return;
+        const index=counts[character.location]||0;
+        counts[character.location]=index+1;
+        character.position=getMarkerPosition(character.location,index);
+        const marker=createSharedMarker(character,popupId);
+        layer.appendChild(marker);
+    });
+}
+
+function createSharedMarker(character,popupId){
+    const marker=document.createElement("button");
+    const style=character.markerStyle||defaultHeroMarkerStyle;
+    marker.type="button";
+    marker.className="character-map-marker "+(style.shape||"circle")+
+        (character.kind==="enemy"?" enemy-marker":"")+
+        (character.kind==="npc"?" npc-marker":"");
+    marker.style.left=character.position.left+"%";
+    marker.style.top=character.position.top+"%";
+    marker.style.background=style.color||"#2563EB";
+    marker.style.borderColor=style.borderColor||"#FFFFFF";
+    const symbol=document.createElement("span");
+    symbol.className="marker-symbol";
+    symbol.innerText=style.icon||(character.kind==="enemy"?"👹":character.kind==="npc"?"🧑":"🦸");
+    const label=document.createElement("span");
+    label.className="marker-name";
+    label.innerText=character.name;
+    marker.append(symbol,label);
+    marker.addEventListener("click",()=>showSharedMarkerInformation(character,popupId));
+    return marker;
+}
+
+function showSharedMarkerInformation(character,popupId){
+    const popup=document.getElementById(popupId);
+    if(!popup) return;
+    popup.innerHTML="";
+    const title=document.createElement("h3");
+    title.innerText=(character.kind==="enemy"?"👹 ":character.kind==="npc"?"🧑 ":"🦸 ")+character.name;
+    const details=document.createElement("div");
+    details.innerHTML=`<strong>Type:</strong> ${escapeMultiplayerText(character.type||"Unknown")}<br>
+        <strong>Location:</strong> ${escapeMultiplayerText(character.location||"Unknown")}<br>
+        <strong>Health:</strong> ${escapeMultiplayerText(String(character.health??"--"))}/${escapeMultiplayerText(String(character.maxHealth??"--"))}<br>
+        <strong>Status:</strong> ${escapeMultiplayerText(character.status||"Ready")}`;
+    const close=document.createElement("button");
+    close.type="button"; close.innerText="Close";
+    close.addEventListener("click",()=>popup.style.display="none");
+    popup.append(title,details,close);
+    popup.style.display="block";
+}
+
+function renderAllSharedMarkers(){
+    renderMarkersIntoLayer("liveMapMarkers","markerInfoPopup");
+    renderMarkersIntoLayer("playerLiveMapMarkers","playerMarkerInfoPopup");
+}
+function renderPlayerWorldMarkers(){ renderMarkersIntoLayer("playerLiveMapMarkers","playerMarkerInfoPopup"); }
+function createPlayerCharacterMarker(character){ return createSharedMarker(character,"playerMarkerInfoPopup"); }
+function showPlayerMarkerInformation(character){ showSharedMarkerInformation(character,"playerMarkerInfoPopup"); }
+
+function renderSharedWorldFeed(){
+    const html=sharedWorldFeed.length?sharedWorldFeed.map(event=>
+        `<div class="world-feed-entry"><strong>${escapeMultiplayerText(event.category||"world")}</strong>: ${escapeMultiplayerText(event.message||"")}</div>`
+    ).join(""):"No world events yet.";
+    ["gmWorldFeed","playerWorldFeed"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});
+}
+
+function renderSharedWorldPanels(){
+    const mission=sharedWorldMission;
+    const missionHtml=mission?
+        `<strong>${escapeMultiplayerText(mission.title||"Active Mission")}</strong><br>
+         ${escapeMultiplayerText(mission.description||mission.brief||"")}<br>
+         <span class="small-muted">Location: ${escapeMultiplayerText(mission.location||"Unknown")} | Status: ${escapeMultiplayerText(mission.status||"Active")}</span>`:
+        "No active mission.";
+    ["playerMissionDisplay","gmSharedMissionDisplay"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=missionHtml;});
+
+    const online=document.getElementById("playerOnlineHeroes");
+    if(online) online.innerHTML=sharedWorldPlayers.length?sharedWorldPlayers.map(p=>
+        `<div><span class="online-dot"></span>${escapeMultiplayerText(p.hero?.name||p.playerName||"Hero")} — ${escapeMultiplayerText(p.location||"Nexus City")}</div>`
+    ).join(""):"No heroes online.";
+
+    const own=sharedWorldPlayers.find(p=>p.id===sharedWorldPlayerId||p.playerId===sharedWorldPlayerId);
+    const nearby=document.getElementById("playerNearbyThreats");
+    if(nearby){
+        const threats=own?sharedWorldEnemies.filter(e=>e.location===(own.location||"Nexus City")):[];
+        nearby.innerHTML=threats.length?threats.map(e=>`${escapeMultiplayerText(e.name)} — ${escapeMultiplayerText(e.status||"Ready")}`).join("<br>"):"No nearby threats.";
+    }
+
+    const npcDisplay=document.getElementById("gmSharedNPCDisplay");
+    if(npcDisplay) npcDisplay.innerHTML=sharedWorldNPCs.length?sharedWorldNPCs.map(npc=>
+        `<div class="character-card"><strong>${escapeMultiplayerText(npc.name)}</strong><br>${escapeMultiplayerText(npc.type||"NPC")} at ${escapeMultiplayerText(npc.location||"Nexus City")}<br><button onclick="moveSharedNPC('${npc.id}')">Move Here</button><button onclick="removeSharedNPC('${npc.id}')">Remove</button></div>`
+    ).join(""):"No NPCs.";
+}
+
+async function submitPlayerWorldAction(){
+    const worldRef=getSharedWorldRef();
+    if(!worldRef||!firebaseUser) return alert("You are not connected to a shared world.");
+    const type=document.getElementById("playerActionType")?.value||"Interact";
+    const target=document.getElementById("playerActionTarget")?.value.trim()||"";
+    const description=document.getElementById("playerActionDescription")?.value.trim()||"";
+    const own=sharedWorldPlayers.find(p=>p.id===firebaseUser.uid||p.playerId===firebaseUser.uid);
+    if(!description) return alert("Describe what your hero is doing.");
+    try{
+        await worldRef.collection("actionRequests").add({
+            playerId:firebaseUser.uid,
+            playerName:own?.playerName||"Player",
+            heroName:own?.hero?.name||"Hero",
+            actionType:type,target,description,status:"pending",
+            createdAt:firebase.firestore.FieldValue.serverTimestamp()
+        });
+        document.getElementById("playerActionStatus").innerText="🟡 Action sent to the GM.";
+        await addWorldFeedEvent(`${own?.hero?.name||"A hero"} proposed: ${description}`,"action");
+    }catch(error){
+        console.error(error);
+        document.getElementById("playerActionStatus").innerText="🔴 Action could not be sent.";
+    }
+}
+
+function renderGMActionRequests(){
+    const display=document.getElementById("gmActionRequestsDisplay");
+    if(!display) return;
+    const pending=sharedWorldActionRequests.filter(r=>r.status==="pending");
+    display.innerHTML=pending.length?pending.map(req=>
+        `<div class="action-request-card"><strong>${escapeMultiplayerText(req.heroName||req.playerName||"Hero")}</strong><br>
+         ${escapeMultiplayerText(req.actionType||"Action")} → ${escapeMultiplayerText(req.target||"No target")}<br>
+         ${escapeMultiplayerText(req.description||"")}<br>
+         <button onclick="resolvePlayerWorldAction('${req.id}',true)">✅ Approve</button>
+         <button onclick="resolvePlayerWorldAction('${req.id}',false)">❌ Decline</button></div>`
+    ).join(""):"No pending actions.";
+}
+
+async function resolvePlayerWorldAction(requestId,approved){
+    const worldRef=getSharedWorldRef(); if(!worldRef) return;
+    const ref=worldRef.collection("actionRequests").doc(requestId);
+    const snap=await ref.get(); if(!snap.exists) return;
+    const req=snap.data();
+    await ref.update({status:approved?"approved":"declined",resolvedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    await addWorldFeedEvent(`${req.heroName||"Hero"}'s ${req.actionType||"action"} was ${approved?"approved":"declined"}.`,"combat");
+}
+
+async function updateSharedPlayer(playerId,patch,feedMessage=""){
+    const worldRef=getSharedWorldRef(); if(!worldRef) return;
+    await worldRef.collection("players").doc(playerId).update({...patch,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    if(feedMessage) await addWorldFeedEvent(feedMessage,"player");
+}
+
+async function moveMultiplayerPlayer(playerId){
+    if(!currentMapLocation) return alert("Select a map location first.");
+    const player=sharedWorldPlayers.find(p=>p.id===playerId);
+    await updateSharedPlayer(playerId,{location:currentMapLocation},`${player?.hero?.name||player?.playerName||"A hero"} moved to ${currentMapLocation}.`);
+}
+
+async function changeMultiplayerPlayerHealth(playerId,amount){
+    const player=sharedWorldPlayers.find(p=>p.id===playerId); if(!player) return;
+    const max=player.maxHealth??100;
+    const health=Math.max(0,Math.min(max,(player.health??100)+amount));
+    const status=health<=0?"Knocked Out":health<=30?"Serious Injury":health<=60?"Minor Injury":"Ready";
+    await updateSharedPlayer(playerId,{health,status},`${player.hero?.name||player.playerName||"Hero"} is now at ${health}/${max} HP.`);
+}
+
+const originalUpdateMultiplayerPlayersDisplay=updateMultiplayerPlayersDisplay;
+updateMultiplayerPlayersDisplay=function(){
+    const display=document.getElementById("multiplayerPlayersDisplay");
+    if(!display) return;
+    if(!acceptedMultiplayerPlayers.length){display.innerHTML="No multiplayer players accepted.";return;}
+    display.innerHTML=acceptedMultiplayerPlayers.map(player=>{
+        const hero=player.hero||{};
+        return `<div class="player-manager-card"><h3>🟢 ${escapeMultiplayerText(hero.name||"Unnamed Hero")}</h3>
+        <p><strong>Player:</strong> ${escapeMultiplayerText(player.playerName||"Unknown")}</p>
+        <p><strong>Location:</strong> ${escapeMultiplayerText(player.location||"Nexus City")}</p>
+        <p><strong>Health:</strong> ${player.health??100}/${player.maxHealth??100}</p>
+        <p><strong>Energy:</strong> ${player.energy??100} | <strong>Shield:</strong> ${player.shield??0}</p>
+        <p><strong>Status:</strong> ${escapeMultiplayerText(player.status||"Ready")}</p>
+        <button onclick="moveMultiplayerPlayer('${player.id}')">🚶 Move Here</button>
+        <button onclick="changeMultiplayerPlayerHealth('${player.id}',-10)">-10 HP</button>
+        <button onclick="changeMultiplayerPlayerHealth('${player.id}',10)">+10 HP</button></div>`;
+    }).join("");
+};
+
+function updateEnemyManagerLocalOnly(){
+    const display=document.getElementById("enemyManagerDisplay");
+    if(!display) return;
+    display.innerHTML=enemies.length?enemies.map((enemy,index)=>
+        `<div class="enemy-card"><h3>👹 ${escapeMultiplayerText(enemy.name||"Enemy")}</h3>
+        Type: ${escapeMultiplayerText(enemy.type||"Enemy")}<br>
+        Location: ${escapeMultiplayerText(enemy.location||"Unknown")}<br>
+        Health: ${enemy.health??0}/${enemy.maxHealth??100}<br>
+        <div class="health-bar"><div class="enemy-health-fill" style="width:${Math.max(0,Math.min(100,((enemy.health??0)/(enemy.maxHealth||100))*100))}%"></div></div>
+        Energy: ${enemy.energy??0}<br>Shield: ${enemy.shield??0}<br>
+        Intent: ${escapeMultiplayerText(enemy.intent||"Unknown")}<br>Status: ${escapeMultiplayerText(enemy.status||"Ready")}<br><br>
+        <button onclick="changeEnemyHealth(${index},-10)">-10 HP</button>
+        <button onclick="changeEnemyHealth(${index},10)">+10 HP</button>
+        <button onclick="moveEnemyToSelected(${index})">Move Here</button>
+        <button onclick="rollEnemyAI(${index})">Roll AI</button>
+        <button onclick="removeEnemy(${index})">Remove</button></div>`
+    ).join(""):"No enemies added.";
+    updateCombatFighters();
+    refreshCombatSelectors();
+}
+
+async function createSharedEnemy(enemy){
+    const worldRef=getSharedWorldRef();
+    if(!worldRef){ enemies.push(enemy); updateEnemyManagerLocalOnly(); renderLiveMapMarkers(); return; }
+    const ref=worldRef.collection("enemies").doc();
+    await ref.set({...enemy,id:ref.id,markerStyle:enemy.markerStyle||defaultEnemyMarkerStyle,createdAt:firebase.firestore.FieldValue.serverTimestamp(),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    await addWorldFeedEvent(`${enemy.name} appeared at ${enemy.location}.`,"enemy");
+}
+
+addGeneratedVillainToEnemies=async function(){
+    const name=document.getElementById("villainName").innerText;
+    if(name==="--") return alert("Generate a villain first.");
+    await createSharedEnemy({name,type:"Villain",location:currentMapLocation||"Nexus City",health:120,maxHealth:120,energy:100,shield:0,intent:"Control the battlefield",status:"Ready",markerStyle:defaultEnemyMarkerStyle});
+};
+addMinion=async function(){
+    await createSharedEnemy({name:"Minion "+(sharedWorldEnemies.length+1),type:"Minion",location:currentMapLocation||"Nexus City",health:40,maxHealth:40,energy:30,shield:0,intent:"Attack nearest hero",status:"Ready",markerStyle:{...defaultEnemyMarkerStyle,icon:"👾"}});
+};
+addElite=async function(){
+    await createSharedEnemy({name:"Elite Enemy "+(sharedWorldEnemies.length+1),type:"Elite",location:currentMapLocation||"Nexus City",health:80,maxHealth:80,energy:60,shield:0,intent:"Protect the villain",status:"Ready",markerStyle:{...defaultEnemyMarkerStyle,icon:"☠️"}});
+};
+updateEnemyManager=function(){ updateEnemyManagerLocalOnly(); renderAllSharedMarkers(); };
+changeEnemyHealth=async function(index,amount){
+    const enemy=enemies[index]; if(!enemy) return;
+    const max=enemy.maxHealth??100;
+    const health=Math.max(0,Math.min(max,(enemy.health??0)+amount));
+    const status=health<=0?"Defeated":health<=30?"Badly Injured":"Ready";
+    const worldRef=getSharedWorldRef();
+    if(worldRef&&enemy.id){
+        await worldRef.collection("enemies").doc(enemy.id).update({health,status,intent:health<=0?"None":enemy.intent,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+        await addWorldFeedEvent(`${enemy.name} is now at ${health}/${max} HP.`,"combat");
+    }else{enemy.health=health;enemy.status=status;updateEnemyManagerLocalOnly();}
+};
+moveEnemyToSelected=async function(index){
+    if(!currentMapLocation) return alert("Select a map location first.");
+    const enemy=enemies[index]; if(!enemy) return;
+    const worldRef=getSharedWorldRef();
+    if(worldRef&&enemy.id){
+        await worldRef.collection("enemies").doc(enemy.id).update({location:currentMapLocation,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+        await addWorldFeedEvent(`${enemy.name} moved to ${currentMapLocation}.`,"enemy");
+    }else{enemy.location=currentMapLocation;updateEnemyManagerLocalOnly();}
+};
+removeEnemy=async function(index){
+    const enemy=enemies[index]; if(!enemy) return;
+    const worldRef=getSharedWorldRef();
+    if(worldRef&&enemy.id){await worldRef.collection("enemies").doc(enemy.id).delete();await addWorldFeedEvent(`${enemy.name} was removed from the world.`,"enemy");}
+    else{enemies.splice(index,1);updateEnemyManagerLocalOnly();}
+};
+async function clearDefeatedSharedEnemies(){
+    const worldRef=getSharedWorldRef(); if(!worldRef) return;
+    const defeated=sharedWorldEnemies.filter(e=>(e.health??1)<=0||e.status==="Defeated");
+    await Promise.all(defeated.map(e=>worldRef.collection("enemies").doc(e.id).delete()));
+    if(defeated.length) await addWorldFeedEvent(`${defeated.length} defeated enemies were cleared.`,"enemy");
+}
+
+const npcNames=["Mira Vale","Officer Reyes","Doctor Zenith","Rook Mercer","Astra Quinn","Cipher","Kellan Voss","Sable Hart"];
+const npcTypes=["Civilian","Merchant","Police","Scientist","Quest Giver","Mercenary","Hero","Medic"];
+async function spawnSharedNPC(){
+    const worldRef=getSharedWorldRef(); if(!worldRef) return alert("Create or restore a multiplayer world first.");
+    const ref=worldRef.collection("npcs").doc();
+    const npc={id:ref.id,name:pick(npcNames),type:pick(npcTypes),location:currentMapLocation||"Nexus City",health:50,maxHealth:50,status:"Available",dialogue:"The world is changing. Stay alert.",markerStyle:{icon:"🧑",color:"#CA8A04",borderColor:"#FFFFFF",shape:"circle"},createdAt:firebase.firestore.FieldValue.serverTimestamp()};
+    await ref.set(npc);
+    await addWorldFeedEvent(`${npc.name}, a ${npc.type}, appeared at ${npc.location}.`,"npc");
+}
+async function moveSharedNPC(id){
+    if(!currentMapLocation) return alert("Select a map location first.");
+    const worldRef=getSharedWorldRef(); if(!worldRef) return;
+    const npc=sharedWorldNPCs.find(n=>n.id===id);
+    await worldRef.collection("npcs").doc(id).update({location:currentMapLocation,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    await addWorldFeedEvent(`${npc?.name||"An NPC"} moved to ${currentMapLocation}.`,"npc");
+}
+async function removeSharedNPC(id){
+    const worldRef=getSharedWorldRef(); if(!worldRef) return;
+    const npc=sharedWorldNPCs.find(n=>n.id===id);
+    await worldRef.collection("npcs").doc(id).delete();
+    await addWorldFeedEvent(`${npc?.name||"An NPC"} left the world.`,"npc");
+}
+async function runSharedNPCTurn(){
+    const worldRef=getSharedWorldRef(); if(!worldRef||!sharedWorldNPCs.length) return alert("There are no NPCs to move.");
+    const locations=Object.keys(mapLocationPositions);
+    const batch=firebaseDb.batch();
+    sharedWorldNPCs.forEach(npc=>{
+        if(Math.random()<0.55){
+            const destination=pick(locations);
+            batch.update(worldRef.collection("npcs").doc(npc.id),{location:destination,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+        }
+    });
+    await batch.commit();
+    await addWorldFeedEvent("NPCs completed a world turn.","npc");
+}
+
+const originalGenerateFullMission=generateFullMission;
+generateFullMission=async function(){
+    originalGenerateFullMission();
+    const result=document.getElementById("fullMissionResult")?.innerText||"New mission";
+    const title=(result.split("\n")[0]||"Generated Mission").slice(0,100);
+    sharedWorldMission={title,description:result,brief:result,location:currentMapLocation||"Nexus City",status:"Active",createdBy:firebaseUser?.uid||null};
+    const worldRef=getSharedWorldRef();
+    if(worldRef){
+        await worldRef.update({currentMission:sharedWorldMission,activeEvents:firebase.firestore.FieldValue.increment(1),updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+        await addWorldFeedEvent(`Mission started at ${sharedWorldMission.location}: ${title}`,"mission");
+    }
+    renderSharedWorldPanels();
+};
+async function completeSharedMission(){
+    const worldRef=getSharedWorldRef(); if(!worldRef||!sharedWorldMission) return alert("No active mission.");
+    const completed={...sharedWorldMission,status:"Completed",completedAt:new Date().toISOString()};
+    await worldRef.update({currentMission:completed,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+    await addWorldFeedEvent(`Mission completed: ${sharedWorldMission.title||"Mission"}.`,"mission");
+    sharedWorldMission=completed;
+    renderSharedWorldPanels();
+}
+
+const originalNextWorldTurn=nextWorldTurn;
+nextWorldTurn=async function(){
+    originalNextWorldTurn();
+    const worldRef=getSharedWorldRef();
+    if(worldRef){
+        await worldRef.update({worldTurn:mapTurn,activeEvents:activeEventsCount,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+        await addWorldFeedEvent(`World turn advanced to ${mapTurn}.`,"world");
+    }
+};
+
+async function syncCurrentWorldNow(){
+    const worldRef=getSharedWorldRef(); if(!worldRef) return alert("No shared world is active.");
+    await worldRef.set({worldTurn:mapTurn,activeEvents:activeEventsCount,currentMission:sharedWorldMission||null,mode:teamMode?"Team":"Solo",updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+    await addWorldFeedEvent("The GM synchronized the world state.","system");
+    alert("Shared world synchronized.");
+}
+
+function connectGMSharedWorld(){
+    if(currentWorldCode) connectSharedWorld(currentWorldCode,"gm",firebaseUser?.uid||null);
+}
+
+const originalStartGMJoinRequestListener=startGMJoinRequestListener;
+startGMJoinRequestListener=async function(){
+    const result=await originalStartGMJoinRequestListener();
+    connectGMSharedWorld();
+    return result;
+};
+
+const originalCreateWorldCode=createWorldCode;
+createWorldCode=async function(event){
+    await originalCreateWorldCode(event);
+    if(currentWorldCode){
+        connectSharedWorld(currentWorldCode,"gm",firebaseUser?.uid||null);
+        await addWorldFeedEvent(`World created: ${multiplayerWorldName||currentWorldCode}.`,"system");
+    }
+};
+
+const originalAcceptMultiplayerJoinRequest=acceptMultiplayerJoinRequest;
+acceptMultiplayerJoinRequest=async function(requestId){
+    await originalAcceptMultiplayerJoinRequest(requestId);
+    connectGMSharedWorld();
+};
+
+const originalRestoreGMWorld=restoreGMWorld;
+restoreGMWorld=async function(){
+    await originalRestoreGMWorld();
+    if(currentWorldCode) connectSharedWorld(currentWorldCode,"gm",firebaseUser?.uid||null);
+};
+
+const originalRestorePlayerMultiplayerSession=restorePlayerMultiplayerSession;
+restorePlayerMultiplayerSession=async function(){
+    await originalRestorePlayerMultiplayerSession();
+    const acceptedCode=localStorage.getItem("nexusAcceptedWorldCode");
+    if(acceptedCode&&firebaseUser){startPlayerWorldView(acceptedCode,firebaseUser.uid);}
+};
+
+const originalSaveCampaign=saveCampaign;
+saveCampaign=async function(){
+    originalSaveCampaign();
+    if(getSharedWorldRef()) await syncCurrentWorldNow();
+};
+
+function initializeAlpha2(){
+    ensureSharedWorldUI();
+    const acceptedCode=localStorage.getItem("nexusAcceptedWorldCode");
+    if(acceptedCode&&firebaseUser) startPlayerWorldView(acceptedCode,firebaseUser.uid);
+    if(currentWorldCode&&firebaseUser) connectSharedWorld(currentWorldCode,"gm",firebaseUser.uid);
+}
+
+
 updateInventoryDisplay();
 refreshShop();
 refreshCombatSelectors();
@@ -5023,6 +5741,7 @@ refreshCombatSelectors();
 document.addEventListener("DOMContentLoaded", () => {
     setupMarkerCustomization();
     renderLiveMapMarkers();
+    initializeAlpha2();
 });
     
 </script>
