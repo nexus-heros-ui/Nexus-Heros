@@ -300,6 +300,129 @@ input,select{
     padding:12px;
     margin:12px 0;
 }
+
+.live-marker-layer{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:4;
+    pointer-events:none;
+}
+
+.character-map-marker{
+    position:absolute;
+    width:42px;
+    height:42px;
+    padding:0;
+    margin:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:3px solid white;
+    border-radius:50%;
+    font-size:23px;
+    cursor:pointer;
+    pointer-events:auto;
+    transform:translate(-50%, -50%);
+    transition:left .45s ease, top .45s ease, transform .2s ease;
+    z-index:10;
+}
+
+.character-map-marker:hover{
+    transform:translate(-50%, -50%) scale(1.25);
+    z-index:30;
+}
+
+.character-map-marker.square{
+    border-radius:8px;
+}
+
+.character-map-marker.diamond{
+    border-radius:8px;
+    transform:translate(-50%, -50%) rotate(45deg);
+}
+
+.character-map-marker.diamond .marker-symbol{
+    transform:rotate(-45deg);
+}
+
+.character-map-marker.diamond:hover{
+    transform:translate(-50%, -50%) rotate(45deg) scale(1.25);
+}
+
+.character-map-marker.shield{
+    border-radius:50% 50% 60% 60% / 35% 35% 75% 75%;
+}
+
+.character-map-marker.enemy-marker{
+    box-shadow:0 0 0 2px rgba(239,68,68,.55);
+}
+
+.marker-name{
+    position:absolute;
+    top:45px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#020617;
+    color:white;
+    border:1px solid #60A5FA;
+    border-radius:6px;
+    padding:3px 6px;
+    font-size:11px;
+    white-space:nowrap;
+    pointer-events:none;
+}
+
+.enemy-marker .marker-name{
+    border-color:#EF4444;
+}
+
+.marker-preview{
+    width:60px;
+    height:60px;
+    margin:12px auto;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#2563EB;
+    border:4px solid #FFFFFF;
+    border-radius:50%;
+    font-size:30px;
+}
+
+.marker-preview.square{
+    border-radius:8px;
+}
+
+.marker-preview.diamond{
+    border-radius:8px;
+    transform:rotate(45deg);
+}
+
+.marker-preview.diamond .marker-preview-symbol{
+    transform:rotate(-45deg);
+}
+
+.marker-preview.shield{
+    border-radius:50% 50% 60% 60% / 35% 35% 75% 75%;
+}
+
+.marker-info-popup{
+    position:absolute;
+    left:50%;
+    bottom:12px;
+    transform:translateX(-50%);
+    width:min(320px, 85%);
+    background:#020617;
+    border:2px solid #60A5FA;
+    border-radius:12px;
+    padding:12px;
+    z-index:50;
+    text-align:left;
+    display:none;
+}
     
 </style>
 </head>
@@ -329,6 +452,58 @@ input,select{
 
 <br>
 
+<h3>Character Marker</h3>
+
+<label for="markerIcon">Character Symbol</label>
+
+<select id="markerIcon">
+    <option value="🦸">🦸 Hero</option>
+    <option value="🥷">🥷 Ninja</option>
+    <option value="🧙">🧙 Mystic</option>
+    <option value="🤖">🤖 Robot</option>
+    <option value="👽">👽 Alien</option>
+    <option value="🛡️">🛡️ Guardian</option>
+    <option value="⚡">⚡ Energy Hero</option>
+    <option value="🔥">🔥 Fire Hero</option>
+    <option value="❄️">❄️ Ice Hero</option>
+    <option value="🌌">🌌 Cosmic Hero</option>
+</select>
+
+<br>
+
+<label for="markerColor">Marker Color</label>
+
+<input
+    type="color"
+    id="markerColor"
+    value="#2563EB"
+>
+
+<label for="markerBorderColor">Border Color</label>
+
+<input
+    type="color"
+    id="markerBorderColor"
+    value="#FFFFFF"
+>
+
+<br>
+
+<label for="markerShape">Marker Shape</label>
+
+<select id="markerShape">
+    <option value="circle">Circle</option>
+    <option value="square">Square</option>
+    <option value="diamond">Diamond</option>
+    <option value="shield">Shield</option>
+</select>
+
+<div id="markerPreview" class="marker-preview">
+    🦸
+</div>
+
+<br>
+    
 <button onclick="generateRandomName()">🎲 Random Name</button>
 <button onclick="generateHero()">⚡ Generate Hero</button>
 <button onclick="saveHero()">💾 Save Hero</button>
@@ -534,6 +709,12 @@ No multiplayer players accepted.
 
 <div class="world-map">
 
+<div id="liveMapMarkers" class="live-marker-layer"></div>
+
+<div id="markerInfoPopup" class="marker-info-popup">
+    Click a character marker.
+</div>
+    
 <svg class="roadLayer" viewBox="0 0 100 100" preserveAspectRatio="none">
     <path class="roadPath" d="M45 29 L47 13" />
     <path class="roadPath" d="M45 29 L21 43" />
@@ -1895,6 +2076,449 @@ let equippedGear = {
     artifact:null
 };
 
+const mapLocationPositions = {
+    "Nexus City": {
+        left:44,
+        top:29
+    },
+
+    "Harbor District": {
+        left:23,
+        top:79
+    },
+
+    "Blackgate Prison": {
+        left:61,
+        top:39
+    },
+
+    "Omega Labs": {
+        left:9,
+        top:65
+    },
+
+    "Crash Site": {
+        left:50,
+        top:86
+    },
+
+    "Ancient Ruins": {
+        left:20,
+        top:16
+    },
+
+    "Wasteland Desert": {
+        left:77,
+        top:24
+    },
+
+    "Hidden Sanctuary": {
+        left:48,
+        top:60
+    },
+
+    "Titan Fortress": {
+        left:47,
+        top:13
+    },
+
+    "Dimensional Portal": {
+        left:74,
+        top:83
+    },
+
+    "Power Plant": {
+        left:22,
+        top:43
+    },
+
+    "Shadow Realm": {
+        left:84,
+        top:57
+    }
+};
+
+const defaultHeroMarkerStyle = {
+    icon:"🦸",
+    color:"#2563EB",
+    borderColor:"#FFFFFF",
+    shape:"circle"
+};
+
+const defaultEnemyMarkerStyle = {
+    icon:"👹",
+    color:"#DC2626",
+    borderColor:"#FFFFFF",
+    shape:"diamond"
+};
+
+function getSelectedMarkerStyle(){
+    const iconInput =
+        document.getElementById("markerIcon");
+
+    const colorInput =
+        document.getElementById("markerColor");
+
+    const borderInput =
+        document.getElementById("markerBorderColor");
+
+    const shapeInput =
+        document.getElementById("markerShape");
+
+    return {
+        icon:iconInput
+            ? iconInput.value
+            : defaultHeroMarkerStyle.icon,
+
+        color:colorInput
+            ? colorInput.value
+            : defaultHeroMarkerStyle.color,
+
+        borderColor:borderInput
+            ? borderInput.value
+            : defaultHeroMarkerStyle.borderColor,
+
+        shape:shapeInput
+            ? shapeInput.value
+            : defaultHeroMarkerStyle.shape
+    };
+}
+
+function updateMarkerPreview(){
+    const preview =
+        document.getElementById("markerPreview");
+
+    if(!preview){
+        return;
+    }
+
+    const markerStyle =
+        getSelectedMarkerStyle();
+
+    preview.innerHTML =
+        "<span class='marker-preview-symbol'>" +
+        markerStyle.icon +
+        "</span>";
+
+    preview.style.background =
+        markerStyle.color;
+
+    preview.style.borderColor =
+        markerStyle.borderColor;
+
+    preview.className =
+        "marker-preview " +
+        markerStyle.shape;
+}
+
+function setupMarkerCustomization(){
+    [
+        "markerIcon",
+        "markerColor",
+        "markerBorderColor",
+        "markerShape"
+    ].forEach(id => {
+        const control =
+            document.getElementById(id);
+
+        if(!control){
+            return;
+        }
+
+        control.addEventListener(
+            "input",
+            updateMarkerPreview
+        );
+
+        control.addEventListener(
+            "change",
+            updateMarkerPreview
+        );
+    });
+
+    updateMarkerPreview();
+}
+
+function getMarkerPosition(location, stackIndex){
+    const base =
+        mapLocationPositions[location];
+
+    if(!base){
+        return null;
+    }
+
+    const offsets = [
+        { x:0, y:0 },
+        { x:4, y:0 },
+        { x:-4, y:0 },
+        { x:0, y:6 },
+        { x:0, y:-6 },
+        { x:4, y:6 },
+        { x:-4, y:6 },
+        { x:4, y:-6 },
+        { x:-4, y:-6 }
+    ];
+
+    const offset =
+        offsets[stackIndex % offsets.length];
+
+    return {
+        left:base.left + offset.x,
+        top:base.top + offset.y
+    };
+}
+
+function createCharacterMapMarker(character){
+    const marker =
+        document.createElement("button");
+
+    const markerStyle =
+        character.markerStyle ||
+        (
+            character.kind === "enemy"
+            ? defaultEnemyMarkerStyle
+            : defaultHeroMarkerStyle
+        );
+
+    marker.type =
+        "button";
+
+    marker.className =
+        "character-map-marker " +
+        (markerStyle.shape || "circle") +
+        (
+            character.kind === "enemy"
+            ? " enemy-marker"
+            : ""
+        );
+
+    marker.style.left =
+        character.position.left + "%";
+
+    marker.style.top =
+        character.position.top + "%";
+
+    marker.style.background =
+        markerStyle.color ||
+        defaultHeroMarkerStyle.color;
+
+    marker.style.borderColor =
+        markerStyle.borderColor ||
+        "#FFFFFF";
+
+    const symbol =
+        document.createElement("span");
+
+    symbol.className =
+        "marker-symbol";
+
+    symbol.innerText =
+        markerStyle.icon ||
+        (
+            character.kind === "enemy"
+            ? "👹"
+            : "🦸"
+        );
+
+    const label =
+        document.createElement("span");
+
+    label.className =
+        "marker-name";
+
+    label.innerText =
+        character.name;
+
+    marker.appendChild(symbol);
+    marker.appendChild(label);
+
+    marker.addEventListener("click", () => {
+        showMarkerInformation(character);
+    });
+
+    return marker;
+}
+
+function showMarkerInformation(character){
+    const popup =
+        document.getElementById("markerInfoPopup");
+
+    if(!popup){
+        return;
+    }
+
+    popup.innerHTML = "";
+
+    const title =
+        document.createElement("h3");
+
+    title.innerText =
+        (
+            character.kind === "enemy"
+            ? "👹 "
+            : "🦸 "
+        ) +
+        character.name;
+
+    const details =
+        document.createElement("div");
+
+    details.innerHTML =
+        "<strong>Type:</strong> " +
+        escapeMultiplayerText(
+            character.type || "Hero"
+        ) +
+        "<br>" +
+
+        "<strong>Location:</strong> " +
+        escapeMultiplayerText(
+            character.location || "Unknown"
+        ) +
+        "<br>" +
+
+        "<strong>Health:</strong> " +
+        escapeMultiplayerText(
+            String(character.health ?? "--")
+        ) +
+        "/" +
+        escapeMultiplayerText(
+            String(character.maxHealth ?? 100)
+        ) +
+        "<br>" +
+
+        "<strong>Status:</strong> " +
+        escapeMultiplayerText(
+            character.status || "Ready"
+        );
+
+    const closeButton =
+        document.createElement("button");
+
+    closeButton.type =
+        "button";
+
+    closeButton.innerText =
+        "Close";
+
+    closeButton.addEventListener("click", () => {
+        popup.style.display =
+            "none";
+    });
+
+    popup.appendChild(title);
+    popup.appendChild(details);
+    popup.appendChild(closeButton);
+
+    popup.style.display =
+        "block";
+}
+
+function renderLiveMapMarkers(){
+    const markerLayer =
+        document.getElementById("liveMapMarkers");
+
+    if(!markerLayer){
+        return;
+    }
+
+    markerLayer.innerHTML = "";
+
+    const locationCounts = {};
+    const liveCharacters = [];
+
+    acceptedMultiplayerPlayers.forEach(player => {
+        const hero =
+            player.hero || {};
+
+        liveCharacters.push({
+            id:player.id,
+            kind:"hero",
+            name:
+                hero.name ||
+                player.playerName ||
+                "Unnamed Hero",
+
+            type:
+                hero.heroClass ||
+                "Hero",
+
+            location:
+                player.location ||
+                "Nexus City",
+
+            health:
+                player.health ?? 100,
+
+            maxHealth:
+                player.maxHealth ?? 100,
+
+            status:
+                player.status ||
+                "Ready",
+
+            markerStyle:
+                hero.markerStyle ||
+                defaultHeroMarkerStyle
+        });
+    });
+
+    enemies.forEach((enemy, index) => {
+        liveCharacters.push({
+            id:"enemy-" + index,
+            kind:"enemy",
+
+            name:
+                enemy.name ||
+                "Unnamed Enemy",
+
+            type:
+                enemy.type ||
+                "Enemy",
+
+            location:
+                enemy.location ||
+                "Unknown",
+
+            health:
+                enemy.health ?? 0,
+
+            maxHealth:
+                enemy.maxHealth ?? 100,
+
+            status:
+                enemy.status ||
+                "Ready",
+
+            markerStyle:
+                enemy.markerStyle ||
+                defaultEnemyMarkerStyle
+        });
+    });
+
+    liveCharacters.forEach(character => {
+        if(!mapLocationPositions[character.location]){
+            return;
+        }
+
+        const stackIndex =
+            locationCounts[character.location] || 0;
+
+        locationCounts[character.location] =
+            stackIndex + 1;
+
+        character.position =
+            getMarkerPosition(
+                character.location,
+                stackIndex
+            );
+
+        const marker =
+            createCharacterMapMarker(character);
+
+        markerLayer.appendChild(marker);
+    });
+}
+    
 function getWeightedPower(){
     let roll = Math.random() * 100;
 
@@ -4144,6 +4768,12 @@ function simulateBattle(){
 updateInventoryDisplay();
 refreshShop();
 refreshCombatSelectors();
+
+document.addEventListener("DOMContentLoaded", () => {
+    setupMarkerCustomization();
+    renderLiveMapMarkers();
+});
+    
 </script>
 
 </body>
