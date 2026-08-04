@@ -2884,7 +2884,8 @@ function saveHero(){
         rank: document.getElementById("rank").innerText,
         powers: document.getElementById("powers").innerHTML,
         equipment: document.getElementById("equipment").innerHTML,
-        weaknesses: document.getElementById("weaknesses").innerHTML
+        weaknesses: document.getElementById("weaknesses").innerHTML,
+        markerStyle: getSelectedMarkerStyle()
     };
 
     localStorage.setItem("savedHero", JSON.stringify(hero));
@@ -2921,6 +2922,22 @@ function loadHero(){
 
     currentHeroScore = Number(hero.powerScore) || 0;
 
+     if(hero.markerStyle){
+    document.getElementById("markerIcon").value =
+        hero.markerStyle.icon || "🦸";
+
+    document.getElementById("markerColor").value =
+        hero.markerStyle.color || "#2563EB";
+
+    document.getElementById("markerBorderColor").value =
+        hero.markerStyle.borderColor || "#FFFFFF";
+
+    document.getElementById("markerShape").value =
+        hero.markerStyle.shape || "circle";
+
+    updateMarkerPreview();
+}
+    
     alert("Hero Loaded!");
 }
 
@@ -3147,9 +3164,11 @@ function getCurrentHeroForMultiplayer(){
         heroClass:document.getElementById("heroClass").innerText,
         rank:document.getElementById("rank").innerText,
 
-        powers:document.getElementById("powers").innerText,
-        equipment:document.getElementById("equipment").innerText,
-        weaknesses:document.getElementById("weaknesses").innerText
+       powers:document.getElementById("powers").innerText,
+       equipment:document.getElementById("equipment").innerText,
+       weaknesses:document.getElementById("weaknesses").innerText,
+
+       markerStyle:getSelectedMarkerStyle()
     };
 }
 
@@ -3615,7 +3634,8 @@ async function startGMJoinRequestListener(){
                     });
                 });
 
-                updateMultiplayerPlayersDisplay();
+               updateMultiplayerPlayersDisplay();
+               renderLiveMapMarkers();
             }, error => {
                 console.error("Player listener failed:", error);
             });
@@ -4241,6 +4261,7 @@ function updateEnemyManager(){
         html || "No enemies added.";
 
     updateCombatFighters();
+    renderLiveMapMarkers();
 }
 
 function changeEnemyHealth(index, amount){
