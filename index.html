@@ -241,6 +241,66 @@ input,select{
 .manualSection{
     display:none;
 }
+
+.gm-guide-section{
+    background:#111827;
+    border:1px solid #334155;
+    border-radius:10px;
+    margin:10px 0;
+    overflow:hidden;
+}
+
+.gm-guide-button{
+    width:100%;
+    margin:0;
+    padding:14px;
+    border-radius:0;
+    background:#0F172A;
+    color:#BFDBFE;
+    text-align:left;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.gm-guide-button:hover{
+    background:#1E3A8A;
+}
+
+.gm-guide-content{
+    display:none;
+    padding:15px;
+    text-align:left;
+    line-height:1.7;
+}
+
+.gm-guide-content.show{
+    display:block;
+}
+
+.gm-step{
+    background:#020617;
+    border-left:4px solid #60A5FA;
+    border-radius:6px;
+    padding:10px;
+    margin:10px 0;
+}
+
+.gm-warning{
+    background:#451A03;
+    border:1px solid #F59E0B;
+    border-radius:8px;
+    padding:12px;
+    margin:12px 0;
+}
+
+.gm-checklist{
+    background:#052E16;
+    border:1px solid #22C55E;
+    border-radius:8px;
+    padding:12px;
+    margin:12px 0;
+}
+    
 </style>
 </head>
 
@@ -720,10 +780,707 @@ Players choose actions like Attack, Defend, Heal, Heavy Attack, or Power Attack.
 </div>
 
 <div class="card manualSection" id="gmHandbook">
-<h2>GM Handbook</h2>
+
+<h2>🎮 Game Master Handbook</h2>
+
 <div class="rulebook-item">
-The GM controls world events, enemies, missions, health, rewards, shops, and final rulings.
+The Game Master creates the world, accepts players, controls missions,
+moves characters, spawns enemies, runs combat, gives rewards, and makes
+the final ruling when something is not covered by the game system.
 </div>
+
+<div class="gm-warning">
+<strong>Important:</strong> Wait until the website says
+<strong>🟢 Multiplayer Connected</strong> before creating or joining a world.
+</div>
+
+
+<!-- STARTING A WORLD -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmStartWorld')"
+>
+🌍 1. Starting a Multiplayer World
+</button>
+
+<div class="gm-guide-content" id="gmStartWorld">
+
+<div class="gm-step">
+<strong>Step 1:</strong> Open the GM Portal using the button at the top of the page.
+</div>
+
+<div class="gm-step">
+<strong>Step 2:</strong> Enter a name in the World Name box.
+</div>
+
+<div class="gm-step">
+<strong>Step 3:</strong> Choose Solo or Team mode using
+<strong>Toggle Team / Solo</strong>.
+</div>
+
+<div class="gm-step">
+<strong>Step 4:</strong> Press
+<strong>🌍 Create Multiplayer World</strong>.
+</div>
+
+<div class="gm-step">
+<strong>Step 5:</strong> Copy the generated world code and give it to the players.
+</div>
+
+<p>
+Keep the GM page open while players join. The world code is used by every
+player who wants to enter the campaign.
+</p>
+
+</div>
+</div>
+
+
+<!-- ACCEPTING PLAYERS -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmAcceptPlayers')"
+>
+🦸 2. Accepting Players
+</button>
+
+<div class="gm-guide-content" id="gmAcceptPlayers">
+
+<p>Each player must:</p>
+
+<div class="gm-step">
+1. Open the same published Nexus Heroes website.
+</div>
+
+<div class="gm-step">
+2. Create or load a hero.
+</div>
+
+<div class="gm-step">
+3. Enter their player name and the GM's world code.
+</div>
+
+<div class="gm-step">
+4. Press <strong>Check World</strong>.
+</div>
+
+<div class="gm-step">
+5. Press <strong>Send Hero To GM</strong>.
+</div>
+
+<p>
+The request will appear under <strong>Pending Join Requests</strong>.
+</p>
+
+<p>
+Review the player's hero name, class, rank, and power score.
+</p>
+
+<p>
+Press <strong>✅ Accept</strong> to add the player or
+<strong>❌ Decline</strong> to reject the request.
+</p>
+
+<p>Accepted players begin with:</p>
+
+<ul>
+    <li>100 Health</li>
+    <li>100 Maximum Health</li>
+    <li>100 Energy</li>
+    <li>0 Shield</li>
+    <li>Ready status</li>
+    <li>No injuries</li>
+    <li>Nexus City starting location</li>
+</ul>
+
+</div>
+</div>
+
+
+<!-- WORLD MAP -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmWorldMap')"
+>
+🗺 3. Using the World Map
+</button>
+
+<div class="gm-guide-content" id="gmWorldMap">
+
+<p>
+Click a map location before creating missions, spawning enemies, or moving
+characters.
+</p>
+
+<p>Available locations include:</p>
+
+<ul>
+    <li>Nexus City</li>
+    <li>Harbor District</li>
+    <li>Blackgate Prison</li>
+    <li>Omega Labs</li>
+    <li>Crash Site</li>
+    <li>Ancient Ruins</li>
+    <li>Wasteland Desert</li>
+    <li>Hidden Sanctuary</li>
+    <li>Titan Fortress</li>
+    <li>Dimensional Portal</li>
+    <li>Power Plant</li>
+    <li>Shadow Realm</li>
+</ul>
+
+<div class="gm-step">
+<strong>Add Hero To Map:</strong> Adds the hero shown on the current Hero Sheet
+to the local map-character list.
+</div>
+
+<div class="gm-step">
+<strong>Add Hero To Player Manager:</strong> Creates a manageable version of
+the hero with health, energy, shield, status, injuries, and location.
+</div>
+
+<div class="gm-step">
+<strong>Travel Here:</strong> Moves the selected hero to the currently selected
+location.
+</div>
+
+<div class="gm-step">
+<strong>Next World Turn:</strong> Advances time outside combat and may create
+travel or world events.
+</div>
+
+<div class="gm-warning">
+World turns and combat turns are different. World turns control travel,
+missions, and events. Combat turns control who acts during a battle.
+</div>
+
+</div>
+</div>
+
+
+<!-- MISSIONS -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmMissions')"
+>
+📜 4. Creating Missions
+</button>
+
+<div class="gm-guide-content" id="gmMissions">
+
+<div class="gm-step">
+<strong>Step 1:</strong> Select the map location where the mission will happen.
+</div>
+
+<div class="gm-step">
+<strong>Step 2:</strong> Confirm the location appears under Mission Location.
+</div>
+
+<div class="gm-step">
+<strong>Step 3:</strong> Press <strong>📜 Generate Mission</strong>.
+</div>
+
+<div class="gm-step">
+<strong>Step 4:</strong> Read the generated mission brief and explain the
+situation to the players.
+</div>
+
+<p>
+The generated mission is a story prompt. The GM can change names, enemies,
+objectives, and details to fit the campaign.
+</p>
+
+<p>Possible mission objectives include:</p>
+
+<ul>
+    <li>Defeat a villain</li>
+    <li>Rescue civilians</li>
+    <li>Capture an escaped enemy</li>
+    <li>Protect a location</li>
+    <li>Disable a machine</li>
+    <li>Retrieve an artifact</li>
+    <li>Escape a dangerous area</li>
+    <li>Survive a certain number of rounds</li>
+</ul>
+
+</div>
+</div>
+
+
+<!-- ENEMIES -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmEnemies')"
+>
+👹 5. Spawning and Managing Enemies
+</button>
+
+<div class="gm-guide-content" id="gmEnemies">
+
+<p>
+Select a map location before adding enemies. New enemies will be placed at
+the selected location.
+</p>
+
+<div class="gm-step">
+<strong>Generate Villain:</strong> Creates a villain sheet with a name, species,
+origin, threat level, class, score, and rank.
+</div>
+
+<div class="gm-step">
+<strong>Add Villain:</strong> Adds the generated villain to the Enemy Manager.
+</div>
+
+<div class="gm-step">
+<strong>Add Minion:</strong> Creates a weaker enemy with lower health and energy.
+</div>
+
+<div class="gm-step">
+<strong>Add Elite:</strong> Creates a stronger enemy that can protect a villain
+or lead minions.
+</div>
+
+<p>Recommended encounters:</p>
+
+<div class="gm-checklist">
+<strong>Small encounter</strong><br>
+1 villain or elite<br>
+1–2 minions
+</div>
+
+<div class="gm-checklist">
+<strong>Major encounter</strong><br>
+1 villain<br>
+2 elites<br>
+2–4 minions
+</div>
+
+<div class="gm-checklist">
+<strong>Boss encounter</strong><br>
+1 powerful villain<br>
+2–3 elites<br>
+4–6 minions
+</div>
+
+<p>
+Use the Enemy Manager to damage, heal, move, or remove enemies.
+</p>
+
+</div>
+</div>
+
+
+<!-- PLAYERS -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmPlayers')"
+>
+❤️ 6. Managing Player Characters
+</button>
+
+<div class="gm-guide-content" id="gmPlayers">
+
+<p>The Player Manager tracks:</p>
+
+<ul>
+    <li>Health</li>
+    <li>Maximum health</li>
+    <li>Energy</li>
+    <li>Shield</li>
+    <li>Status</li>
+    <li>Injuries</li>
+    <li>Current location</li>
+</ul>
+
+<p>Suggested health conditions:</p>
+
+<div class="gm-step">
+<strong>61–100 Health:</strong> Ready
+</div>
+
+<div class="gm-step">
+<strong>31–60 Health:</strong> Minor Injury
+</div>
+
+<div class="gm-step">
+<strong>1–30 Health:</strong> Serious Injury
+</div>
+
+<div class="gm-step">
+<strong>0 Health:</strong> Knocked Out
+</div>
+
+<p>
+The GM decides when a condition, injury, shield, or special effect should
+change.
+</p>
+
+</div>
+</div>
+
+
+<!-- COMBAT PREPARATION -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmCombatStart')"
+>
+⚔ 7. Preparing Combat
+</button>
+
+<div class="gm-guide-content" id="gmCombatStart">
+
+<p>Before starting combat, confirm that:</p>
+
+<div class="gm-checklist">
+✅ At least one hero is in the Player Manager.<br>
+✅ At least one enemy is in the Enemy Manager.<br>
+✅ Everyone is at the correct map location.<br>
+✅ The correct mission is active.<br>
+✅ Health and energy values are correct.
+</div>
+
+<div class="gm-step">
+<strong>Step 1:</strong> Press <strong>🔄 Refresh Fighters</strong>.
+</div>
+
+<div class="gm-step">
+<strong>Step 2:</strong> Confirm heroes appear in the Attacker list and enemies
+appear in the Target list.
+</div>
+
+<div class="gm-step">
+<strong>Step 3:</strong> Press <strong>▶ Start Turns</strong>.
+</div>
+
+<p>
+The Turn Tracker will show the current round, current fighter, and upcoming
+fighters.
+</p>
+
+</div>
+</div>
+
+
+<!-- PLAYER TURN -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmPlayerTurn')"
+>
+🎯 8. Running a Player Turn
+</button>
+
+<div class="gm-guide-content" id="gmPlayerTurn">
+
+<div class="gm-step">
+<strong>Step 1:</strong> Ask the player what they want their hero to do.
+</div>
+
+<div class="gm-step">
+<strong>Step 2:</strong> Select the hero in the Attacker dropdown.
+</div>
+
+<div class="gm-step">
+<strong>Step 3:</strong> Select the enemy or target.
+</div>
+
+<div class="gm-step">
+<strong>Step 4:</strong> Choose the player's action.
+</div>
+
+<p><strong>Attack:</strong> Normal damage with normal accuracy.</p>
+
+<p><strong>Defend:</strong> Adds defensive protection or shield.</p>
+
+<p><strong>Heal:</strong> Restores health.</p>
+
+<p><strong>Heavy Attack:</strong> Higher damage with lower accuracy.</p>
+
+<p><strong>Power Attack:</strong> Strong power-based attack that may use energy.</p>
+
+<div class="gm-step">
+<strong>Step 5:</strong> Press <strong>✅ GM Approve Action</strong>.
+</div>
+
+<div class="gm-step">
+<strong>Step 6:</strong> Read the result in the Combat Log.
+</div>
+
+<div class="gm-step">
+<strong>Step 7:</strong> Press <strong>⏭ End Turn</strong>.
+</div>
+
+</div>
+</div>
+
+
+<!-- ENEMY TURN -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmEnemyTurn')"
+>
+🎲 9. Running an Enemy Turn
+</button>
+
+<div class="gm-guide-content" id="gmEnemyTurn">
+
+<p>
+When an enemy's turn begins, select the enemy and the hero it will target.
+</p>
+
+<div class="gm-step">
+Press <strong>👹 Enemy Attack</strong> for a standard enemy attack.
+</div>
+
+<div class="gm-step">
+Press <strong>🎲 Enemy AI Turn</strong> to allow the game to choose an action.
+</div>
+
+<div class="gm-step">
+Read the result in the Combat Log and update the story.
+</div>
+
+<div class="gm-step">
+Press <strong>⏭ End Turn</strong> when the enemy is finished.
+</div>
+
+<p>
+Use <strong>Reset Turns</strong> only when combat ends or the turn order needs
+to be completely restarted.
+</p>
+
+</div>
+</div>
+
+
+<!-- ENDING COMBAT -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmEndCombat')"
+>
+🏁 10. Ending Combat
+</button>
+
+<div class="gm-guide-content" id="gmEndCombat">
+
+<p>Combat can end when:</p>
+
+<ul>
+    <li>All enemies are defeated or removed</li>
+    <li>All heroes are knocked out</li>
+    <li>The heroes escape</li>
+    <li>The enemies surrender</li>
+    <li>The mission objective is completed</li>
+    <li>The GM decides the encounter has ended</li>
+</ul>
+
+<p>
+Not every mission requires defeating every enemy. The objective may be more
+important than the fight.
+</p>
+
+</div>
+</div>
+
+
+<!-- REWARDS -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmRewards')"
+>
+🎁 11. Rewards, Inventory, and Shops
+</button>
+
+<div class="gm-guide-content" id="gmRewards">
+
+<div class="gm-step">
+Use <strong>Give 100 Credits</strong> to award money or test the shop.
+</div>
+
+<div class="gm-step">
+Use <strong>Generate Loot</strong> to create a random reward.
+</div>
+
+<div class="gm-step">
+Use <strong>Refresh Shop</strong> to generate new shop items.
+</div>
+
+<div class="gm-step">
+Select an item and press <strong>Buy Selected Item</strong> to purchase it.
+</div>
+
+<p>Possible rewards include:</p>
+
+<ul>
+    <li>Credits</li>
+    <li>Weapons</li>
+    <li>Armor</li>
+    <li>Artifacts</li>
+    <li>Consumables</li>
+    <li>Power upgrades</li>
+    <li>Reputation</li>
+    <li>Bonus stat points</li>
+</ul>
+
+</div>
+</div>
+
+
+<!-- SAVING -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmSaving')"
+>
+💾 12. Saving the Campaign
+</button>
+
+<div class="gm-guide-content" id="gmSaving">
+
+<div class="gm-step">
+Press <strong>💾 Save Campaign</strong> at the end of every game session.
+</div>
+
+<p>The campaign save stores local game information such as:</p>
+
+<ul>
+    <li>World players</li>
+    <li>Map characters</li>
+    <li>Managed players</li>
+    <li>Enemies</li>
+    <li>Inventory</li>
+    <li>Credits</li>
+    <li>World turn</li>
+    <li>Active events</li>
+    <li>Equipped gear</li>
+    <li>Combat information</li>
+</ul>
+
+<div class="gm-step">
+Press <strong>📂 Load Campaign</strong> when returning to a saved campaign on
+the same browser and device.
+</div>
+
+<div class="gm-warning">
+<strong>Reset Campaign</strong> erases the local campaign. Only use it when
+starting completely over.
+</div>
+
+</div>
+</div>
+
+
+<!-- SESSION ORDER -->
+
+<div class="gm-guide-section">
+
+<button
+    class="gm-guide-button"
+    onclick="toggleGMGuide('gmSessionOrder')"
+>
+✅ 13. Complete Session Checklist
+</button>
+
+<div class="gm-guide-content" id="gmSessionOrder">
+
+<div class="gm-checklist">
+<strong>Before the game</strong><br>
+1. Open the website.<br>
+2. Wait for Multiplayer Connected.<br>
+3. Open the GM Portal.<br>
+4. Load the campaign or create a world.<br>
+5. Choose Team or Solo mode.<br>
+6. Select the starting location.
+</div>
+
+<div class="gm-checklist">
+<strong>When players join</strong><br>
+7. Give players the world code.<br>
+8. Accept their join requests.<br>
+9. Confirm they appear in Accepted Multiplayer Players.<br>
+10. Confirm their health and starting location.
+</div>
+
+<div class="gm-checklist">
+<strong>Before a mission</strong><br>
+11. Select a map location.<br>
+12. Generate a mission.<br>
+13. Explain the mission to the players.<br>
+14. Spawn enemies.<br>
+15. Confirm everyone is at the correct location.
+</div>
+
+<div class="gm-checklist">
+<strong>During combat</strong><br>
+16. Refresh fighters.<br>
+17. Start turns.<br>
+18. Select the attacker and target.<br>
+19. Choose and approve actions.<br>
+20. Run enemy turns.<br>
+21. End each turn.<br>
+22. Continue until the encounter ends.
+</div>
+
+<div class="gm-checklist">
+<strong>After the mission</strong><br>
+23. Remove defeated enemies.<br>
+24. Give credits and loot.<br>
+25. Update injuries and health.<br>
+26. Advance the world turn.<br>
+27. Save the campaign.
+</div>
+
+</div>
+</div>
+
+
+<!-- CURRENT LIMITATION -->
+
+<div class="gm-warning">
+<strong>Current Multiplayer Development Note:</strong><br><br>
+
+Accepted online players are stored in Firebase, while some older map,
+combat, inventory, and campaign systems still use local browser data.
+
+The upcoming multiplayer updates will automatically connect accepted players
+to the Player Manager, map markers, movement system, combat system, and turn
+order.
+</div>
+
 </div>
 
 <div class="card manualSection" id="combatGuide">
@@ -913,6 +1670,17 @@ function showManualSection(sectionId){
     document.getElementById(sectionId).style.display = "block";
 }
 
+function toggleGMGuide(sectionId){
+    const section =
+        document.getElementById(sectionId);
+
+    if(!section){
+        return;
+    }
+
+    section.classList.toggle("show");
+}
+    
 function rollD20(){
     return Math.floor(Math.random() * 20) + 1;
 }
