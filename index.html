@@ -6754,41 +6754,329 @@ function getCurrentPowerHeroName(){
    SUBMIT TO GM
    ========================================================= */
 
-function submitCreatedPowerAction(){
+async function submitCreatedPowerAction(){
 
-    const request =
-        assessCreatedPowerAction();
+    // ==========================================
+    // 1. MAKE SURE FIREBASE IS READY
+    // ==========================================
 
-    if(!request){
+    if(!firebaseReady || !firebaseDb){
+
+        alert(
+            "Multiplayer is not connected yet. " +
+            "Wait for Firebase to connect."
+        );
+
         return;
     }
 
 
-    request.status =
-        "Pending GM Review";
+    // ==========================================
+    // 2. MAKE SURE PLAYER IS SIGNED IN
+    // ==========================================
+
+    const user = firebase.auth().currentUser;
+
+    if(!user){
+
+        alert(
+            "You must be connected to multiplayer first."
+        );
+
+        return;
+    }
 
 
-    localPowerRequests.push(
-        JSON.parse(
-            JSON.stringify(request)
-        )
-    );
+    // ==========================================
+    // 3. GET CURRENT WORLD CODE
+    // ==========================================
+
+    const code =
+        String(joinedWorldCode || "")
+        .trim()
+        .toUpperCase();
+
+    if(!code){
+
+        alert(
+            "Join a multiplayer world before sending a power action."
+        );
+
+        return;
+    }
 
 
-    document.getElementById(
-        "powerActionAssessment"
-    ).innerHTML += `
+    // ==========================================
+    // 4. ASSESS THE PLAYER'S CREATED POWER
+    // ==========================================
 
-        <br><br>
+    const assessment =
+        assessCreatedPowerAction();
 
-        <strong>
-            📨 Sent to GM for review.
-        </strong>
-
-    `;
+    if(!assessment){
+        return;
+    }
 
 
-    updateGMPowerRequests();
+    // ==========================================
+    // 5. VERIFY PLAYER IS ACCEPTED
+    // ==========================================
+
+    try{
+
+        const playerRef =
+            firebaseDb
+            .collection("worlds")
+            .doc(code)
+            .collection("players")
+            .doc(user.uid);
+
+        const playerSnapshot =
+            await playerRef.get();
+
+        if(!playerSnapshot.exists){
+
+            alert(
+                "The GM must accept your hero before " +
+                "you can submit combat actions."
+            );
+
+            return;
+        }
+
+
+        const multiplayerPlayer =
+            playerSnapshot.data() || {};
+
+
+        // ==========================================
+        // 6. BUILD FIRESTORE POWER REQUEST
+        // ==========================================
+
+        const powerRequest = {
+
+            // PLAYER INFORMATION
+            playerId: user.uid,
+
+            playerName:
+                multiplayerPlayer.playerName ||
+                document.getElementById(
+                    "multiplayerPlayerName"
+                )?.value ||
+                "Player",
+
+            heroName:
+                multiplayerPlayer.hero?.name ||
+                currentHero?.name ||
+                "Unknown Hero",
+
+
+            // REQUEST TYPE
+            actionType: "customPower",
+
+
+            // POWER INFORMATION
+            power:
+                assessment.power ||
+                document.getElementById(
+                    "creatorPowerSelect"
+                )?.value ||
+                "",
+
+            target:
+                assessment.target ||
+                document.getElementById(
+                    "creatorTarget"
+                )?.value.trim() ||
+                "",
+
+            description:
+                assessment.description ||
+                document.getElementById(
+                    "creatorActionDescription"
+                )?.value.trim() ||
+                "",
+
+
+            // POWER DIFFICULTY
+            scale:
+                Number(
+                    assessment.scale ||
+                    document.getElementById(
+                        "creatorScale"
+                    )?.value ||
+                    1
+                ),
+
+            precision:
+                Number(
+                    assessment.precision ||
+                    document.getElementById(
+                        "creatorPrecision"
+                    )?.value ||
+                    1
+                ),
+
+            powerControl:
+                Number(
+                    assessment.powerControl ||
+                    currentPowerControl ||
+                    0
+                ),
+
+
+            // SYSTEM ASSESSMENT
+            difficulty:
+                Number(
+                    assessment.difficulty || 0
+                ),
+
+            difficultyLabel:
+                assessment.difficultyLabel ||
+                assessment.rating ||
+                "GM Review",
+
+            requiredRoll:
+                assessment.requiredRoll || null,
+
+            energyCost:
+                Number(
+                    assessment.energyCost || 0
+                ),
+
+
+            // GM REVIEW
+            status: "pending",
+
+            gmDecision: null,
+
+            gmNotes: "",
+
+
+            // COMBAT RESOLUTION
+            resolved: false,
+
+            success: null,
+
+            damage: 0,
+
+            healing: 0,
+
+            effect: "",
+
+
+            // TIME
+            createdAt:
+                firebase.firestore
+                .FieldValue
+                .serverTimestamp(),
+
+            updatedAt:
+                firebase.firestore
+                .FieldValue
+                .serverTimestamp()
+        };
+
+
+        // ==========================================
+        // 7. SEND REQUEST TO FIRESTORE
+        // ==========================================
+
+        const requestRef =
+            await firebaseDb
+            .collection("worlds")
+            .doc(code)
+            .collection("actionRequests")
+            .add(powerRequest);
+
+
+        console.log(
+            "Power request sent:",
+            requestRef.id
+        );
+
+
+        // ==========================================
+        // 8. SHOW PLAYER CONFIRMATION
+        // ==========================================
+
+        const assessmentDisplay =
+            document.getElementById(
+                "powerActionAssessment"
+            );
+
+        if(assessmentDisplay){
+
+            assessmentDisplay.className =
+                "power-assessment roll";
+
+            assessmentDisplay.innerHTML = `
+                <strong>
+                    📨 Power Action Sent To GM
+                </strong>
+
+                <br><br>
+
+                <strong>Power:</strong>
+                ${escapeHtml(powerRequest.power)}
+
+                <br>
+
+                <strong>Target:</strong>
+                ${escapeHtml(
+                    powerRequest.target || "None"
+                )}
+
+                <br>
+
+                <strong>Action:</strong>
+                ${escapeHtml(
+                    powerRequest.description
+                )}
+
+                <br><br>
+
+                <strong>Status:</strong>
+                Waiting for GM decision...
+            `;
+        }
+
+
+        // ==========================================
+        // 9. CLEAR ACTION BOXES
+        // ==========================================
+
+        const targetInput =
+            document.getElementById(
+                "creatorTarget"
+            );
+
+        const descriptionInput =
+            document.getElementById(
+                "creatorActionDescription"
+            );
+
+        if(targetInput){
+            targetInput.value = "";
+        }
+
+        if(descriptionInput){
+            descriptionInput.value = "";
+        }
+
+
+    }catch(error){
+
+        console.error(
+            "Power request error:",
+            error
+        );
+
+        alert(
+            "Could not send power action to GM.\n\n" +
+            error.message
+        );
+    }
 }
 
 
