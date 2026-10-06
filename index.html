@@ -7324,39 +7324,99 @@ function findPowerRequest(id){
    GM APPROVE
    ========================================================= */
 
-function gmApproveCustomPower(id){
+async function gmApproveCustomPower(id){
 
     const request =
         findPowerRequest(id);
 
     if(!request){
+        alert("Power request could not be found.");
         return;
     }
 
+    if(!firebaseReady || !firebaseDb){
+        alert("Firebase is not connected.");
+        return;
+    }
 
-    request.status =
-        "Approved";
+    const code =
+        String(
+            activeMultiplayerWorldCode ||
+            document.getElementById(
+                "worldCodeDisplay"
+            )?.innerText ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+    if(!code || code === "--"){
+        alert("No active multiplayer world.");
+        return;
+    }
+
+    try{
+
+        await firebaseDb
+            .collection("worlds")
+            .doc(code)
+            .collection("actionRequests")
+            .doc(id)
+            .update({
+
+                status: "Approved",
+
+                gmDecision: "approved",
+
+                gmNotes: "",
+
+                resolved: false,
+
+                updatedAt:
+                    firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
+
+            });
 
 
-    addCustomPowerCombatLog(
-        "✅ GM APPROVED: " +
-        request.heroName +
-        " uses " +
-        request.power +
-        " — " +
-        request.description
-    );
+        addCustomPowerCombatLog(
+
+            "✅ GM APPROVED: " +
+            request.heroName +
+            " uses " +
+            request.power +
+            " — " +
+            request.description
+
+        );
 
 
-    askToSaveSignatureMove(
-        request
-    );
+        askToSaveSignatureMove(
+            request
+        );
 
 
-    updateGMPowerRequests();
+        console.log(
+            "Power request approved:",
+            id
+        );
+
+    }catch(error){
+
+        console.error(
+            "Could not approve power request:",
+            error
+        );
+
+        alert(
+            "Could not approve this power action.\n\n" +
+            error.message
+        );
+
+    }
 
 }
-
 
 /* =========================================================
    GM APPROVE WITH ROLL
