@@ -7270,25 +7270,25 @@ function updateGMPowerRequests(){
                 <div class="power-gm-actions">
 
                     <button
-                        onclick="gmApproveCustomPower('${request.id}')"
+                        onclick="gmApproveCustomPower('${request.firebaseId}')"
                     >
                         ✅ Approve
                     </button>
 
                     <button
-                        onclick="gmRollCustomPower('${request.id}')"
+                        onclick="gmRollCustomPower('${request.firebaseId}')"
                     >
                         🎲 Approve With Roll
                     </button>
 
                     <button
-                        onclick="gmModifyCustomPower('${request.id}')"
+                        onclick="gmModifyCustomPower('${request.firebaseId}')"
                     >
                         ✏️ Modify
                     </button>
 
                     <button
-                        onclick="gmDenyCustomPower('${request.id}')"
+                        onclick="gmDenyCustomPower('${request.firebaseId}')"
                     >
                         ❌ Deny
                     </button>
@@ -7313,6 +7313,7 @@ function findPowerRequest(id){
 
     return localPowerRequests.find(
         request =>
+            request.firebaseId === id ||
             request.id === id
     );
 
