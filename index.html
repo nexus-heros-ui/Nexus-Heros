@@ -488,6 +488,144 @@ input,select{
     .marker-name{top:39px;font-size:10px;}
 }
 
+/* =========================================================
+   NEXUS HEROES BETA 4.0
+   PLAYER-CREATED POWER ACTION SYSTEM
+   ========================================================= */
+
+.power-creator-panel{
+    background:#020617;
+    border:2px solid #8B5CF6;
+    border-radius:14px;
+    padding:16px;
+    margin-top:15px;
+    text-align:left;
+}
+
+.power-creator-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.power-creator-field{
+    background:#0F172A;
+    border:1px solid #334155;
+    border-radius:10px;
+    padding:12px;
+}
+
+.power-creator-field label{
+    display:block;
+    color:#BFDBFE;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.power-creator-field textarea,
+.power-creator-field select,
+.power-creator-field input{
+    width:100%;
+    box-sizing:border-box;
+}
+
+.power-creator-field textarea{
+    min-height:100px;
+    resize:vertical;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    background:#111827;
+    color:white;
+    font-family:Arial,sans-serif;
+    font-size:15px;
+}
+
+.power-control-meter{
+    background:#111827;
+    border:1px solid #334155;
+    border-radius:10px;
+    padding:12px;
+    margin-top:12px;
+}
+
+.power-control-bar{
+    width:100%;
+    height:18px;
+    background:#374151;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:8px;
+}
+
+.power-control-fill{
+    height:100%;
+    width:0%;
+    background:#8B5CF6;
+    transition:width .3s ease;
+}
+
+.power-assessment{
+    background:#111827;
+    border:2px solid #334155;
+    border-radius:12px;
+    padding:14px;
+    margin-top:14px;
+}
+
+.power-assessment.safe{
+    border-color:#22C55E;
+}
+
+.power-assessment.roll{
+    border-color:#F59E0B;
+}
+
+.power-assessment.extreme{
+    border-color:#EF4444;
+}
+
+.power-request-card{
+    background:#111827;
+    border:2px solid #A855F7;
+    border-radius:12px;
+    padding:15px;
+    margin-top:12px;
+}
+
+.power-gm-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:12px;
+}
+
+.power-approved{
+    border-color:#22C55E;
+}
+
+.power-denied{
+    border-color:#EF4444;
+}
+
+.power-modified{
+    border-color:#F59E0B;
+}
+
+.signature-move{
+    background:#172554;
+    border:1px solid #60A5FA;
+    border-radius:10px;
+    padding:10px;
+    margin:8px 0;
+}
+
+@media(max-width:700px){
+    .power-creator-grid{
+        grid-template-columns:1fr;
+    }
+}
+    
 </style>
 </head>
 
@@ -1319,8 +1457,6 @@ No multiplayer players accepted.
 <h3>Enemy Manager</h3>
 <div id="enemyManagerDisplay">No enemies added.</div>
 </div>
-
-<div class="card">
 
 <!-- =====================================================
      GM CUSTOM POWER APPROVAL
@@ -5950,143 +6086,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeAlpha2();
 });
 
-/* =========================================================
-   NEXUS HEROES BETA 4.0
-   PLAYER-CREATED POWER ACTION SYSTEM
-   ========================================================= */
-
-.power-creator-panel{
-    background:#020617;
-    border:2px solid #8B5CF6;
-    border-radius:14px;
-    padding:16px;
-    margin-top:15px;
-    text-align:left;
-}
-
-.power-creator-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-}
-
-.power-creator-field{
-    background:#0F172A;
-    border:1px solid #334155;
-    border-radius:10px;
-    padding:12px;
-}
-
-.power-creator-field label{
-    display:block;
-    color:#BFDBFE;
-    font-weight:bold;
-    margin-bottom:6px;
-}
-
-.power-creator-field textarea,
-.power-creator-field select,
-.power-creator-field input{
-    width:100%;
-    box-sizing:border-box;
-}
-
-.power-creator-field textarea{
-    min-height:100px;
-    resize:vertical;
-    padding:10px;
-    border-radius:8px;
-    border:none;
-    background:#111827;
-    color:white;
-    font-family:Arial,sans-serif;
-    font-size:15px;
-}
-
-.power-control-meter{
-    background:#111827;
-    border:1px solid #334155;
-    border-radius:10px;
-    padding:12px;
-    margin-top:12px;
-}
-
-.power-control-bar{
-    width:100%;
-    height:18px;
-    background:#374151;
-    border-radius:20px;
-    overflow:hidden;
-    margin-top:8px;
-}
-
-.power-control-fill{
-    height:100%;
-    width:0%;
-    background:#8B5CF6;
-    transition:width .3s ease;
-}
-
-.power-assessment{
-    background:#111827;
-    border:2px solid #334155;
-    border-radius:12px;
-    padding:14px;
-    margin-top:14px;
-}
-
-.power-assessment.safe{
-    border-color:#22C55E;
-}
-
-.power-assessment.roll{
-    border-color:#F59E0B;
-}
-
-.power-assessment.extreme{
-    border-color:#EF4444;
-}
-
-.power-request-card{
-    background:#111827;
-    border:2px solid #A855F7;
-    border-radius:12px;
-    padding:15px;
-    margin-top:12px;
-}
-
-.power-gm-actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-top:12px;
-}
-
-.power-approved{
-    border-color:#22C55E;
-}
-
-.power-denied{
-    border-color:#EF4444;
-}
-
-.power-modified{
-    border-color:#F59E0B;
-}
-
-.signature-move{
-    background:#172554;
-    border:1px solid #60A5FA;
-    border-radius:10px;
-    padding:10px;
-    margin:8px 0;
-}
-
-@media(max-width:700px){
-    .power-creator-grid{
-        grid-template-columns:1fr;
-    }
-}
 
 /* =========================================================
    NEXUS HEROES BETA 4.0
