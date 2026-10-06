@@ -7422,12 +7422,36 @@ async function gmApproveCustomPower(id){
    GM APPROVE WITH ROLL
    ========================================================= */
 
-function gmRollCustomPower(id){
+async function gmRollCustomPower(id){
 
     const request =
         findPowerRequest(id);
 
     if(!request){
+        alert("Power request could not be found.");
+        return;
+    }
+
+    if(!firebaseReady || !firebaseDb){
+        alert("Firebase is not connected.");
+        return;
+    }
+
+
+    const code =
+        String(
+            activeMultiplayerWorldCode ||
+            document.getElementById(
+                "worldCodeDisplay"
+            )?.innerText ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+    if(!code || code === "--"){
+        alert("No active multiplayer world.");
         return;
     }
 
@@ -7442,13 +7466,21 @@ function gmRollCustomPower(id){
         ) + 1;
 
 
-    const total =
-        dieRoll +
-        request.powerControl;
+    const powerControl =
+        Number(
+            request.powerControl || 0
+        );
 
 
     const target =
-        request.suggestedDifficulty;
+        Number(
+            request.suggestedDifficulty || 10
+        );
+
+
+    const total =
+        dieRoll +
+        powerControl;
 
 
     let result;
@@ -7477,59 +7509,115 @@ function gmRollCustomPower(id){
     }
 
 
-    request.status =
-        "Roll: " +
-        result;
+    try{
 
+        await firebaseDb
+            .collection("worlds")
+            .doc(code)
+            .collection("actionRequests")
+            .doc(id)
+            .update({
 
-    addCustomPowerCombatLog(
+                status:
+                    "Roll: " +
+                    result,
 
-        "🎲 " +
-        request.heroName +
-        " POWER CONTROL CHECK — " +
+                gmDecision:
+                    "roll",
 
-        "d20: " +
-        dieRoll +
+                rollResult:
+                    result,
 
-        " + Control " +
-        request.powerControl +
+                dieRoll:
+                    dieRoll,
 
-        " = " +
-        total +
+                powerControlRoll:
+                    powerControl,
 
-        " vs Difficulty " +
-        target +
+                rollTotal:
+                    total,
 
-        " → " +
-        result
+                rollDifficulty:
+                    target,
 
-    );
+                resolved:
+                    true,
 
+                updatedAt:
+                    firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
 
-    if(
-        result === "SUCCESS" ||
-        result === "CRITICAL SUCCESS"
-    ){
+            });
+
 
         addCustomPowerCombatLog(
 
-            "✨ POWER ACTION: " +
-            request.description
+            "🎲 " +
+            request.heroName +
+            " POWER CONTROL CHECK — " +
+
+            "d20: " +
+            dieRoll +
+
+            " + Control " +
+            powerControl +
+
+            " = " +
+            total +
+
+            " vs Difficulty " +
+            target +
+
+            " → " +
+            result
 
         );
 
 
-        askToSaveSignatureMove(
-            request
+        if(
+            result === "SUCCESS" ||
+            result === "CRITICAL SUCCESS"
+        ){
+
+            addCustomPowerCombatLog(
+
+                "✨ POWER ACTION: " +
+                request.description
+
+            );
+
+
+            askToSaveSignatureMove(
+                request
+            );
+
+        }
+
+
+        console.log(
+            "Power roll saved to Firebase:",
+            id,
+            result
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Could not save power roll:",
+            error
+        );
+
+
+        alert(
+            "Could not save this power roll.\n\n" +
+            error.message
         );
 
     }
 
-
-    updateGMPowerRequests();
-
 }
-
 
 /* =========================================================
    GM MODIFY
