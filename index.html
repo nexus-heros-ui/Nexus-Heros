@@ -7084,6 +7084,101 @@ async function submitCreatedPowerAction(){
    GM REQUEST DISPLAY
    ========================================================= */
 
+// =========================================================
+// FIREBASE - LIVE GM POWER REQUEST LISTENER
+// =========================================================
+
+let gmPowerRequestUnsubscribe = null;
+
+function startGMPowerRequestListener(){
+
+    if(!firebaseReady || !firebaseDb){
+        console.warn("Firebase is not ready.");
+        return;
+    }
+
+    const user = firebase.auth().currentUser;
+
+    if(!user){
+        console.warn("GM is not signed in.");
+        return;
+    }
+
+    const code =
+        String(currentWorldCode || "")
+        .trim()
+        .toUpperCase();
+
+    if(!code){
+        console.warn("No active GM world.");
+        return;
+    }
+
+    // Stop old listener if one already exists
+    if(gmPowerRequestUnsubscribe){
+        gmPowerRequestUnsubscribe();
+        gmPowerRequestUnsubscribe = null;
+    }
+
+    console.log(
+        "Listening for power requests in world:",
+        code
+    );
+
+    gmPowerRequestUnsubscribe =
+        firebaseDb
+        .collection("worlds")
+        .doc(code)
+        .collection("actionRequests")
+        .onSnapshot(
+
+            function(snapshot){
+
+                localPowerRequests = [];
+
+                snapshot.forEach(function(doc){
+
+                    const request =
+                        doc.data() || {};
+
+                    request.firebaseId =
+                        doc.id;
+
+                    localPowerRequests.push(
+                        request
+                    );
+                });
+
+                console.log(
+                    "Power requests received:",
+                    localPowerRequests.length
+                );
+
+                updateGMPowerRequests();
+            },
+
+            function(error){
+
+                console.error(
+                    "Power request listener error:",
+                    error
+                );
+
+                const display =
+                    document.getElementById(
+                        "gmPowerRequestsDisplay"
+                    );
+
+                if(display){
+
+                    display.innerHTML =
+                        "⚠ Could not load power requests: " +
+                        escapeHtml(error.message);
+                }
+            }
+        );
+}
+    
 function updateGMPowerRequests(){
 
     const display =
