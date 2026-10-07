@@ -3667,7 +3667,9 @@ function loadHero(){
         );
 
         await startGMJoinRequestListener();
-
+        
+        startGMPowerRequestListener();
+        
         alert(
             "Multiplayer world created!\n\n" +
             "World: " + worldName + "\n" +
@@ -7472,10 +7474,10 @@ async function gmRollCustomPower(id){
         );
 
 
-    const target =
-        Number(
-            request.suggestedDifficulty || 10
-        );
+   const target =
+    Number(
+        request.difficulty || 10
+    );
 
 
     const total =
