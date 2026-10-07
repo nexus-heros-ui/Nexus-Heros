@@ -7623,12 +7623,18 @@ async function gmRollCustomPower(id){
    GM MODIFY
    ========================================================= */
 
-function gmModifyCustomPower(id){
+async function gmModifyCustomPower(id){
 
     const request =
         findPowerRequest(id);
 
     if(!request){
+        alert("Power request could not be found.");
+        return;
+    }
+
+    if(!firebaseReady || !firebaseDb){
+        alert("Firebase is not connected.");
         return;
     }
 
@@ -7648,24 +7654,90 @@ function gmModifyCustomPower(id){
     }
 
 
-    request.description =
+    const code =
+        String(
+            activeMultiplayerWorldCode ||
+            document.getElementById(
+                "worldCodeDisplay"
+            )?.innerText ||
+            ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+    if(!code || code === "--"){
+        alert("No active multiplayer world.");
+        return;
+    }
+
+
+    const modifiedDescription =
         modified.trim();
 
-    request.status =
-        "Modified By GM";
+
+    try{
+
+        await firebaseDb
+            .collection("worlds")
+            .doc(code)
+            .collection("actionRequests")
+            .doc(id)
+            .update({
+
+                description:
+                    modifiedDescription,
+
+                status:
+                    "Modified By GM",
+
+                gmDecision:
+                    "modified",
+
+                gmNotes:
+                    "GM modified the requested action.",
+
+                resolved:
+                    false,
+
+                updatedAt:
+                    firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
+
+            });
 
 
-    addCustomPowerCombatLog(
+        addCustomPowerCombatLog(
 
-        "✏️ GM MODIFIED POWER ACTION: " +
-        request.heroName +
-        " — " +
-        request.description
+            "✏️ GM MODIFIED POWER ACTION: " +
+            request.heroName +
+            " — " +
+            modifiedDescription
 
-    );
+        );
 
 
-    updateGMPowerRequests();
+        console.log(
+            "Power request modified:",
+            id
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Could not modify power request:",
+            error
+        );
+
+
+        alert(
+            "Could not modify this power action.\n\n" +
+            error.message
+        );
+
+    }
 
 }
 
