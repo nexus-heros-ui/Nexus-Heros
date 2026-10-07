@@ -7746,12 +7746,18 @@ async function gmModifyCustomPower(id){
    GM DENY
    ========================================================= */
 
-function gmDenyCustomPower(id){
+async function gmDenyCustomPower(id){
 
     const request =
         findPowerRequest(id);
 
     if(!request){
+        alert("Power request could not be found.");
+        return;
+    }
+
+    if(!firebaseReady || !firebaseDb){
+        alert("Firebase is not connected.");
         return;
     }
 
@@ -7763,38 +7769,104 @@ function gmDenyCustomPower(id){
         );
 
 
-    request.status =
-        "Denied";
-
-
-    if(reason){
-
-        request.status +=
-            ": " +
-            reason.trim();
-
+    if(reason === null){
+        return;
     }
 
 
-    addCustomPowerCombatLog(
-
-        "❌ POWER ACTION DENIED: " +
-        request.heroName +
-        " attempted " +
-        request.description +
-        (
-            reason
-            ? " — Reason: " + reason
-            : ""
+    const code =
+        String(
+            currentWorldCode ||
+            document.getElementById(
+                "worldCodeDisplay"
+            )?.innerText ||
+            ""
         )
+        .trim()
+        .toUpperCase();
 
-    );
+
+    if(!code || code === "--"){
+        alert("No active multiplayer world.");
+        return;
+    }
 
 
-    updateGMPowerRequests();
+    const denialReason =
+        reason.trim();
+
+
+    try{
+
+        await firebaseDb
+            .collection("worlds")
+            .doc(code)
+            .collection("actionRequests")
+            .doc(id)
+            .update({
+
+                status:
+                    denialReason
+                    ? "Denied: " + denialReason
+                    : "Denied",
+
+                gmDecision:
+                    "denied",
+
+                gmNotes:
+                    denialReason,
+
+                resolved:
+                    true,
+
+                success:
+                    false,
+
+                updatedAt:
+                    firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
+
+            });
+
+
+        addCustomPowerCombatLog(
+
+            "❌ POWER ACTION DENIED: " +
+            request.heroName +
+            " attempted " +
+            request.description +
+            (
+                denialReason
+                ? " — Reason: " + denialReason
+                : ""
+            )
+
+        );
+
+
+        console.log(
+            "Power request denied:",
+            id
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Could not deny power request:",
+            error
+        );
+
+
+        alert(
+            "Could not deny this power action.\n\n" +
+            error.message
+        );
+
+    }
 
 }
-
 
 /* =========================================================
    SIGNATURE MOVES
