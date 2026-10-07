@@ -7341,7 +7341,7 @@ async function gmApproveCustomPower(id){
 
     const code =
         String(
-            activeMultiplayerWorldCode ||
+            currentWorldCode ||
             document.getElementById(
                 "worldCodeDisplay"
             )?.innerText ||
@@ -7440,7 +7440,7 @@ async function gmRollCustomPower(id){
 
     const code =
         String(
-            activeMultiplayerWorldCode ||
+            currentWorldCode ||
             document.getElementById(
                 "worldCodeDisplay"
             )?.innerText ||
@@ -7656,7 +7656,7 @@ async function gmModifyCustomPower(id){
 
     const code =
         String(
-            activeMultiplayerWorldCode ||
+            currentWorldCode ||
             document.getElementById(
                 "worldCodeDisplay"
             )?.innerText ||
