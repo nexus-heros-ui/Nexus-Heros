@@ -7710,7 +7710,11 @@ async function gmRollCustomPower(id){
 
                 rollResult:
                     result,
-
+                
+                success:
+                    result === "SUCCESS" ||
+                    result === "CRITICAL SUCCESS",
+                
                 dieRoll:
                     dieRoll,
 
