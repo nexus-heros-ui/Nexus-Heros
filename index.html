@@ -7082,7 +7082,186 @@ async function submitCreatedPowerAction(){
     }
 }
 
+// =========================================================
+// FIREBASE - PLAYER POWER REQUEST LISTENER
+// =========================================================
 
+let playerPowerRequestUnsubscribe = null;
+
+function startPlayerPowerRequestListener(worldCode, requestId){
+
+    if(!firebaseReady || !firebaseDb){
+        console.warn("Firebase is not ready.");
+        return;
+    }
+
+    const user = firebase.auth().currentUser;
+
+    if(!user){
+        console.warn("Player is not signed in.");
+        return;
+    }
+
+    const code =
+        String(worldCode || "")
+        .trim()
+        .toUpperCase();
+
+    if(!code || !requestId){
+        console.warn("Missing world code or power request ID.");
+        return;
+    }
+
+    if(playerPowerRequestUnsubscribe){
+        playerPowerRequestUnsubscribe();
+        playerPowerRequestUnsubscribe = null;
+    }
+
+    playerPowerRequestUnsubscribe =
+        firebaseDb
+        .collection("worlds")
+        .doc(code)
+        .collection("actionRequests")
+        .doc(requestId)
+        .onSnapshot(
+
+            function(doc){
+
+                if(!doc.exists){
+                    return;
+                }
+
+                const request = doc.data() || {};
+
+                const display =
+                    document.getElementById(
+                        "powerActionAssessment"
+                    );
+
+                if(!display){
+                    return;
+                }
+
+                let decisionText =
+                    request.status ||
+                    "Waiting for GM decision...";
+
+                let decisionIcon = "⏳";
+
+                if(request.gmDecision === "approved"){
+                    decisionIcon = "✅";
+                }
+
+                if(request.gmDecision === "modified"){
+                    decisionIcon = "✏️";
+                }
+
+                if(request.gmDecision === "denied"){
+                    decisionIcon = "❌";
+                }
+
+                if(request.gmDecision === "roll"){
+                    decisionIcon = "🎲";
+                }
+
+                display.innerHTML = `
+                    <strong>
+                        ${decisionIcon}
+                        GM Decision
+                    </strong>
+
+                    <br><br>
+
+                    <strong>Power:</strong>
+                    ${escapeHtml(
+                        request.power || "Unknown"
+                    )}
+
+                    <br>
+
+                    <strong>Target:</strong>
+                    ${escapeHtml(
+                        request.target || "None"
+                    )}
+
+                    <br>
+
+                    <strong>Action:</strong>
+                    ${escapeHtml(
+                        request.description || ""
+                    )}
+
+                    <br><br>
+
+                    <strong>Status:</strong>
+                    ${escapeHtml(
+                        decisionText
+                    )}
+
+                    ${
+                        request.gmNotes
+                        ? `
+                            <br><br>
+                            <strong>GM Notes:</strong>
+                            ${escapeHtml(
+                                request.gmNotes
+                            )}
+                        `
+                        : ""
+                    }
+
+                    ${
+                        request.gmDecision === "roll"
+                        ? `
+                            <br><br>
+
+                            <strong>Roll Result:</strong>
+                            ${escapeHtml(
+                                request.rollResult || "--"
+                            )}
+
+                            <br>
+
+                            <strong>Roll:</strong>
+                            ${Number(
+                                request.dieRoll || 0
+                            )}
+
+                            <br>
+
+                            <strong>Total:</strong>
+                            ${Number(
+                                request.rollTotal || 0
+                            )}
+
+                            <br>
+
+                            <strong>Difficulty:</strong>
+                            ${Number(
+                                request.rollDifficulty ||
+                                request.rollTarget ||
+                                request.difficulty ||
+                                0
+                            )}
+                        `
+                        : ""
+                    }
+                `;
+
+            },
+
+            function(error){
+
+                console.error(
+                    "Player power request listener error:",
+                    error
+                );
+
+            }
+
+        );
+}
+    
 /* =========================================================
    GM REQUEST DISPLAY
    ========================================================= */
