@@ -625,8 +625,6 @@ input,select{
         grid-template-columns:1fr;
     }
 }
-    
-<style>
 
 /* Nexus Heroes — role-oriented responsive play workspace */
 .nexus-topnav{position:sticky;top:0;z-index:100;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;background:#0b1120ee;padding:10px;border-bottom:1px solid #334155;backdrop-filter:blur(12px)}
@@ -818,222 +816,7 @@ No join request sent.
 </div>
 </div>
 
-<!-- =====================================================
-     PLAYER WORLD VIEW
-     Hidden until the GM accepts the player
-     ===================================================== -->
 
-<div
-    class="card"
-    id="playerWorldView"
-    style="display:block;"
->
-
-<h2>🌍 Live World</h2>
-
-<div id="playerWorldStatus" class="result">
-Map preview — join a world and wait for GM approval to see live gameplay.
-</div>
-
-<div class="world-map">
-
-    <!-- Accepted player and enemy markers appear here -->
-    <div
-        id="playerLiveMapMarkers"
-        class="live-marker-layer"
-    ></div>
-
-    <!-- Opens when the player clicks a character marker -->
-    <div
-        id="playerMarkerInfoPopup"
-        class="marker-info-popup"
-    >
-        Click a character marker.
-    </div>
-
-    <!-- Map roads -->
-    <svg
-        class="roadLayer"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-    >
-        <path class="roadPath" d="M45 29 L47 13" />
-        <path class="roadPath" d="M45 29 L21 43" />
-        <path class="roadPath" d="M45 29 L21 78" />
-        <path class="roadPath" d="M45 29 L61 39" />
-        <path class="roadPath" d="M61 39 L78 24" />
-        <path class="roadPath" d="M61 39 L85 57" />
-        <path class="roadPath" d="M45 29 L48 59" />
-        <path class="roadPath" d="M48 59 L50 86" />
-        <path class="roadPath" d="M48 59 L73 82" />
-    </svg>
-
-    <!-- Player map locations are visual only.
-         They do not contain GM controls. -->
-
-    <div
-        class="mapMarker city"
-        title="Nexus City"
-    >
-        🏙
-    </div>
-
-    <div
-        class="mapMarker harbor"
-        title="Harbor District"
-    >
-        ⚓
-    </div>
-
-    <div
-        class="mapMarker prison"
-        title="Blackgate Prison"
-    >
-        🚔
-    </div>
-
-    <div
-        class="mapMarker labs"
-        title="Omega Labs"
-    >
-        🧪
-    </div>
-
-    <div
-        class="mapMarker crash"
-        title="Crash Site"
-    >
-        🛸
-    </div>
-
-    <div
-        class="mapMarker ruins"
-        title="Ancient Ruins"
-    >
-        🏛
-    </div>
-
-    <div
-        class="mapMarker wasteland"
-        title="Wasteland Desert"
-    >
-        🏜
-    </div>
-
-    <div
-        class="mapMarker sanctuary"
-        title="Hidden Sanctuary"
-    >
-        🛡
-    </div>
-
-    <div
-        class="mapMarker fortress"
-        title="Titan Fortress"
-    >
-        🏰
-    </div>
-
-    <div
-        class="mapMarker portalMarker"
-        title="Dimensional Portal"
-    >
-        🌀
-    </div>
-
-    <div
-        class="mapMarker powerplant"
-        title="Power Plant"
-    >
-        ⚡
-    </div>
-
-    <div
-        class="mapMarker shadow"
-        title="Shadow Realm"
-    >
-        💀
-    </div>
-
-</div>
-
-
-<!-- PLAYER CHARACTER STATUS -->
-
-<div class="game-panel">
-
-<h3>🦸 Your Character</h3>
-
-<p>
-    <strong>Location:</strong>
-    <span id="playerCurrentLocation">
-        --
-    </span>
-</p>
-
-<p>
-    <strong>Health:</strong>
-    <span id="playerCurrentHealth">
-        --
-    </span>
-</p>
-
-<p>
-    <strong>Energy:</strong>
-    <span id="playerCurrentEnergy">
-        --
-    </span>
-</p>
-
-<p>
-    <strong>Shield:</strong>
-    <span id="playerCurrentShield">
-        --
-    </span>
-</p>
-
-<p>
-    <strong>Status:</strong>
-    <span id="playerCurrentStatus">
-        --
-    </span>
-</p>
-
-<p>
-    <strong>World Turn:</strong>
-    <span id="playerWorldTurn">
-        --
-    </span>
-</p>
-
-</div>
-
-
-<!-- WORLD INFORMATION -->
-
-<div class="game-panel">
-
-<h3>📡 Live World Information</h3>
-
-<p>
-    Accepted heroes will appear as customized character markers.
-</p>
-
-<p>
-    Enemy markers will appear after enemy Firebase syncing is added.
-</p>
-
-<p>
-    The GM controls travel, missions, combat, health, enemies, and world events.
-</p>
-
-</div>
-
-</div>
-
-<!-- =====================================================
-     END PLAYER WORLD VIEW
-     ===================================================== -->
      
 <div class="card">
 <h2>Power Wheels</h2>
@@ -1332,6 +1115,223 @@ Map preview — join a world and wait for GM approval to see live gameplay.
 </div>
 
 </div>
+
+<!-- =====================================================
+     PLAYER WORLD VIEW
+     Hidden until the GM accepts the player
+     ===================================================== -->
+
+<div
+    class="card portal"
+    id="playerWorldView"
+    style="display:none;"
+>
+
+<h2>🌍 Live World</h2>
+
+<div id="playerWorldStatus" class="result">
+Map preview — join a world and wait for GM approval to see live gameplay.
+</div>
+
+<div class="world-map">
+
+    <!-- Accepted player and enemy markers appear here -->
+    <div
+        id="playerLiveMapMarkers"
+        class="live-marker-layer"
+    ></div>
+
+    <!-- Opens when the player clicks a character marker -->
+    <div
+        id="playerMarkerInfoPopup"
+        class="marker-info-popup"
+    >
+        Click a character marker.
+    </div>
+
+    <!-- Map roads -->
+    <svg
+        class="roadLayer"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+    >
+        <path class="roadPath" d="M45 29 L47 13" />
+        <path class="roadPath" d="M45 29 L21 43" />
+        <path class="roadPath" d="M45 29 L21 78" />
+        <path class="roadPath" d="M45 29 L61 39" />
+        <path class="roadPath" d="M61 39 L78 24" />
+        <path class="roadPath" d="M61 39 L85 57" />
+        <path class="roadPath" d="M45 29 L48 59" />
+        <path class="roadPath" d="M48 59 L50 86" />
+        <path class="roadPath" d="M48 59 L73 82" />
+    </svg>
+
+    <!-- Player map locations are visual only.
+         They do not contain GM controls. -->
+
+    <div
+        class="mapMarker city"
+        title="Nexus City"
+    >
+        🏙
+    </div>
+
+    <div
+        class="mapMarker harbor"
+        title="Harbor District"
+    >
+        ⚓
+    </div>
+
+    <div
+        class="mapMarker prison"
+        title="Blackgate Prison"
+    >
+        🚔
+    </div>
+
+    <div
+        class="mapMarker labs"
+        title="Omega Labs"
+    >
+        🧪
+    </div>
+
+    <div
+        class="mapMarker crash"
+        title="Crash Site"
+    >
+        🛸
+    </div>
+
+    <div
+        class="mapMarker ruins"
+        title="Ancient Ruins"
+    >
+        🏛
+    </div>
+
+    <div
+        class="mapMarker wasteland"
+        title="Wasteland Desert"
+    >
+        🏜
+    </div>
+
+    <div
+        class="mapMarker sanctuary"
+        title="Hidden Sanctuary"
+    >
+        🛡
+    </div>
+
+    <div
+        class="mapMarker fortress"
+        title="Titan Fortress"
+    >
+        🏰
+    </div>
+
+    <div
+        class="mapMarker portalMarker"
+        title="Dimensional Portal"
+    >
+        🌀
+    </div>
+
+    <div
+        class="mapMarker powerplant"
+        title="Power Plant"
+    >
+        ⚡
+    </div>
+
+    <div
+        class="mapMarker shadow"
+        title="Shadow Realm"
+    >
+        💀
+    </div>
+
+</div>
+
+
+<!-- PLAYER CHARACTER STATUS -->
+
+<div class="game-panel">
+
+<h3>🦸 Your Character</h3>
+
+<p>
+    <strong>Location:</strong>
+    <span id="playerCurrentLocation">
+        --
+    </span>
+</p>
+
+<p>
+    <strong>Health:</strong>
+    <span id="playerCurrentHealth">
+        --
+    </span>
+</p>
+
+<p>
+    <strong>Energy:</strong>
+    <span id="playerCurrentEnergy">
+        --
+    </span>
+</p>
+
+<p>
+    <strong>Shield:</strong>
+    <span id="playerCurrentShield">
+        --
+    </span>
+</p>
+
+<p>
+    <strong>Status:</strong>
+    <span id="playerCurrentStatus">
+        --
+    </span>
+</p>
+
+<p>
+    <strong>World Turn:</strong>
+    <span id="playerWorldTurn">
+        --
+    </span>
+</p>
+
+</div>
+
+
+<!-- WORLD INFORMATION -->
+
+<div class="game-panel">
+
+<h3>📡 Live World Information</h3>
+
+<p>
+    Accepted heroes will appear as customized character markers.
+</p>
+
+<p>
+    Enemy markers will appear after enemy Firebase syncing is added.
+</p>
+
+<p>
+    The GM controls travel, missions, combat, health, enemies, and world events.
+</p>
+
+</div>
+
+</div>
+
+<!-- =====================================================
+     END PLAYER WORLD VIEW
+     ===================================================== -->
 
 <div id="gmPortal" class="portal">
 
