@@ -7703,7 +7703,8 @@ if(type === "heal" && finalHealth > 0 && target.status === "Defeated"){
             " on " + targetName +
             ". " + type.toUpperCase() + ": " + amount +
             ". Remaining health: " + finalHealth +
-(type === "damage" && finalHealth === 0 ? " 💀 DEFEATED!" : "")
+(type === "damage" && finalHealth === 0 ? " 💀 DEFEATED!" : "") +
+(type === "heal" && finalHealth > 0 && target.status === "Defeated" ? " 💚 REVIVED!" : "")
         );
 
         alert(
