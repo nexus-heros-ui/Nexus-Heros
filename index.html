@@ -7550,17 +7550,13 @@ function findPowerRequest(id){
    GM APPLY CUSTOM POWER RESULT
    ========================================================= */
 
+
 async function gmApplyCustomPowerResult(id){
 
     const request = findPowerRequest(id);
 
-    if(!request){
-        alert("Power request not found.");
-        return;
-    }
-
-    if(request.success !== true || request.resolved === true){
-        alert("This action is not ready to apply.");
+    if(!request || request.success !== true || request.resolved === true){
+        alert("This power request is not ready.");
         return;
     }
 
@@ -7580,79 +7576,124 @@ async function gmApplyCustomPowerResult(id){
         return;
     }
 
-const targetSelect = document.getElementById(
-    "powerTarget_" + id
-);
+    const targetSelect = document.getElementById("powerTarget_" + id);
+    const selectedTarget = targetSelect?.value || "";
+    const targetParts = selectedTarget.split("/");
 
-if(!targetSelect || !targetSelect.value){
-    alert("Please select an actual player or enemy target first.");
-    return;
-}
-
-const selectedTarget = targetSelect.value;
-const targetParts = selectedTarget.split("/");
-
-if(
-    targetParts.length !== 2 ||
-    !["players", "enemies"].includes(targetParts[0]) ||
-    !targetParts[1]
-){
-    alert("Invalid target selection.");
-    return;
-}
-
-    const result = prompt(
-        "Describe the approved result (damage, healing, shield, or other effect):",
-        request.effect || ""
-    );
-
-    if(result === null || !result.trim()){
+    if(
+        targetParts.length !== 2 ||
+        !["players", "enemies"].includes(targetParts[0]) ||
+        !targetParts[1]
+    ){
+        alert("Select a valid player or enemy.");
         return;
     }
 
+    const effectType = prompt(
+        "Enter effect type: damage or heal",
+        "damage"
+    );
+
+    if(effectType === null) return;
+
+    const type = effectType.trim().toLowerCase();
+
+    if(!["damage", "heal"].includes(type)){
+        alert("Only damage and heal are supported right now.");
+        return;
+    }
+
+    const amountInput = prompt("Enter effect amount:");
+
+    if(amountInput === null) return;
+
+    const amount = Number(amountInput);
+
+    if(
+        !amountInput.trim() ||
+        !Number.isSafeInteger(amount) ||
+        amount <= 0
+    ){
+        alert("Enter a positive whole number.");
+        return;
+    }
+
+    const worldRef = firebaseDb.collection("worlds").doc(code);
+    const requestRef = worldRef.collection("actionRequests").doc(id);
+    const targetRef = worldRef.collection(targetParts[0]).doc(targetParts[1]);
+
     try{
 
-        const ref = firebaseDb
-            .collection("worlds")
-            .doc(code)
-            .collection("actionRequests")
-            .doc(id);
+        let finalHealth;
 
         await firebaseDb.runTransaction(async transaction => {
 
-            const snapshot = await transaction.get(ref);
+            const requestSnapshot = await transaction.get(requestRef);
+            const targetSnapshot = await transaction.get(targetRef);
 
-            if(!snapshot.exists){
-                throw new Error("Power request no longer exists.");
+            if(!requestSnapshot.exists){
+                throw new Error("Power request not found.");
             }
 
-            const current = snapshot.data();
+            const currentRequest = requestSnapshot.data();
 
-            if(current.success !== true || current.resolved === true){
-                throw new Error("This action is no longer available.");
+            if(
+                currentRequest.success !== true ||
+                currentRequest.resolved === true
+            ){
+                throw new Error("This request has already been resolved or is not approved.");
             }
 
-            transaction.update(ref, {
-                effect: result.trim(),
+            if(!targetSnapshot.exists){
+                throw new Error("Selected target no longer exists.");
+            }
+
+            const target = targetSnapshot.data();
+            const health = Number(target.health);
+            const maxHealth = Number(target.maxHealth);
+
+            if(
+                !Number.isFinite(health) ||
+                !Number.isFinite(maxHealth) ||
+                maxHealth <= 0
+            ){
+                throw new Error("Target health information is invalid.");
+            }
+
+            finalHealth = type === "damage"
+                ? Math.max(0, health - amount)
+                : Math.min(maxHealth, health + amount);
+
+            transaction.update(targetRef, {
+                health: finalHealth
+            });
+
+            transaction.update(requestRef, {
                 targetRef: selectedTarget,
-                status: "Effect Recorded - Pending Application",
+                effectType: type,
+                effectAmount: amount,
+                effect: type + " " + amount,
+                resolved: true,
+                status: "Resolved - " + type,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
         });
 
         alert(
-            "GM result saved.\n" +
-            "No health or character stats have changed yet."
+            "Power effect applied successfully!\n" +
+            "Effect: " + type + " " + amount + "\n" +
+            "Target health: " + finalHealth
         );
 
     }catch(error){
 
-        console.error("Could not save power result:", error);
-        alert(error.message);
+        console.error("Power application failed:", error);
+        alert("Could not apply power: " + error.message);
 
     }
 }
+
 
     
 /* =========================================================
