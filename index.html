@@ -7580,6 +7580,27 @@ async function gmApplyCustomPowerResult(id){
         return;
     }
 
+const targetSelect = document.getElementById(
+    "powerTarget_" + id
+);
+
+if(!targetSelect || !targetSelect.value){
+    alert("Please select an actual player or enemy target first.");
+    return;
+}
+
+const selectedTarget = targetSelect.value;
+const targetParts = selectedTarget.split("/");
+
+if(
+    targetParts.length !== 2 ||
+    !["players", "enemies"].includes(targetParts[0]) ||
+    !targetParts[1]
+){
+    alert("Invalid target selection.");
+    return;
+}
+
     const result = prompt(
         "Describe the approved result (damage, healing, shield, or other effect):",
         request.effect || ""
@@ -7613,6 +7634,7 @@ async function gmApplyCustomPowerResult(id){
 
             transaction.update(ref, {
                 effect: result.trim(),
+                targetRef: selectedTarget,
                 status: "Effect Recorded - Pending Application",
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
