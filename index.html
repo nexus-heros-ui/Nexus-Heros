@@ -7710,43 +7710,6 @@ async function gmApplyCustomPowerResult(id){
     }
 }
 
-
-            finalHealth = type === "damage"
-                ? Math.max(0, health - amount)
-                : Math.min(maxHealth, health + amount);
-
-            transaction.update(targetRef, {
-                health: finalHealth
-            });
-
-            transaction.update(requestRef, {
-                targetRef: selectedTarget,
-                effectType: type,
-                effectAmount: amount,
-                effect: type + " " + amount,
-                resolved: true,
-                status: "Resolved - " + type,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-
-        });
-
-        alert(
-            "Power effect applied successfully!\n" +
-            "Effect: " + type + " " + amount + "\n" +
-            "Target health: " + finalHealth
-        );
-
-    }catch(error){
-
-        console.error("Power application failed:", error);
-        alert("Could not apply power: " + error.message);
-
-    }
-}
-
-
-    
 /* =========================================================
    GM APPROVE
    ========================================================= */
