@@ -7551,6 +7551,7 @@ function findPowerRequest(id){
    ========================================================= */
 
 
+
 async function gmApplyCustomPowerResult(id){
 
     const request = findPowerRequest(id);
@@ -7626,6 +7627,9 @@ async function gmApplyCustomPowerResult(id){
 
         let finalHealth;
         let targetName;
+        let wasDefeated = false;
+        let isDefeated = false;
+        let wasRevived = false;
 
         await firebaseDb.runTransaction(async transaction => {
 
@@ -7667,21 +7671,40 @@ async function gmApplyCustomPowerResult(id){
                 target.playerName ||
                 targetParts[1];
 
+            wasDefeated = target.status === "Defeated";
+
             finalHealth = type === "damage"
                 ? Math.max(0, health - amount)
                 : Math.min(maxHealth, health + amount);
 
-                       const targetUpdate = {
+            const targetUpdate = {
                 health: finalHealth
             };
 
-            if(type === "damage" && finalHealth === 0){
-    targetUpdate.status = "Defeated";
-}
+            isDefeated = false;
+            wasRevived = false;
 
-if(type === "heal" && finalHealth > 0 && target.status === "Defeated"){
-    targetUpdate.status = "Ready";
-}
+            if(type === "damage" && finalHealth === 0){
+
+                targetUpdate.status = "Defeated";
+                isDefeated = !wasDefeated;
+
+            }
+
+            if(
+                type === "heal" &&
+                finalHealth > 0 &&
+                wasDefeated
+            ){
+
+                targetUpdate.status =
+                    targetParts[0] === "players"
+                        ? "Ready"
+                        : "Active";
+
+                wasRevived = true;
+
+            }
 
             transaction.update(targetRef, targetUpdate);
 
@@ -7697,22 +7720,45 @@ if(type === "heal" && finalHealth > 0 && target.status === "Defeated"){
 
         });
 
-        addCustomPowerCombatLog(
-            "⚡ " + (request.heroName || request.playerName || "Hero") +
-            " used " + (request.power || "a power") +
-            " on " + targetName +
-            ". " + type.toUpperCase() + ": " + amount +
-            ". Remaining health: " + finalHealth +
-(type === "damage" && finalHealth === 0 ? " 💀 DEFEATED!" : "") +
-(type === "heal" && finalHealth > 0 && target.status === "Defeated" ? " 💚 REVIVED!" : "")
-        );
+        let combatMessage =
+            "⚡ " +
+            (request.heroName || request.playerName || "Hero") +
+            " used " +
+            (request.power || "a power") +
+            " on " +
+            targetName +
+            ". " +
+            type.toUpperCase() +
+            ": " +
+            amount +
+            ". Remaining health: " +
+            finalHealth;
 
-        alert(
+        if(isDefeated){
+            combatMessage += " 💀 DEFEATED!";
+        }
+
+        if(wasRevived){
+            combatMessage += " 💚 REVIVED!";
+        }
+
+        addCustomPowerCombatLog(combatMessage);
+
+        let resultMessage =
             "Power effect applied successfully!\n" +
             "Target: " + targetName + "\n" +
             "Effect: " + type + " " + amount + "\n" +
-            "Target health: " + finalHealth
-        );
+            "Target health: " + finalHealth;
+
+        if(isDefeated){
+            resultMessage += "\n💀 Target defeated!";
+        }
+
+        if(wasRevived){
+            resultMessage += "\n💚 Target revived!";
+        }
+
+        alert(resultMessage);
 
     }catch(error){
 
