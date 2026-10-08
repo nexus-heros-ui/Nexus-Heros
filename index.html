@@ -76,7 +76,7 @@ input,select{
     max-width:1200px;
     aspect-ratio:16/9;
     margin:auto;
-    background-image:url("./map2.png");
+    background-image:none;
     background-size:100% 100%;
     background-position:center;
     background-repeat:no-repeat;
@@ -651,6 +651,47 @@ input,select{
 @media(max-width:1050px){.nexus-play-grid{grid-template-columns:1fr}.nexus-play-actions .power-creator-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){body{padding:6px}.card,#playerWorldView.nexus-game-workspace{width:100%;padding:12px}.nexus-play-actions .power-creator-grid,#playerSharedControls,.nexus-play-actions #playerSharedControls{grid-template-columns:1fr}.nexus-topnav{top:0}.nexus-topnav button{font-size:12px;padding:9px}}
 
+</style>
+
+<style>
+/* Independent player gameplay portal: map and powers side by side. */
+#playerWorldView.portal {width:min(1600px,calc(100% - 24px));max-width:none;margin:16px auto;box-sizing:border-box}
+#playerWorldView .nexus-play-grid {display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,1fr);gap:12px}
+#playerWorldView .nexus-play-actions {min-width:0}
+#playerWorldView .nexus-play-actions #playerPowerCreatorCard {padding:12px}
+#playerWorldView .world-map {position:relative;aspect-ratio:16/9;background:#132438;overflow:hidden}
+.world-map .nexus-map-image {position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:0;pointer-events:none}
+.world-map .live-marker-layer,.world-map .roadLayer,.world-map .mapMarker {position:absolute;z-index:2}
+.world-map .marker-info-popup {z-index:10}
+.nexus-map-settings {padding:10px;margin-bottom:10px;background:#17243b;border:1px solid #475569;border-radius:12px;text-align:left}
+.nexus-map-settings label {display:block;font-size:13px;margin-bottom:5px}
+.nexus-map-input {display:flex;gap:8px}
+.nexus-map-input input {flex:1;min-width:0;padding:8px}
+.nexus-map-input button {white-space:nowrap}
+#nexusMapMessage {font-size:12px;color:#a5c7eb;margin-top:5px}
+.nexus-enemy-panel {border:2px solid #e87979;border-radius:10px;padding:10px;margin-bottom:10px}
+@media(max-width:900px){#playerWorldView .nexus-play-grid{grid-template-columns:1fr}}
+</style>
+
+<style id="nexus-gm-compact-style">
+/* Compact GM dashboard without removing existing controls. */
+#gmPortal{width:min(1500px,calc(100% - 20px));max-width:none;margin:auto}
+#gmPortal>.card{max-width:none;width:100%;box-sizing:border-box;padding:14px}
+#gmPortal h2{margin:4px 0 12px;font-size:1.35rem}
+#gmPortal h3{font-size:1rem;margin:0}
+#gmPortal button{font-size:.85rem;padding:7px 10px;margin:3px}
+#gmPortal input,#gmPortal select,#gmPortal textarea{max-width:100%;box-sizing:border-box;font-size:.9rem;padding:7px}
+#gmPortal .game-panel,#gmPortal .result{padding:8px;margin:6px 0}
+#gmPortal .nexus-gm-accordion{border:1px solid #475569;border-radius:9px;margin:7px 0;background:rgba(15,23,42,.38);overflow:hidden}
+#gmPortal .nexus-gm-accordion>summary{padding:10px 12px;font-weight:700;cursor:pointer;background:#24324a;list-style:revert}
+#gmPortal .nexus-gm-section-body{padding:8px 10px}
+#gmPortal .nexus-gm-section-body>button{display:inline-block}
+#gmPortal .nexus-gm-section-body hr{margin:6px 0}
+#gmPortal .nexus-gm-section-body p{margin:6px 0}
+#rulebookPortal .nexus-manual-extra{line-height:1.55}
+#rulebookPortal .nexus-manual-extra h3{margin-top:15px}
+#rulebookPortal .nexus-manual-extra li{margin:6px 0}
+@media(max-width:700px){#gmPortal{width:100%}#gmPortal>.card{padding:9px}}
 </style>
 </head>
 
@@ -8792,6 +8833,89 @@ setTimeout(
     });
 })();
 
+
+/* NEXUS: independent Player Game portal and configurable GitHub map. */
+(function(){
+ function init(){
+  const setup=document.getElementById('playerPortal');
+  const game=document.getElementById('playerWorldView');
+  const gm=document.getElementById('gmPortal');
+  const nav=document.querySelector('.nexus-topnav');
+  if(!setup||!game||!gm||!nav)return;
+  // The game is no longer a child of character creation.
+  setup.after(game);
+  game.classList.add('portal','nexus-game-workspace');
+  game.style.display='none';
+  const button=document.createElement('button');
+  button.type='button';button.textContent='🎮 Player Game';button.dataset.portal='playerWorldView';
+  const gmButton=nav.querySelector('[data-portal="gmPortal"]');
+  nav.insertBefore(button,gmButton||null);
+  button.addEventListener('click',()=>window.showPortal('playerWorldView'));
+  // Override the navigation once, after the older enhanced navigation is installed.
+  window.showPortal=function(id){
+   const target=document.getElementById(id);
+   if(!target)return;
+   document.querySelectorAll('.portal').forEach(el=>el.style.display='none');
+   target.style.display='block';
+   nav.querySelectorAll('button').forEach(el=>{
+    if(el.dataset.portal===id)el.setAttribute('aria-current','page');
+    else el.removeAttribute('aria-current');
+   });
+   window.scrollTo({top:0,behavior:'smooth'});
+  };
+  // Map image is an HTML image, not a fragile CSS background.
+  const maps=[...document.querySelectorAll('.world-map')];
+  const settings=document.createElement('div');
+  settings.className='nexus-map-settings';
+  settings.innerHTML='<label for="nexusMapUrl">🗺 Map image URL (GitHub Pages or raw.githubusercontent.com)</label><div class="nexus-map-input"><input id="nexusMapUrl" type="text" placeholder="./map2.png" aria-label="Map image URL"><button type="button" id="nexusApplyMap">Load Map</button></div><div id="nexusMapMessage" role="status">The map uses map2.png next to index.html by default.</div>';
+  const mapColumn=document.getElementById('nexusMapArea');
+  if(mapColumn)mapColumn.insertBefore(settings,mapColumn.firstChild);
+  else game.insertBefore(settings,game.querySelector('.world-map'));
+  const input=settings.querySelector('#nexusMapUrl');
+  const message=settings.querySelector('#nexusMapMessage');
+  const stored=localStorage.getItem('nexusMapImageUrl')||'./map2.png';
+  input.value=stored;
+  function normalize(value){
+   let url=value.trim();
+   const blob=url.match(/^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/);
+   if(blob)url='https://raw.githubusercontent.com/'+blob[1]+'/'+blob[2]+'/'+blob[3]+'/'+blob[4];
+   return url;
+  }
+  function apply(value){
+   const url=normalize(value);
+   if(!url){message.textContent='Enter a map image URL.';return;}
+   localStorage.setItem('nexusMapImageUrl',url);
+   input.value=url;
+   message.textContent='Loading map image…';
+   maps.forEach((map,i)=>{
+    let image=map.querySelector('.nexus-map-image');
+    if(!image){
+     image=document.createElement('img');
+     image.className='nexus-map-image';
+     image.alt='Nexus Heroes game world map';
+     image.draggable=false;
+     map.insertBefore(image,map.firstChild);
+    }
+    image.onload=()=>{if(i===0)message.textContent='Map image loaded successfully.';};
+    image.onerror=()=>{if(i===0)message.textContent='Map image could not load. Check its exact filename and GitHub URL. You can paste the image URL above.';};
+    image.src=url;
+   });
+  }
+  settings.querySelector('#nexusApplyMap').addEventListener('click',()=>apply(input.value));
+  input.addEventListener('keydown',event=>{if(event.key==='Enter')apply(input.value);});
+  apply(stored);
+  // Keep enemy status prominent in the player game panel.
+  const threats=document.getElementById('playerNearbyThreats');
+  if(threats){
+   const panel=threats.closest('.shared-world-panel');
+   const actions=document.querySelector('.nexus-play-actions');
+   if(panel&&actions){panel.classList.add('nexus-enemy-panel');actions.insertBefore(panel,actions.firstChild);}
+  }
+  window.showPortal('playerPortal');
+ }
+ document.addEventListener('DOMContentLoaded',init);
+})();
+
 /* Combat controls restored: these functions were referenced by buttons but absent. */
 function nexusCombatLog(message){
     const el=document.getElementById('combatLog');
@@ -8896,6 +9020,77 @@ function endCurrentTurn(){
     nexusShowTurn();
 }
 function resetTurns(){turnOrder=[];currentTurnIndex=0;combatRound=1;combatActive=false;nexusShowTurn();}
+
+
+/* Nexus GM compact sections and expanded player/GM documentation. */
+(function(){
+ function init(){
+  const gm=document.querySelector('#gmPortal>.card');
+  if(gm){
+   // Wrap each GM heading's following controls in a native disclosure panel.
+   // All original control elements, IDs and handlers are retained.
+   const headings=[...gm.children].filter(el=>el.tagName==='H3');
+   headings.forEach((heading,index)=>{
+    if(!heading.parentElement||heading.parentElement!==gm)return;
+    const details=document.createElement('details');
+    details.className='nexus-gm-accordion';
+    details.open=index<2;
+    const summary=document.createElement('summary');
+    summary.textContent=heading.textContent.trim();
+    const body=document.createElement('div');body.className='nexus-gm-section-body';
+    gm.insertBefore(details,heading);
+    details.append(summary,body);
+    let next=heading.nextSibling;
+    heading.remove();
+    while(next && !(next.nodeType===1&&next.tagName==='H3')){
+     const item=next;next=next.nextSibling;body.appendChild(item);
+    }
+   });
+   const toolbar=document.createElement('div');toolbar.className='nexus-gm-toolbar';
+   toolbar.innerHTML='<button type="button" id="nexusGMExpand">Expand GM Sections</button><button type="button" id="nexusGMCollapse">Collapse GM Sections</button>';
+   gm.insertBefore(toolbar,gm.querySelector('.nexus-gm-accordion'));
+   toolbar.querySelector('#nexusGMExpand').onclick=()=>gm.querySelectorAll('.nexus-gm-accordion').forEach(d=>d.open=true);
+   toolbar.querySelector('#nexusGMCollapse').onclick=()=>gm.querySelectorAll('.nexus-gm-accordion').forEach(d=>d.open=false);
+  }
+  const manual=document.getElementById('rulebookPortal');
+  if(!manual)return;
+  const nav=manual.querySelector('.card');
+  const addTab=(label,id)=>{
+   const b=document.createElement('button');b.type='button';b.textContent=label;
+   b.onclick=()=>showManualSection(id);nav.appendChild(b);
+  };
+  const addSection=(id,title,html)=>{
+   const section=document.createElement('div');
+   section.className='card manualSection nexus-manual-extra';section.id=id;section.style.display='none';
+   const h=document.createElement('h2');h.textContent=title;section.appendChild(h);
+   const content=document.createElement('div');content.innerHTML=html;section.appendChild(content);
+   manual.appendChild(section);
+  };
+  addTab('🎮 Player Game','nexusPlayerGameGuide');
+  addTab('🛠 GM Controls','nexusGMControlsGuide');
+  addTab('🗺 Map Help','nexusMapGuide');
+  addSection('nexusPlayerGameGuide','Player Game Portal — Updated Guide',`
+   <p><strong>Character Creation and Player Game are separate screens.</strong> Create or select your hero in Player Portal, then open <strong>🎮 Player Game</strong> from the top navigation.</p>
+   <h3>Playing on the shared map</h3>
+   <ol><li>Join the GM's world using the world code and wait for acceptance.</li><li>Open Player Game. The map shows the world image and, once the multiplayer state is available, live hero and enemy markers.</li><li>Use the character information and nearby-threats display to understand the situation. A missing enemy marker may mean the GM has not placed an enemy yet.</li><li>Use Create Power Action in the same screen to describe your power, choose its details and submit the action for the GM to review.</li><li>Watch the world feed and action result for approvals, rolls and narration. An action is not automatically successful just because it was submitted.</li></ol>
+   <h3>Turn-by-turn play</h3><p>During combat, follow the GM's turn order. Choose an action, wait for the GM's decision and roll resolution, and check your health and other effects after the turn. Signature moves are special reusable actions when the GM approves saving them.</p>
+   <h3>Compact layout</h3><p>On larger screens the map and power creator appear side by side; on phones they stack vertically. You can scroll to other world information using the quick navigation controls.</p>
+  `);
+  addSection('nexusGMControlsGuide','GM Portal — Updated Control Guide',`
+   <p>The GM dashboard now uses <strong>collapsible sections</strong>. Select a heading to reveal its controls. <strong>Expand GM Sections</strong> shows all tools; <strong>Collapse GM Sections</strong> reduces scrolling. Collapsing a section does not delete its contents.</p>
+   <h3>Start and manage a session</h3><ol><li>Wait for the multiplayer connection indicator.</li><li>Enter a world name and create a multiplayer world. Give the resulting code to players.</li><li>Review pending join requests and accept the intended players.</li><li>Use player and world management controls to add heroes, prepare missions and place enemies.</li><li>Keep the map, enemies and mission status updated so the Player Game screen reflects the current encounter.</li></ol>
+   <h3>Run combat</h3><ol><li>Prepare player and enemy combatants, then refresh combat selectors.</li><li>Start turns and confirm the active combatant.</li><li>Review player-submitted power actions. Approve, modify or deny them as appropriate.</li><li>Roll or resolve the action using the available GM controls, then narrate the outcome.</li><li>Use enemy attack and turn controls for hostile actions. End the current turn to advance the encounter.</li><li>Reset turns when starting a new encounter; verify health and status values before continuing.</li></ol>
+   <h3>Signature moves and rewards</h3><p>When a player creates a successful custom action, the GM may choose to save it as a signature move. Use existing inventory, shop, reward and save controls where appropriate.</p>
+   <p><strong>Important:</strong> GM-only visibility in the interface is not a security boundary. For a public Firebase deployment, configure authentication and database security rules to prevent unauthorized GM actions.</p>
+  `);
+  addSection('nexusMapGuide','GitHub Map — Setup and Troubleshooting',`
+   <h3>Load the map image</h3><ol><li>Upload the image to your GitHub repository. The default expected path is <code>./map2.png</code> next to <code>index.html</code>.</li><li>Open <strong>🎮 Player Game</strong> and enter a different image URL in the Map Image URL field if needed.</li><li>Press <strong>Load Map</strong>. A success or error message appears beneath the field.</li><li>If using a GitHub file page URL containing <code>/blob/</code>, the game attempts to convert it into a direct raw image URL.</li></ol>
+   <h3>If the image is blank</h3><p>Confirm the image's capitalization, extension and folder. Open the image URL in a separate browser tab to ensure it displays the actual image. GitHub Pages paths are case-sensitive. A local HTML file may load the image differently from your published GitHub Pages site.</p>
+   <h3>Map image versus live markers</h3><p>The background image is visual artwork. Player and enemy markers depend on the live world state, acceptance, and GM placement; loading the image does not itself spawn enemies.</p>
+  `);
+ }
+ document.addEventListener('DOMContentLoaded',init);
+})();
 
 </script>
 
