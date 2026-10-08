@@ -76,7 +76,7 @@ input,select{
     max-width:1200px;
     aspect-ratio:16/9;
     margin:auto;
-    background-image:url("map2.png");
+    background-image:url("./map2.png");
     background-size:100% 100%;
     background-position:center;
     background-repeat:no-repeat;
@@ -626,6 +626,31 @@ input,select{
     }
 }
     
+<style>
+
+/* Nexus Heroes — role-oriented responsive play workspace */
+.nexus-topnav{position:sticky;top:0;z-index:100;display:flex;justify-content:center;flex-wrap:wrap;gap:8px;background:#0b1120ee;padding:10px;border-bottom:1px solid #334155;backdrop-filter:blur(12px)}
+.nexus-topnav button{margin:0}.nexus-topnav button[aria-current="page"]{background:#2563eb;box-shadow:0 0 0 2px #93c5fd inset}
+#playerWorldView.nexus-game-workspace{max-width:1600px;width:calc(100% - 36px);box-sizing:border-box}
+.nexus-play-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;text-align:left;margin-bottom:14px}
+.nexus-play-header h2{margin:0}.nexus-status-pill{border:1px solid #475569;border-radius:30px;padding:8px 12px;background:#0f172a;font-size:13px}
+.nexus-play-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(340px,1fr);gap:18px;align-items:start}
+.nexus-play-map,.nexus-play-actions{min-width:0}.nexus-play-map .world-map{max-width:none}
+.nexus-play-actions #playerPowerCreatorCard{width:auto;max-width:none;margin:0;padding:16px}
+.nexus-play-actions #playerPowerCreatorCard h2{margin-top:0}
+.nexus-play-actions .power-creator-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.nexus-play-actions .power-creator-field{min-width:0}.nexus-play-actions button{margin:5px 2px}
+.nexus-play-map .game-panel{margin-top:12px}.nexus-play-lower{margin-top:16px}
+.nexus-setup-heading{color:#93c5fd;font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin:12px auto 0}
+#gmPortal>.card{max-width:1450px;box-sizing:border-box}
+#playerPortal .card{box-sizing:border-box}
+.nexus-quick-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start;margin-bottom:12px}
+.nexus-quick-nav button{font-size:13px;padding:9px 12px;background:#1e3a8a}
+.nexus-play-actions #playerSharedControls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.nexus-play-actions #playerSharedControls .shared-world-panel{min-width:0}
+@media(max-width:1050px){.nexus-play-grid{grid-template-columns:1fr}.nexus-play-actions .power-creator-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){body{padding:6px}.card,#playerWorldView.nexus-game-workspace{width:100%;padding:12px}.nexus-play-actions .power-creator-grid,#playerSharedControls,.nexus-play-actions #playerSharedControls{grid-template-columns:1fr}.nexus-topnav{top:0}.nexus-topnav button{font-size:12px;padding:9px}}
+
 </style>
 </head>
 
@@ -760,13 +785,13 @@ No join request sent.
 <div
     class="card"
     id="playerWorldView"
-    style="display:none;"
+    style="display:block;"
 >
 
 <h2>🌍 Live World</h2>
 
 <div id="playerWorldStatus" class="result">
-Waiting for the GM to accept you.
+Map preview — join a world and wait for GM approval to see live gameplay.
 </div>
 
 <div class="world-map">
@@ -1262,6 +1287,8 @@ Waiting for the GM to accept you.
     <div id="signatureMovesDisplay">
         No signature moves saved.
     </div>
+
+</div>
 
 </div>
 
@@ -8662,6 +8689,214 @@ setTimeout(
     500
 );
     
+
+/* =========================================================
+   NEXUS HEROES — PLAYER / GM WORKSPACE UPGRADE
+   Retains all existing element IDs, handlers and Firebase data.
+   ========================================================= */
+(function(){
+    let workspaceReady=false;
+    let lastPortal='playerPortal';
+
+    function moveTo(parent, element){
+        if(parent && element && element.parentNode!==parent) parent.appendChild(element);
+    }
+    function make(tag, className, parent){
+        const node=document.createElement(tag);
+        if(className) node.className=className;
+        if(parent) parent.appendChild(node);
+        return node;
+    }
+    function setupPlayWorkspace(){
+        if(workspaceReady) return;
+        const view=document.getElementById('playerWorldView');
+        const power=document.getElementById('playerPowerCreatorCard');
+        if(!view || !power) return;
+        workspaceReady=true;
+        view.classList.add('nexus-game-workspace');
+        const heading=view.querySelector('h2');
+        const status=document.getElementById('playerWorldStatus');
+        const header=make('div','nexus-play-header');
+        view.insertBefore(header,view.firstChild);
+        moveTo(header,heading);
+        if(status){status.classList.add('nexus-status-pill');moveTo(header,status);}
+        const quick=make('div','nexus-quick-nav',view);
+        const buttons=[
+            ['🗺 Map','nexusMapArea'],
+            ['✨ Create Power','playerPowerCreatorCard'],
+            ['🎯 Mission & Actions','playerSharedControls'],
+            ['📡 World Feed','playerWorldFeed']
+        ];
+        for(const [label,id] of buttons){
+            const button=make('button','',quick);
+            button.type='button';button.textContent=label;
+            button.addEventListener('click',()=>{
+                const target=document.getElementById(id);
+                if(target) target.scrollIntoView({behavior:'smooth',block:'start'});
+                else alert('This panel is not available until the world connects.');
+            });
+        }
+        const grid=make('div','nexus-play-grid',view);
+        const mapColumn=make('section','nexus-play-map',grid);
+        mapColumn.id='nexusMapArea';
+        const actionColumn=make('section','nexus-play-actions',grid);
+        const map=view.querySelector('.world-map');
+        moveTo(mapColumn,map);
+        const characterPanel=Array.from(view.children).find(el=>el.classList?.contains('game-panel') && el.textContent.includes('Your Character'));
+        moveTo(mapColumn,characterPanel);
+        moveTo(actionColumn,power);
+        const lower=make('section','nexus-play-lower',view);
+        const infoPanel=Array.from(view.children).find(el=>el.classList?.contains('game-panel') && el.textContent.includes('Live World Information'));
+        moveTo(lower,infoPanel);
+        // Dynamic mission, team, threats, action and feed are created by existing game code.
+        // A MutationObserver places them alongside the power creator when available.
+        const arrangeDynamic=()=>{
+            const shared=document.getElementById('playerSharedControls');
+            if(shared && shared.parentNode!==actionColumn) moveTo(actionColumn,shared);
+            const feed=document.getElementById('playerWorldFeed');
+            if(feed && feed.parentElement?.parentNode!==lower) moveTo(lower,feed.parentElement);
+        };
+        arrangeDynamic();
+        const observer=new MutationObserver(arrangeDynamic);
+        observer.observe(view,{childList:true});
+        // This observer is intentionally scoped to the world view, not the entire document.
+    }
+    function setupNavigation(){
+        const oldButtons=Array.from(document.querySelectorAll('body > button[onclick^="showPortal"]'));
+        const nav=make('nav','nexus-topnav');
+        nav.setAttribute('aria-label','Game areas');
+        const title=document.querySelector('body > h1');
+        if(title) title.after(nav); else document.body.prepend(nav);
+        for(const button of oldButtons){
+            nav.appendChild(button);
+            button.type='button';
+            const target=button.getAttribute('onclick')?.match(/showPortal\('([^']+)'\)/)?.[1];
+            if(target) button.dataset.portal=target;
+        }
+        const originalShow=window.showPortal;
+        window.showPortal=function(id){
+            if(!document.getElementById(id)) return;
+            lastPortal=id;
+            originalShow(id);
+            nav.querySelectorAll('button').forEach(button=>{
+                if(button.dataset.portal===id) button.setAttribute('aria-current','page');
+                else button.removeAttribute('aria-current');
+            });
+            window.scrollTo({top:0,behavior:'smooth'});
+        };
+        window.showPortal(lastPortal);
+    }
+    document.addEventListener('DOMContentLoaded',()=>{
+        setupPlayWorkspace();
+        setupNavigation();
+    });
+})();
+
+/* Combat controls restored: these functions were referenced by buttons but absent. */
+function nexusCombatLog(message){
+    const el=document.getElementById('combatLog');
+    if(!el)return;
+    if(el.textContent.trim()==='No combat yet.')el.textContent='';
+    const line=document.createElement('div');
+    line.textContent=message;
+    el.prepend(line);
+}
+function refreshCombatSelectors(){
+    const attacker=document.getElementById('combatAttacker');
+    const target=document.getElementById('combatTarget');
+    if(!attacker||!target)return;
+    const oldA=attacker.value,oldT=target.value;
+    const fill=(select,entries)=>{
+        select.replaceChildren();
+        for(const [value,label] of entries){const o=document.createElement('option');o.value=value;o.textContent=label;select.appendChild(o);}
+    };
+    fill(attacker,[...managedPlayers.map((p,i)=>['p:'+i,'🦸 '+p.name+' ('+p.health+' HP)']),...enemies.map((e,i)=>['e:'+i,'👹 '+e.name+' ('+e.health+' HP)'])]);
+    fill(target,[...enemies.map((e,i)=>['e:'+i,'👹 '+e.name+' ('+e.health+' HP)']),...managedPlayers.map((p,i)=>['p:'+i,'🦸 '+p.name+' ('+p.health+' HP)'])]);
+    if([...attacker.options].some(o=>o.value===oldA))attacker.value=oldA;
+    if([...target.options].some(o=>o.value===oldT))target.value=oldT;
+    const fighters=document.getElementById('combatFighterDisplay');
+    if(fighters){fighters.replaceChildren();for(const p of managedPlayers){const card=document.createElement('div');card.className='fighter-token';card.textContent='🦸 '+p.name+' — '+p.health+' HP';fighters.appendChild(card);}if(!managedPlayers.length)fighters.textContent='No fighters loaded.';}
+}
+function nexusCombatActor(key){
+    const m=/^([pe]):(\d+)$/.exec(key||'');
+    if(!m)return null;
+    return (m[1]==='p'?managedPlayers:enemies)[Number(m[2])]||null;
+}
+function nexusCombatDamage(target,damage){
+    const shield=Math.max(0,Number(target.shield)||0);
+    const absorbed=Math.min(shield,damage);
+    target.shield=shield-absorbed;
+    target.health=Math.max(0,(Number(target.health)||0)-(damage-absorbed));
+    if(target.health===0)target.status='Defeated';
+    return absorbed;
+}
+function playerChooseAction(action){
+    chosenPlayerAction=action;
+    const label=document.getElementById('chosenPlayerAction');if(label)label.textContent=action;
+}
+function gmApprovePlayerAction(){
+    if(!chosenPlayerAction){alert('Choose a player action first.');return;}
+    const actor=nexusCombatActor(document.getElementById('combatAttacker')?.value);
+    const target=nexusCombatActor(document.getElementById('combatTarget')?.value);
+    if(!actor||actor.health<=0){alert('Choose a living attacker.');return;}
+    const action=chosenPlayerAction;
+    if(action==='Defend'){
+        actor.shield=(Number(actor.shield)||0)+10;
+        nexusCombatLog('🛡 '+actor.name+' defends (+10 shield).');
+    }else if(action==='Heal'){
+        actor.health=Math.min(Number(actor.maxHealth)||100,(Number(actor.health)||0)+20);
+        nexusCombatLog('💚 '+actor.name+' heals 20 HP.');
+    }else{
+        if(!target||target.health<=0||target===actor){alert('Choose a living, different target.');return;}
+        const roll=Math.floor(Math.random()*20)+1;
+        const threshold=action==='Heavy Attack'?12:10;
+        if(roll>=threshold){
+            const damage=action==='Heavy Attack'?25:action==='Power Attack'?20:15;
+            const absorbed=nexusCombatDamage(target,damage);
+            nexusCombatLog('⚔ '+actor.name+' uses '+action+' on '+target.name+' (d20 '+roll+', '+damage+' damage, '+absorbed+' shield absorbed).');
+        }else nexusCombatLog('⚔ '+actor.name+' misses '+target.name+' (d20 '+roll+').');
+    }
+    if(typeof updatePlayerManager==='function')updatePlayerManager();
+    if(typeof updateEnemyManager==='function')updateEnemyManager();
+    refreshCombatSelectors();
+    chosenPlayerAction=null;
+    const label=document.getElementById('chosenPlayerAction');if(label)label.textContent='None';
+}
+function combatEnemyAttack(){
+    const livingEnemies=enemies.filter(e=>e.health>0);
+    const livingHeroes=managedPlayers.filter(p=>p.health>0);
+    if(!livingEnemies.length||!livingHeroes.length){alert('Add a living enemy and hero first.');return;}
+    const enemy=livingEnemies[Math.floor(Math.random()*livingEnemies.length)];
+    const hero=livingHeroes[Math.floor(Math.random()*livingHeroes.length)];
+    const roll=Math.floor(Math.random()*20)+1;
+    if(roll>=10){const absorbed=nexusCombatDamage(hero,12);nexusCombatLog('👹 '+enemy.name+' hits '+hero.name+' (d20 '+roll+', 12 damage, '+absorbed+' shield absorbed).');}
+    else nexusCombatLog('👹 '+enemy.name+' misses '+hero.name+' (d20 '+roll+').');
+    updatePlayerManager();refreshCombatSelectors();
+}
+function rollEnemyTurn(){combatEnemyAttack();}
+function nexusShowTurn(){
+    const el=document.getElementById('turnTrackerDisplay');if(!el)return;
+    if(!combatActive||!turnOrder.length){el.textContent='No turn order started.';return;}
+    const entry=turnOrder[currentTurnIndex];
+    el.textContent='Round '+combatRound+' — '+(entry?.name||'Unknown')+' is up ('+(currentTurnIndex+1)+'/'+turnOrder.length+').';
+}
+function startTurns(){
+    turnOrder=[...managedPlayers,...enemies].filter(c=>c.health>0);
+    if(!turnOrder.length){alert('Add fighters before starting turns.');return;}
+    currentTurnIndex=0;combatRound=1;combatActive=true;nexusShowTurn();
+    nexusCombatLog('▶ Combat begins: '+turnOrder.map(c=>c.name).join(', '));
+}
+function endCurrentTurn(){
+    if(!combatActive||!turnOrder.length){alert('Start turns first.');return;}
+    currentTurnIndex++;
+    if(currentTurnIndex>=turnOrder.length){currentTurnIndex=0;combatRound++;}
+    let guard=0;
+    while(turnOrder[currentTurnIndex]?.health<=0&&guard++<turnOrder.length){currentTurnIndex=(currentTurnIndex+1)%turnOrder.length;}
+    if(turnOrder.every(c=>c.health<=0)){resetTurns();return;}
+    nexusShowTurn();
+}
+function resetTurns(){turnOrder=[];currentTurnIndex=0;combatRound=1;combatActive=false;nexusShowTurn();}
+
 </script>
 
 </body>
