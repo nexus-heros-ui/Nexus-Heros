@@ -7488,7 +7488,42 @@ ${request.success === true && request.resolved !== true ? `
 
             `;
 
+            
+if(request.success === true && request.resolved !== true){
 
+    const targetLabel = document.createElement("label");
+    targetLabel.textContent = "🎯 GM Select Actual Target:";
+    targetLabel.style.display = "block";
+    targetLabel.style.marginTop = "12px";
+
+    const targetSelect = document.createElement("select");
+    targetSelect.id = "powerTarget_" + request.firebaseId;
+
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Select a player or enemy";
+    targetSelect.appendChild(defaultOption);
+
+    sharedWorldPlayers.forEach(player => {
+        const option = document.createElement("option");
+        option.value = "players/" + player.id;
+        option.textContent = "🦸 " +
+            (player.hero?.name || player.name || player.playerName || player.id);
+        targetSelect.appendChild(option);
+    });
+
+    sharedWorldEnemies.forEach(enemy => {
+        const option = document.createElement("option");
+        option.value = "enemies/" + enemy.id;
+        option.textContent = "👹 " + (enemy.name || enemy.id);
+        targetSelect.appendChild(option);
+    });
+
+    card.appendChild(targetLabel);
+    card.appendChild(targetSelect);
+}
+
+            
             display.appendChild(card);
 
         }
