@@ -8342,6 +8342,76 @@ async function gmDenyCustomPower(id){
 }
 
 /* =========================================================
+   SAVE APPROVED SIGNATURE MOVE
+   ========================================================= */
+
+function askToSaveSignatureMove(request){
+
+    if(!request || !request.power || !request.description){
+        return;
+    }
+
+    const alreadySaved = signatureMoves.some(move =>
+        move.heroName === request.heroName &&
+        move.power === request.power &&
+        move.description === request.description
+    );
+
+    if(alreadySaved){
+        return;
+    }
+
+    const shouldSave = confirm(
+        "Save this approved action as a Signature Move?\n\n" +
+        "Power: " + request.power + "\n" +
+        "Action: " + request.description
+    );
+
+    if(!shouldSave){
+        return;
+    }
+
+    const moveName = prompt(
+        "Enter a name for this Signature Move:",
+        request.power + " Move"
+    );
+
+    if(moveName === null){
+        return;
+    }
+
+    const name = moveName.trim();
+
+    if(!name){
+        alert("Signature Move must have a name.");
+        return;
+    }
+
+    const move = {
+        id: "SIGNATURE-" + Date.now() + "-" +
+            Math.random().toString(36).slice(2, 8),
+
+        heroName: request.heroName || "",
+        name: name,
+        power: request.power,
+        description: request.description,
+        target: request.target || "",
+        scale: request.scale || 1,
+        precision: request.precision || 1,
+        createdAt: Date.now()
+    };
+
+    signatureMoves.push(move);
+
+    updateSignatureMovesDisplay();
+
+    alert(
+        "⭐ Signature Move saved!\n\n" +
+        "Name: " + move.name
+    );
+}
+    
+/* =========================================================
    DISPLAY SIGNATURE MOVES
    ========================================================= */
 
