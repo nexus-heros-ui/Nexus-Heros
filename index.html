@@ -7702,7 +7702,8 @@ if(type === "heal" && finalHealth > 0 && target.status === "Defeated"){
             " used " + (request.power || "a power") +
             " on " + targetName +
             ". " + type.toUpperCase() + ": " + amount +
-            ". Remaining health: " + finalHealth
+            ". Remaining health: " + finalHealth +
+(type === "damage" && finalHealth === 0 ? " 💀 DEFEATED!" : "")
         );
 
         alert(
