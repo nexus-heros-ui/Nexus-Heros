@@ -7512,6 +7512,93 @@ function findPowerRequest(id){
 
 
 /* =========================================================
+   GM APPLY CUSTOM POWER RESULT
+   ========================================================= */
+
+async function gmApplyCustomPowerResult(id){
+
+    const request = findPowerRequest(id);
+
+    if(!request){
+        alert("Power request not found.");
+        return;
+    }
+
+    if(request.success !== true || request.resolved === true){
+        alert("This action is not ready to apply.");
+        return;
+    }
+
+    if(!firebaseReady || !firebaseDb){
+        alert("Firebase is not connected.");
+        return;
+    }
+
+    const code = String(
+        currentWorldCode ||
+        document.getElementById("worldCodeDisplay")?.innerText ||
+        ""
+    ).trim().toUpperCase();
+
+    if(!code || code === "--"){
+        alert("No active multiplayer world.");
+        return;
+    }
+
+    const result = prompt(
+        "Describe the approved result (damage, healing, shield, or other effect):",
+        request.effect || ""
+    );
+
+    if(result === null || !result.trim()){
+        return;
+    }
+
+    try{
+
+        const ref = firebaseDb
+            .collection("worlds")
+            .doc(code)
+            .collection("actionRequests")
+            .doc(id);
+
+        await firebaseDb.runTransaction(async transaction => {
+
+            const snapshot = await transaction.get(ref);
+
+            if(!snapshot.exists){
+                throw new Error("Power request no longer exists.");
+            }
+
+            const current = snapshot.data();
+
+            if(current.success !== true || current.resolved === true){
+                throw new Error("This action is no longer available.");
+            }
+
+            transaction.update(ref, {
+                effect: result.trim(),
+                status: "Effect Recorded - Pending Application",
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        });
+
+        alert(
+            "GM result saved.\n" +
+            "No health or character stats have changed yet."
+        );
+
+    }catch(error){
+
+        console.error("Could not save power result:", error);
+        alert(error.message);
+
+    }
+}
+
+    
+/* =========================================================
    GM APPROVE
    ========================================================= */
 
