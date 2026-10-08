@@ -7772,10 +7772,10 @@ async function gmApplyCustomPowerResult(id){
    GM APPROVE
    ========================================================= */
 
+
 async function gmApproveCustomPower(id){
 
-    const request =
-        findPowerRequest(id);
+    const request = findPowerRequest(id);
 
     if(!request){
         alert("Power request could not be found.");
@@ -7787,77 +7787,82 @@ async function gmApproveCustomPower(id){
         return;
     }
 
-    const code =
-        String(
-            currentWorldCode ||
-            document.getElementById(
-                "worldCodeDisplay"
-            )?.innerText ||
-            ""
-        )
-        .trim()
-        .toUpperCase();
+    const code = String(
+        currentWorldCode ||
+        document.getElementById("worldCodeDisplay")?.innerText ||
+        ""
+    ).trim().toUpperCase();
 
     if(!code || code === "--"){
         alert("No active multiplayer world.");
         return;
     }
 
+    const requestRef = firebaseDb
+        .collection("worlds")
+        .doc(code)
+        .collection("actionRequests")
+        .doc(id);
+
     try{
 
-        await firebaseDb
-            .collection("worlds")
-            .doc(code)
-            .collection("actionRequests")
-            .doc(id)
-            .update({
+        await firebaseDb.runTransaction(async transaction => {
+
+            const snapshot = await transaction.get(requestRef);
+
+            if(!snapshot.exists){
+                throw new Error("Power request no longer exists.");
+            }
+
+            const current = snapshot.data();
+
+            if(current.resolved === true){
+                throw new Error("This power action has already been resolved.");
+            }
+
+            if(
+                current.gmDecision &&
+                current.gmDecision !== "pending"
+            ){
+                throw new Error("The GM has already made a decision on this request.");
+            }
+
+            transaction.update(requestRef, {
 
                 status: "Approved",
-
                 gmDecision: "approved",
-
                 gmNotes: "",
-
                 success: true,
-
                 resolved: false,
 
                 updatedAt:
-                    firebase.firestore
-                    .FieldValue
-                    .serverTimestamp()
+                    firebase.firestore.FieldValue.serverTimestamp()
 
             });
 
+        });
 
         addCustomPowerCombatLog(
-
             "✅ GM APPROVED: " +
-            request.heroName +
+            (request.heroName || request.playerName || "Hero") +
             " uses " +
-            request.power +
+            (request.power || "a power") +
             " — " +
-            request.description
-
+            (request.description || "Custom action")
         );
 
+        askToSaveSignatureMove(request);
 
-        askToSaveSignatureMove(
-            request
-        );
-
-
-        console.log(
-            "Power request approved:",
-            id
+        alert(
+            "Power action approved!\n\n" +
+            "Hero: " + (request.heroName || "Hero") + "\n" +
+            "Power: " + (request.power || "Custom Power") + "\n\n" +
+            "The GM can now apply the result."
         );
 
     }catch(error){
 
-        console.error(
-            "Could not approve power request:",
-            error
-        );
+        console.error("Could not approve power request:", error);
 
         alert(
             "Could not approve this power action.\n\n" +
@@ -7865,8 +7870,8 @@ async function gmApproveCustomPower(id){
         );
 
     }
-
 }
+
 
 /* =========================================================
    GM APPROVE WITH ROLL
