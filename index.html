@@ -7671,9 +7671,15 @@ async function gmApplyCustomPowerResult(id){
                 ? Math.max(0, health - amount)
                 : Math.min(maxHealth, health + amount);
 
-            transaction.update(targetRef, {
+                       const targetUpdate = {
                 health: finalHealth
-            });
+            };
+
+            if(type === "damage" && finalHealth === 0){
+                targetUpdate.status = "Defeated";
+            }
+
+            transaction.update(targetRef, targetUpdate);
 
             transaction.update(requestRef, {
                 targetRef: selectedTarget,
