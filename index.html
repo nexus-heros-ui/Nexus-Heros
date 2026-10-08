@@ -7625,6 +7625,7 @@ async function gmApplyCustomPowerResult(id){
     try{
 
         let finalHealth;
+        let targetName;
 
         await firebaseDb.runTransaction(async transaction => {
 
@@ -7641,7 +7642,7 @@ async function gmApplyCustomPowerResult(id){
                 currentRequest.success !== true ||
                 currentRequest.resolved === true
             ){
-                throw new Error("This request has already been resolved or is not approved.");
+                throw new Error("This request is no longer available.");
             }
 
             if(!targetSnapshot.exists){
@@ -7659,6 +7660,56 @@ async function gmApplyCustomPowerResult(id){
             ){
                 throw new Error("Target health information is invalid.");
             }
+
+            targetName =
+                target.hero?.name ||
+                target.name ||
+                target.playerName ||
+                targetParts[1];
+
+            finalHealth = type === "damage"
+                ? Math.max(0, health - amount)
+                : Math.min(maxHealth, health + amount);
+
+            transaction.update(targetRef, {
+                health: finalHealth
+            });
+
+            transaction.update(requestRef, {
+                targetRef: selectedTarget,
+                effectType: type,
+                effectAmount: amount,
+                effect: type + " " + amount,
+                resolved: true,
+                status: "Resolved - " + type,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+        });
+
+        addCustomPowerCombatLog(
+            "⚡ " + (request.heroName || request.playerName || "Hero") +
+            " used " + (request.power || "a power") +
+            " on " + targetName +
+            ". " + type.toUpperCase() + ": " + amount +
+            ". Remaining health: " + finalHealth
+        );
+
+        alert(
+            "Power effect applied successfully!\n" +
+            "Target: " + targetName + "\n" +
+            "Effect: " + type + " " + amount + "\n" +
+            "Target health: " + finalHealth
+        );
+
+    }catch(error){
+
+        console.error("Power application failed:", error);
+        alert("Could not apply power: " + error.message);
+
+    }
+}
+
 
             finalHealth = type === "damage"
                 ? Math.max(0, health - amount)
