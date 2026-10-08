@@ -7476,6 +7476,14 @@ function updateGMPowerRequests(){
                         ❌ Deny
                     </button>
 
+${request.success === true && request.resolved !== true ? `
+    <button
+        onclick="gmApplyCustomPowerResult('${request.firebaseId}')"
+    >
+        ⚡ Apply Result
+    </button>
+` : ""}
+
                 </div>
 
             `;
