@@ -7877,10 +7877,10 @@ async function gmApproveCustomPower(id){
    GM APPROVE WITH ROLL
    ========================================================= */
 
+
 async function gmRollCustomPower(id){
 
-    const request =
-        findPowerRequest(id);
+    const request = findPowerRequest(id);
 
     if(!request){
         alert("Power request could not be found.");
@@ -7892,147 +7892,127 @@ async function gmRollCustomPower(id){
         return;
     }
 
-
-    const code =
-        String(
-            currentWorldCode ||
-            document.getElementById(
-                "worldCodeDisplay"
-            )?.innerText ||
-            ""
-        )
-        .trim()
-        .toUpperCase();
-
+    const code = String(
+        currentWorldCode ||
+        document.getElementById("worldCodeDisplay")?.innerText ||
+        ""
+    ).trim().toUpperCase();
 
     if(!code || code === "--"){
         alert("No active multiplayer world.");
         return;
     }
 
-
-    /*
-       d20 + Power Control
-    */
-
-    const dieRoll =
-        Math.floor(
-            Math.random() * 20
-        ) + 1;
-
-
-    const powerControl =
-        Number(
-            request.powerControl || 0
-        );
-
-
-   const target =
-    Number(
-        request.difficulty || 10
-    );
-
-
-    const total =
-        dieRoll +
-        powerControl;
-
-
-    let result;
-
-
-    if(dieRoll === 20){
-
-        result =
-            "CRITICAL SUCCESS";
-
-    }else if(dieRoll === 1){
-
-        result =
-            "CRITICAL FAILURE";
-
-    }else if(total >= target){
-
-        result =
-            "SUCCESS";
-
-    }else{
-
-        result =
-            "FAILURE";
-
-    }
-
+    const requestRef = firebaseDb
+        .collection("worlds")
+        .doc(code)
+        .collection("actionRequests")
+        .doc(id);
 
     try{
 
-        await firebaseDb
-            .collection("worlds")
-            .doc(code)
-            .collection("actionRequests")
-            .doc(id)
-            .update({
+        let dieRoll;
+        let powerControl;
+        let difficulty;
+        let total;
+        let result;
+        let heroName;
+        let description;
+        let successfulRequest;
 
-                status:
-                    "Roll: " +
-                    result,
+        await firebaseDb.runTransaction(async transaction => {
 
-                gmDecision:
-                    "roll",
+            const snapshot = await transaction.get(requestRef);
 
-                rollResult:
-                    result,
-                
-                success:
-                    result === "SUCCESS" ||
-                    result === "CRITICAL SUCCESS",
-                
-                dieRoll:
-                    dieRoll,
+            if(!snapshot.exists){
+                throw new Error("Power request no longer exists.");
+            }
 
-                powerControlRoll:
-                    powerControl,
+            const current = snapshot.data();
 
-                rollTotal:
-                    total,
+            if(current.resolved === true){
+                throw new Error("This power action is already resolved.");
+            }
 
-                rollDifficulty:
-                    target,
+            if(
+                current.gmDecision &&
+                current.gmDecision !== "pending"
+            ){
+                throw new Error("The GM has already decided this action.");
+            }
 
-                resolved:
-                    false,
+            dieRoll = Math.floor(Math.random() * 20) + 1;
 
+            powerControl = Number(current.powerControl || 0);
+            difficulty = Number(current.difficulty || 10);
+
+            if(
+                !Number.isFinite(powerControl) ||
+                !Number.isFinite(difficulty) ||
+                difficulty <= 0
+            ){
+                throw new Error("Invalid Power Control or difficulty.");
+            }
+
+            total = dieRoll + powerControl;
+
+            if(dieRoll === 20){
+                result = "CRITICAL SUCCESS";
+            }else if(dieRoll === 1){
+                result = "CRITICAL FAILURE";
+            }else if(total >= difficulty){
+                result = "SUCCESS";
+            }else{
+                result = "FAILURE";
+            }
+
+            const success =
+                result === "SUCCESS" ||
+                result === "CRITICAL SUCCESS";
+
+            heroName =
+                current.heroName ||
+                current.playerName ||
+                "Hero";
+
+            description =
+                current.description ||
+                "Custom power action";
+
+            successfulRequest = {
+                ...current,
+                firebaseId: id
+            };
+
+            transaction.update(requestRef, {
+                status: "Roll: " + result,
+                gmDecision: "roll",
+                rollResult: result,
+                success: success,
+                dieRoll: dieRoll,
+                powerControlRoll: powerControl,
+                rollTotal: total,
+                rollDifficulty: difficulty,
+                resolved: !success,
                 updatedAt:
-                    firebase.firestore
-                    .FieldValue
-                    .serverTimestamp()
-
+                    firebase.firestore.FieldValue.serverTimestamp()
             });
 
+        });
 
         addCustomPowerCombatLog(
-
-            "🎲 " +
-            request.heroName +
-            " POWER CONTROL CHECK — " +
-
-            "d20: " +
+            "🎲 " + heroName +
+            " POWER CONTROL CHECK — d20: " +
             dieRoll +
-
             " + Control " +
             powerControl +
-
             " = " +
             total +
-
             " vs Difficulty " +
-            target +
-
+            difficulty +
             " → " +
             result
-
         );
-
 
         if(
             result === "SUCCESS" ||
@@ -8040,42 +8020,45 @@ async function gmRollCustomPower(id){
         ){
 
             addCustomPowerCombatLog(
-
-                "✨ POWER ACTION: " +
-                request.description
-
+                "✨ POWER ACTION: " + description
             );
 
+            askToSaveSignatureMove(successfulRequest);
 
-            askToSaveSignatureMove(
-                request
+        }else{
+
+            addCustomPowerCombatLog(
+                "❌ POWER FAILED: " + description
             );
 
         }
 
-
-        console.log(
-            "Power roll saved to Firebase:",
-            id,
-            result
+        alert(
+            "Power Control Roll\n\n" +
+            "Hero: " + heroName + "\n" +
+            "d20: " + dieRoll + "\n" +
+            "Power Control: " + powerControl + "\n" +
+            "Total: " + total + "\n" +
+            "Difficulty: " + difficulty + "\n\n" +
+            "RESULT: " + result +
+            (
+                result === "SUCCESS" ||
+                result === "CRITICAL SUCCESS"
+                    ? "\n\nGM can now apply the effect."
+                    : "\n\nAction failed."
+            )
         );
-
 
     }catch(error){
 
-        console.error(
-            "Could not save power roll:",
-            error
-        );
-
+        console.error("Could not roll power:", error);
 
         alert(
-            "Could not save this power roll.\n\n" +
+            "Could not complete power roll.\n\n" +
             error.message
         );
 
     }
-
 }
 
 /* =========================================================
