@@ -7676,8 +7676,12 @@ async function gmApplyCustomPowerResult(id){
             };
 
             if(type === "damage" && finalHealth === 0){
-                targetUpdate.status = "Defeated";
-            }
+    targetUpdate.status = "Defeated";
+}
+
+if(type === "heal" && finalHealth > 0 && target.status === "Defeated"){
+    targetUpdate.status = "Ready";
+}
 
             transaction.update(targetRef, targetUpdate);
 
