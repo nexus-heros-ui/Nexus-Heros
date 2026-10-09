@@ -957,10 +957,9 @@ No join request sent.
     character=gltf.scene;
     const box=new THREE.Box3().setFromObject(character);
     const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
-    character.position.sub(center);
-    character.position.y+=size.y/2;
     const scale=3/Math.max(size.y,.01);
     character.scale.setScalar(scale);
+    character.position.set(-center.x*scale,-box.min.y*scale,-center.z*scale);
     character.userData.baseScale=scale;
     character.rotation.y=angle;
     scene.add(character);
