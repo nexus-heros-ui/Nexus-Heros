@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexus Heroes | Live 3D Character Preview</title><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script><style>body{margin:0;background:#080e1b;color:#f2f6ff;font:16px Arial,sans-serif}header{padding:20px 4vw;background:#121e36;border-bottom:1px solid #375783}h1{margin:0;color:#93c5fd}p{color:#c3d4ef}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,1fr);gap:18px;margin:20px auto;max-width:1250px;padding:0 18px}#viewport{height:min(73vh,700px);min-height:420px;border:2px solid #4769a4;border-radius:16px;background:radial-gradient(ellipse at 50% 30%,#2b416c,#0a1020 70%);touch-action:none;overflow:hidden}canvas{width:100%;height:100%;display:block}aside{background:#16243c;border-radius:16px;padding:20px}label{display:block;margin:20px 0 7px;font-weight:bold}select,input,button{font:inherit}select,input[type=color]{width:100%;height:44px;border-radius:8px;background:#0b1629;color:white;border:1px solid #6184b4}button,a.button{display:inline-block;background:#2865c9;color:white;padding:12px 16px;border:0;border-radius:9px;text-decoration:none;margin-top:14px;cursor:pointer}#status{color:#aee2ff;min-height:45px}.hint{font-size:14px}a{color:#b7d5ff}@media(max-width:800px){.layout{grid-template-columns:1fr}#viewport{height:52vh;min-height:360px}}</style></head><body><header><h1>⚡ Nexus Heroes — 3D Character Preview</h1><p>See the actual Quaternius male and female superhero models before using them in the full game.</p></header><main class="layout"><div><div id="viewport"></div><p class="hint">Drag to rotate • Scroll to zoom • Change hero model on the right.</p></div><aside><h2>Character Creator</h2><label for="gender">Hero model</label><select id="gender"><option value="Male">Male Superhero</option><option value="Female">Female Superhero</option></select><label for="build">Body build</label><select id="build"><option value="1">Athletic</option><option value="0.9">Slim</option><option value="1.12">Broad</option></select><label for="color">Body / outfit tint</label><input type="color" id="color" value="#ffffff"><label for="skin">Skin tone</label><input type="color" id="skin" value="#ffffff"><p class="hint">Skin tone colors tint the model’s original skin texture. The body/outfit tint also affects the skin.</p><label for="hair">Hair color</label><input type="color" id="hair" value="#ffffff">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexus Heroes | Live 3D Character Preview</title><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script><style>body{margin:0;background:#080e1b;color:#f2f6ff;font:16px Arial,sans-serif}header{padding:20px 4vw;background:#121e36;border-bottom:1px solid #375783}h1{margin:0;color:#93c5fd}p{color:#c3d4ef}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,1fr);gap:18px;margin:20px auto;max-width:1250px;padding:0 18px}#viewport{height:min(73vh,700px);min-height:420px;border:2px solid #4769a4;border-radius:16px;background:radial-gradient(ellipse at 50% 30%,#2b416c,#0a1020 70%);touch-action:none;overflow:hidden}canvas{width:100%;height:100%;display:block}aside{background:#16243c;border-radius:16px;padding:20px}label{display:block;margin:20px 0 7px;font-weight:bold}select,input,button{font:inherit}select,input[type=color]{width:100%;height:44px;border-radius:8px;background:#0b1629;color:white;border:1px solid #6184b4}button,a.button{display:inline-block;background:#2865c9;color:white;padding:12px 16px;border:0;border-radius:9px;text-decoration:none;margin-top:14px;cursor:pointer}#status{color:#aee2ff;min-height:45px}.hint{font-size:14px}a{color:#b7d5ff}@media(max-width:800px){.layout{grid-template-columns:1fr}#viewport{height:52vh;min-height:360px}}</style></head><body><header><h1>⚡ Nexus Heroes — 3D Character Preview</h1><p>See the actual Quaternius male and female superhero models before using them in the full game.</p></header><main class="layout"><div><div id="viewport"></div><p class="hint">Drag to rotate • Scroll to zoom • Change hero model on the right.</p></div><aside><h2>Character Creator</h2><label for="gender">Hero model</label><select id="gender"><option value="Male">Male Superhero</option><option value="Female">Female Superhero</option></select><label for="build">Body build</label><select id="build"><option value="1">Athletic</option><option value="0.9">Slim</option><option value="1.12">Broad</option></select><label for="color">Original body tint</label><input type="color" id="color" value="#ffffff"><label for="skin">Skin tone</label><input type="color" id="skin" value="#ffffff"><p class="hint">Skin tone affects exposed skin. Outfit design changes the fitted bodysuit, not the character’s size.</p><label for="hair">Hair color</label><input type="color" id="hair" value="#ffffff">
 <label for="outfit">Outfit design</label><select id="outfit"><option value="none">Original model</option><option value="classic">Classic Comic Hero</option><option value="armor">Armored Guardian</option><option value="tactical">Tactical Defender</option><option value="cosmic">Cosmic Champion</option></select>
 <label for="outfitColor">Outfit color</label><input id="outfitColor" type="color" value="#2563eb">
 <label for="accentColor">Accent / emblem color</label><input id="accentColor" type="color" value="#facc15">
@@ -7,7 +7,7 @@
 <label for="emblem">Chest emblem</label><select id="emblem"><option value="star">Star</option><option value="bolt">Lightning Bolt</option><option value="shield">Shield</option><option value="none">None</option></select>
 <label><input id="cape" type="checkbox"> Add cape</label>
 <label for="backdrop">Background</label><select id="backdrop"><option value="blue">Nexus Blue</option><option value="purple">Cosmic Purple</option><option value="black">Shadow Black</option></select>
-<button id="reset">Reset appearance</button><button id="save">Save look on this device</button><button id="photo">Save avatar picture</button><p id="status">Loading 3D engine…</p><a class="button" href="index.html">Open Full Nexus Heroes Game →</a><p class="hint">This preview uses the real downloaded models. Costumes are original prototype 3D overlays fitted to the standing model. They are not yet rigged for animations or combat.</p></aside></main><script type="module">
+<button id="reset">Reset appearance</button><button id="save">Save look on this device</button><button id="photo">Save avatar picture</button><p id="status">Loading 3D engine…</p><a class="button" href="index.html">Open Full Nexus Heroes Game →</a><p class="hint">This preview uses the real downloaded models. Suit colors and panels are applied directly to the rigged character surface. The optional cape and emblem are preview-only attachments; they do not yet follow animation.</p></aside></main><script type="module">
 import * as THREE from 'three';
 import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/loaders/GLTFLoader.js';
 const el=document.getElementById('viewport'),status=document.getElementById('status'),gender=document.getElementById('gender'),build=document.getElementById('build'),color=document.getElementById('color');
@@ -15,62 +15,107 @@ const skin=document.getElementById('skin'),hair=document.getElementById('hair'),
 try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;el.appendChild(renderer.domElement)}catch(e){status.textContent='WebGL unavailable: '+e.message;throw e}
 scene.add(new THREE.HemisphereLight(0xffffff,0x304164,2.2));let light=new THREE.DirectionalLight(0xffffff,3);light.position.set(4,7,5);scene.add(light);light=new THREE.DirectionalLight(0x80baff,1.4);light.position.set(-4,5,-4);scene.add(light);const pedestal=new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.5,.15,48),new THREE.MeshStandardMaterial({color:0x213454}));pedestal.position.y=-.09;scene.add(pedestal);
 
-// Original Nexus Heroes modular costume prototype; fitted to standing Quaternius characters.
-function nxCostume(THREE, hero, options){
-  const previous=hero.getObjectByName('NexusCostume');if(previous)hero.remove(previous);
-  if(options.style==='none')return;
-  const group=new THREE.Group();group.name='NexusCostume';hero.add(group);
-  const mat=(color,metal=0)=>new THREE.MeshStandardMaterial({color,metalness:metal,roughness:metal?.34:.72,side:THREE.DoubleSide});
-  const primary=mat(options.primary,options.style==='armor'?.65:.08),accent=mat(options.accent,.48),dark=mat('#152139',.36);
-  const box=(w,h,d,x,y,z,m)=>{const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);mesh.position.set(x,y,z);group.add(mesh);return mesh};
-  const cyl=(top,bottom,height,x,y,z,m,rotation=0)=>{const mesh=new THREE.Mesh(new THREE.CylinderGeometry(top,bottom,height,12),m);mesh.position.set(x,y,z);mesh.rotation.z=rotation;group.add(mesh);return mesh};
-  const armor=options.style==='armor',tactical=options.style==='tactical',cosmic=options.style==='cosmic';
-  // Centered in the character's rest pose. Costume pieces are visual overlays, not skinned clothing.
-  box(.53,.43,.29,0,1.36,0,primary);
-  box(.49,.15,.28,0,1.085,0,primary);
-  box(.47,.07,.30,0,1.025,0,accent);
-  for(const side of [-1,1]){
-    const shoulder=cyl(armor?.16:.13,armor?.14:.11,.19,side*.33,1.48,0,armor?accent:primary,side*.33);
-    if(armor){box(.18,.28,.23,side*.37,1.26,0,primary);box(.17,.24,.21,side*.40,1.00,0,dark)}
-    if(tactical){box(.16,.19,.26,side*.32,1.37,.06,dark);box(.12,.14,.14,side*.24,1.07,.16,accent)}
-    box(.21,.29,.24,side*.15,.81,0,primary);
-    box(.20,.22,.25,side*.15,.49,0,primary);
-    if(armor)box(.24,.17,.30,side*.15,.26,.06,accent);
-  }
-  if(armor){box(.34,.24,.34,0,1.35,.045,accent);box(.26,.12,.36,0,1.11,.02,dark)}
-  if(tactical){box(.25,.30,.34,0,1.37,.04,dark);box(.18,.12,.36,0,1.13,.04,accent)}
-  if(cosmic){const glow=new THREE.MeshStandardMaterial({color:options.accent,emissive:options.accent,emissiveIntensity:1.6});box(.08,.41,.31,0,1.36,.02,glow);box(.39,.065,.32,0,1.41,.04,glow)}
-  if(options.emblem!=='none'){
-    const m=mat(options.accent,.4);
-    if(options.emblem==='star'){
-      const shape=new THREE.Shape();for(let i=0;i<10;i++){const a=i*Math.PI/5-Math.PI/2,r=i%2?.058:.13;const x=Math.cos(a)*r,y=Math.sin(a)*r;if(!i)shape.moveTo(x,y);else shape.lineTo(x,y)}shape.closePath();
-      const star=new THREE.Mesh(new THREE.ShapeGeometry(shape),m);star.position.set(0,1.40,.17);group.add(star);
-    }else if(options.emblem==='bolt'){
-      const shape=new THREE.Shape();[[-.04,.13],[.075,.13],[.01,.02],[.085,.02],[-.065,-.15],[-.025,-.025],[-.095,-.025]].forEach(([x,y],i)=>i?shape.lineTo(x,y):shape.moveTo(x,y));shape.closePath();const bolt=new THREE.Mesh(new THREE.ShapeGeometry(shape),m);bolt.position.set(0,1.40,.17);group.add(bolt);
-    }else{const shield=new THREE.Mesh(new THREE.ConeGeometry(.12,.21,3),m);shield.position.set(0,1.39,.18);shield.rotation.z=Math.PI;group.add(shield)}
-  }
-  if(options.mask!=='none'){
-    const helmet=options.mask==='helmet';
-    const head=new THREE.Mesh(new THREE.SphereGeometry(helmet?.165:.153,20,14,0,Math.PI*2,0,helmet?Math.PI*.85:Math.PI*.55),helmet?primary:dark);
-    head.position.set(0,1.69,0);group.add(head);
-    if(helmet){const visor=box(.23,.07,.025,0,1.715,.145,accent);visor.material.emissive=new THREE.Color(options.accent);visor.material.emissiveIntensity=.3}
-  }
-  if(options.cape){
-    const shape=new THREE.Shape();shape.moveTo(-.26,1.48);shape.lineTo(.26,1.48);shape.lineTo(.39,.25);shape.quadraticCurveTo(0,.14,-.39,.25);shape.closePath();
-    const cape=new THREE.Mesh(new THREE.ShapeGeometry(shape),mat(options.secondary));cape.position.z=-.21;group.add(cape);
-  }
-  group.scale.x=options.build||1;
+// Surface-fitting costumes: recolor the ORIGINAL skinned mesh using its rest-pose
+// vertex positions. No rigid boxes or armor slabs are attached to the character.
+const outfitUniforms={uSuit:{value:new THREE.Color('#2563eb')},uAccent:{value:new THREE.Color('#facc15')},uDark:{value:new THREE.Color('#17233b')},uStyle:{value:0},uSkin:{value:new THREE.Color('#ffffff')}};
+function installSuitMaterial(root){
+ root.traverse(o=>{
+  if(!o.isMesh)return;
+  const apply=m=>{
+   if(!m.name?.includes('Superhero_'))return m;
+   const c=m.clone();c.name='NX_Fitted_'+m.name;c.color.set('#ffffff');
+   c.onBeforeCompile=shader=>{
+    Object.assign(shader.uniforms,outfitUniforms);
+    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vNxRest;');
+    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvNxRest=position;');
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>',`#include <common>
+varying vec3 vNxRest;
+uniform vec3 uSuit;
+uniform vec3 uAccent;
+uniform vec3 uDark;
+uniform vec3 uSkin;
+uniform float uStyle;`);
+    shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+    vec3 q=vNxRest;
+    // The Quaternius hero stands about 1.8m in its unposed local geometry.
+    // Face and neck remain skin. Hands stay exposed; forearms become gloves.
+    float torso=step(0.98,q.y)*(1.0-step(1.53,q.y));
+    float leg=step(0.37,q.y)*(1.0-step(0.98,q.y));
+    float boot=1.0-step(0.37,q.y);
+    float arm=step(0.34,abs(q.x))*step(0.84,q.y)*(1.0-step(1.51,q.y));
+    float glove=step(0.51,abs(q.x))*step(0.84,q.y)*(1.0-step(1.32,q.y));
+    float covered=clamp(torso+leg+boot+arm,0.0,1.0);
+    float stripe=0.0;
+    if(uStyle>0.5){
+      stripe=max(stripe,torso*(1.0-smoothstep(0.02,0.075,abs(abs(q.x)-0.15))));
+      stripe=max(stripe,step(1.01,q.y)*(1.0-step(1.065,q.y)));
+      stripe=max(stripe,step(0.31,q.y)*(1.0-step(0.40,q.y)));
+      stripe=max(stripe,glove);
+    }
+    if(uStyle>1.5){
+      stripe=max(stripe,torso*step(1.33,q.y)*step(0.12,abs(q.x)));
+      stripe=max(stripe,leg*step(0.09,abs(q.x))*(1.0-step(0.14,abs(q.x))));
+    }
+    if(uStyle>2.5){
+      stripe=max(stripe,torso*step(1.24,q.y)*(1.0-step(1.32,q.y)));
+      stripe=max(stripe,arm*step(0.5,abs(q.x)));
+    }
+    if(uStyle>3.5){
+      stripe=max(stripe,torso*(1.0-smoothstep(0.015,0.045,abs(q.x))));
+      stripe=max(stripe,leg*step(0.65,q.y)*(1.0-step(0.69,q.y)));
+    }
+    vec3 suit=uSuit;
+    if(uStyle>1.5 && uStyle<2.5) suit=mix(uSuit,uDark,0.30);
+    if(uStyle>2.5 && uStyle<3.5) suit=mix(uSuit,uDark,0.50);
+    if(uStyle>3.5) suit=mix(uSuit,uDark,0.23);
+    vec3 outfitColor=mix(suit,uAccent,clamp(stripe,0.0,1.0));
+    diffuseColor.rgb=mix(diffuseColor.rgb*uSkin,outfitColor,covered*step(0.5,uStyle));
+    `);
+   };
+   c.customProgramCacheKey=()=> 'nexus-fitted-v2';
+   return c;
+  };
+  o.material=Array.isArray(o.material)?o.material.map(apply):apply(o.material);
+ });
+}
+function nxCostume(THREE,root,options){
+ const previous=root.getObjectByName('NexusCostume');if(previous)root.remove(previous);
+ const styles={none:0,classic:1,armor:2,tactical:3,cosmic:4};
+ outfitUniforms.uStyle.value=styles[options.style]||0;
+ outfitUniforms.uSuit.value.set(options.primary);
+ outfitUniforms.uAccent.value.set(options.accent);
+ outfitUniforms.uSkin.value.set(skin.value);
+ if(options.style==='none')return;
+ const group=new THREE.Group();group.name='NexusCostume';root.add(group);
+ // Only emblem and optional cape are added geometry; the actual costume follows
+ // the character's skinned mesh, so it cannot float as rectangular blocks.
+ const emblemMat=new THREE.MeshStandardMaterial({color:options.accent,metalness:.3,roughness:.4,side:THREE.DoubleSide});
+ if(options.emblem!=='none'){
+  const shape=new THREE.Shape();
+  if(options.emblem==='star'){
+   for(let i=0;i<10;i++){const a=i*Math.PI/5-Math.PI/2,r=i%2?.038:.085;const x=Math.cos(a)*r,y=Math.sin(a)*r;i?shape.lineTo(x,y):shape.moveTo(x,y)}
+  }else if(options.emblem==='bolt'){
+   [[-.025,.085],[.055,.085],[.005,.005],[.055,.005],[-.055,-.085],[-.02,-.005],[-.065,-.005]].forEach(([x,y],i)=>i?shape.lineTo(x,y):shape.moveTo(x,y));
+  }else{[[-.07,.065],[.07,.065],[.06,-.035],[0,-.085],[-.06,-.035]].forEach(([x,y],i)=>i?shape.lineTo(x,y):shape.moveTo(x,y))}
+  shape.closePath();const symbol=new THREE.Mesh(new THREE.ShapeGeometry(shape),emblemMat);
+  symbol.position.set(0,1.36,.142);group.add(symbol);
+ }
+ if(options.cape){
+  const shape=new THREE.Shape();shape.moveTo(-.21,1.47);shape.lineTo(.21,1.47);shape.lineTo(.30,.32);shape.quadraticCurveTo(0,.23,-.30,.32);shape.closePath();
+  const cape=new THREE.Mesh(new THREE.ShapeGeometry(shape),new THREE.MeshStandardMaterial({color:options.secondary,side:THREE.DoubleSide,roughness:.88}));cape.position.z=-.18;group.add(cape);
+ }
 }
 
 const loader=new GLTFLoader();function draw(){renderer.render(scene,camera)}function resize(){const b=el.getBoundingClientRect();camera.aspect=b.width/b.height;camera.updateProjectionMatrix();renderer.setSize(b.width,b.height,false);draw()}new ResizeObserver(resize).observe(el);
 function costumeOptions(){return {style:document.getElementById('outfit').value,primary:document.getElementById('outfitColor').value,accent:document.getElementById('accentColor').value,secondary:document.getElementById('capeColor').value,mask:document.getElementById('headgear').value,emblem:document.getElementById('emblem').value,cape:document.getElementById('cape').checked,build:Number(build.value)}}
-function update(){if(!hero)return;hero.scale.x=hero.userData.scale*Number(build.value);const tint=new THREE.Color(color.value).multiply(new THREE.Color(skin.value));hero.traverse(o=>{if(o.isMesh){const materials=Array.isArray(o.material)?o.material:[o.material];materials.forEach(m=>{if(m.name?.includes('Superhero_')){m.color.copy(tint);m.needsUpdate=true}else if(m.name?.includes('Hair_')){m.color.set(hair.value);m.needsUpdate=true}})}});nxCostume(THREE,hero,costumeOptions());draw()}
+function update(){if(!hero)return;hero.scale.x=hero.userData.scale*Number(build.value);const tint=new THREE.Color(color.value);hero.traverse(o=>{if(o.isMesh){const materials=Array.isArray(o.material)?o.material:[o.material];materials.forEach(m=>{if(m.name?.includes('Superhero_') && !m.name?.startsWith('NX_Fitted_')){m.color.copy(tint);m.needsUpdate=true}else if(m.name?.includes('Hair_')){m.color.set(hair.value);m.needsUpdate=true}})}});nxCostume(THREE,hero,costumeOptions());draw()}
 async function load(){const id=++request;status.textContent='Loading '+gender.value+' superhero…';try{const gltf=await loader.loadAsync('assets/heroes/Superhero_'+gender.value+'_FullBody.gltf');if(id!==request)return;if(hero)scene.remove(hero);hero=gltf.scene;// Quaternius full-body meshes are authored in meters (about 1.8 tall).
 // Do not normalize using the skinned mesh Box3; it can misreport animated bounds.
 hero.scale.setScalar(1);
 hero.position.set(0,0,0);
 hero.userData.scale=1;
 hero.rotation.y=angle;
+installSuitMaterial(hero);
 scene.add(hero);
 zoom=5.8;
 camera.position.set(0,0.95,zoom);
