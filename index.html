@@ -899,19 +899,19 @@ No join request sent.
 <!-- NEXUS HEROES 3D APPEARANCE STUDIO: START -->
 <style>
 #nx3d-studio{background:linear-gradient(145deg,#101a35,#111827);color:#e5edff;border:1px solid #4166ac;border-radius:15px;padding:18px;margin:20px 0;font-family:Arial,sans-serif}
-#nx3d-studio *{box-sizing:border-box}#nx3d-studio .nx3d-future{display:none}#nx3d-studio h2{color:#8fd4ff;margin:0 0 10px}#nx3d-studio .nx3d-layout{display:grid;grid-template-columns:minmax(240px,1.2fr) minmax(240px,1fr);gap:16px}#nx3d-stage{height:430px;background:radial-gradient(ellipse at 50% 35%,#253d69,#070e1d 75%);border:1px solid #38537f;border-radius:12px;position:relative;overflow:hidden;touch-action:none}#nx3d-stage canvas{display:block;width:100%;height:100%}#nx3d-studio label{display:block;margin:10px 0 5px;font-size:13px;color:#bcd2ff}#nx3d-studio select,#nx3d-studio input[type=color]{width:100%;min-height:36px;border-radius:6px;background:#172b4c;color:white;border:1px solid #5575a9;padding:5px}#nx3d-studio input[type=color]{padding:2px}#nx3d-studio button{background:#205bc0;color:white;border:1px solid #6ba8ff;border-radius:7px;padding:10px 12px;margin:5px 5px 5px 0;cursor:pointer}#nx3d-studio button:hover{background:#3476e9}#nx3d-studio button:disabled{opacity:.45;cursor:not-allowed}#nx3d-studio .nx3d-hint{font-size:12px;color:#afc6e5}#nx3d-status{min-height:22px;color:#bce6ff;font-size:13px}#nx3d-studio .nx3d-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}#nx3d-studio .nx3d-check{display:flex;align-items:center;gap:8px}#nx3d-studio .nx3d-check input{width:auto}#nx3d-studio .nx3d-check label{margin:0}#nx3d-studio .nx3d-portrait{max-width:95px;max-height:95px;border-radius:8px;margin-top:8px} @media(max-width:760px){#nx3d-studio .nx3d-layout{grid-template-columns:1fr}#nx3d-stage{height:350px}}
+#nx3d-studio *{box-sizing:border-box}#nx3d-studio .nx3d-future{display:block}#nx3d-studio h2{color:#8fd4ff;margin:0 0 10px}#nx3d-studio .nx3d-layout{display:grid;grid-template-columns:minmax(240px,1.2fr) minmax(240px,1fr);gap:16px}#nx3d-stage{height:430px;background:radial-gradient(ellipse at 50% 35%,#253d69,#070e1d 75%);border:1px solid #38537f;border-radius:12px;position:relative;overflow:hidden;touch-action:none}#nx3d-stage canvas{display:block;width:100%;height:100%}#nx3d-studio label{display:block;margin:10px 0 5px;font-size:13px;color:#bcd2ff}#nx3d-studio select,#nx3d-studio input[type=color]{width:100%;min-height:36px;border-radius:6px;background:#172b4c;color:white;border:1px solid #5575a9;padding:5px}#nx3d-studio input[type=color]{padding:2px}#nx3d-studio button{background:#205bc0;color:white;border:1px solid #6ba8ff;border-radius:7px;padding:10px 12px;margin:5px 5px 5px 0;cursor:pointer}#nx3d-studio button:hover{background:#3476e9}#nx3d-studio button:disabled{opacity:.45;cursor:not-allowed}#nx3d-studio .nx3d-hint{font-size:12px;color:#afc6e5}#nx3d-status{min-height:22px;color:#bce6ff;font-size:13px}#nx3d-studio .nx3d-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}#nx3d-studio .nx3d-check{display:flex;align-items:center;gap:8px}#nx3d-studio .nx3d-check input{width:auto}#nx3d-studio .nx3d-check label{margin:0}#nx3d-studio .nx3d-portrait{max-width:95px;max-height:95px;border-radius:8px;margin-top:8px} @media(max-width:760px){#nx3d-studio .nx3d-layout{grid-template-columns:1fr}#nx3d-stage{height:350px}}
 </style>
 <section id="nx3d-studio" aria-label="3D Hero Appearance Studio">
 <h2>🦸 Nexus Heroes — 3D Appearance Studio</h2>
 <p class="nx3d-hint">Complete Species and Origin first, then customize your hero. Drag to rotate • Scroll/pinch to zoom. Real Quaternius superhero models. Select male or female, rotate and zoom. Costume-part customization requires additional assets.</p>
 <div class="nx3d-layout"><div><div id="nx3d-stage" aria-label="Rotatable 3D superhero"></div><p class="nx3d-hint">Your existing power wheels, stats and species/origin results are not changed by appearance editing.</p><div id="nx3d-status" role="status"></div><img id="nx3d-portrait" class="nx3d-portrait" alt="Saved hero portrait" hidden></div>
-<div><div class="nx3d-grid"><div><label for="nx3d-gender">Hero model</label><select id="nx3d-gender"><option value="male">Male superhero</option><option value="female">Female superhero</option></select></div><div><label for="nx3d-build">Body build</label><select id="nx3d-build"><option value="athletic">Athletic</option><option value="slim">Slim</option><option value="heavy">Heavy</option></select></div><div class="nx3d-future"><label for="nx3d-suit">Suit</label><select id="nx3d-suit"><option value="classic">Classic</option><option value="armored">Armored</option><option value="tactical">Tactical</option></select></div><div class="nx3d-future"><label for="nx3d-headgear">Headgear</label><select id="nx3d-headgear"><option value="mask">Mask</option><option value="helmet">Helmet</option><option value="none">None</option></select></div><div class="nx3d-future"><label for="nx3d-emblem">Emblem</label><select id="nx3d-emblem"><option value="star">Star</option><option value="bolt">Bolt</option><option value="shield">Shield</option></select></div><div><label for="nx3d-primary">Body / outfit tint</label><input type="color" id="nx3d-primary" value="#2563eb"></div><div><label for="nx3d-hair">Hair color</label><input type="color" id="nx3d-hair" value="#ffffff"></div><div class="nx3d-future"><label for="nx3d-secondary">Secondary color</label><input type="color" id="nx3d-secondary" value="#18243e"></div><div class="nx3d-future"><label for="nx3d-accent">Emblem / accent</label><input type="color" id="nx3d-accent" value="#facc15"></div><div class="nx3d-future"><label for="nx3d-skin">Skin tone</label><input type="color" id="nx3d-skin" value="#b98262"></div></div><p class="nx3d-check nx3d-future"><input type="checkbox" id="nx3d-cape"><label for="nx3d-cape">Add cape</label></p><button type="button" id="nx3d-reset">Reset appearance</button><button type="button" id="nx3d-save">💾 Save Appearance</button><button type="button" id="nx3d-submit">📨 Prepare GM Submission</button><p class="nx3d-hint">Save Appearance also updates the existing saved hero record. GM Submission uses the existing Join Multiplayer World approval flow; it does not create a separate approval system.</p></div></div>
+<div><div class="nx3d-grid"><div><label for="nx3d-gender">Hero model</label><select id="nx3d-gender"><option value="male">Male superhero</option><option value="female">Female superhero</option></select></div><div><label for="nx3d-build">Body build</label><select id="nx3d-build"><option value="athletic">Athletic</option><option value="slim">Slim</option><option value="heavy">Heavy</option></select></div><div><label for="nx3d-suit">Suit</label><select id="nx3d-suit"><option value="classic">Classic</option><option value="armor">Armored</option><option value="tactical">Tactical</option></select></div><div><label for="nx3d-headgear">Headgear</label><select id="nx3d-headgear"><option value="mask">Mask</option><option value="helmet">Helmet</option><option value="none">None</option></select></div><div><label for="nx3d-emblem">Emblem</label><select id="nx3d-emblem"><option value="star">Star</option><option value="bolt">Bolt</option><option value="shield">Shield</option></select></div><div><label for="nx3d-primary">Body / outfit tint</label><input type="color" id="nx3d-primary" value="#2563eb"></div><div><label for="nx3d-skin-tone">Skin tone</label><input type="color" id="nx3d-skin-tone" value="#ffffff"><small>Skin tone and body tint both affect the original body texture.</small></div><div><label for="nx3d-hair">Hair color</label><input type="color" id="nx3d-hair" value="#ffffff"></div><div><label for="nx3d-secondary">Secondary color</label><input type="color" id="nx3d-secondary" value="#18243e"></div><div><label for="nx3d-accent">Emblem / accent</label><input type="color" id="nx3d-accent" value="#facc15"></div><div class="nx3d-future"><label for="nx3d-skin">Skin tone</label><input type="color" id="nx3d-skin" value="#b98262"></div></div><p class="nx3d-check"><input type="checkbox" id="nx3d-cape"><label for="nx3d-cape">Add cape</label></p><button type="button" id="nx3d-reset">Reset appearance</button><button type="button" id="nx3d-save">💾 Save Appearance</button><button type="button" id="nx3d-submit">📨 Prepare GM Submission</button><p class="nx3d-hint">Save Appearance also updates the existing saved hero record. GM Submission uses the existing Join Multiplayer World approval flow; it does not create a separate approval system.</p></div></div>
 </section>
 <script type="module">
 (async()=>{
  const stage=document.getElementById('nx3d-stage'),status=document.getElementById('nx3d-status');
- const defaults={gender:'male',build:'athletic',suit:'classic',headgear:'none',emblem:'star',primary:'#ffffff',hair:'#ffffff',secondary:'#18243e',accent:'#facc15',skin:'#b98262',cape:false};
- const keys=Object.keys(defaults),$=k=>document.getElementById('nx3d-'+k);
+ const defaults={gender:'male',build:'athletic',suit:'classic',headgear:'none',emblem:'star',primary:'#ffffff',hair:'#ffffff',skinTone:'#ffffff',secondary:'#18243e',accent:'#facc15',skin:'#b98262',cape:false};
+ const keys=Object.keys(defaults),$=k=>document.getElementById(k==='skinTone'?'nx3d-skin-tone':'nx3d-'+k);
  const say=t=>{status.textContent=t};
  const read=()=>Object.fromEntries(keys.map(k=>[k,k==='cape'?$(k).checked:$(k).value]));
  const existing=()=>{try{return JSON.parse(localStorage.getItem('savedHero')||'null')}catch{return null}};
@@ -930,13 +930,61 @@ No join request sent.
   const rim=new THREE.DirectionalLight(0x75baff,1.5);rim.position.set(-3,4,-3);scene.add(rim);
   const floor=new THREE.Mesh(new THREE.CylinderGeometry(1.25,1.3,.1,48),new THREE.MeshStandardMaterial({color:0x213451}));
   floor.position.y=-.08;scene.add(floor);
+  
+// Original Nexus Heroes modular costume prototype; fitted to standing Quaternius characters.
+function nxCostume(THREE, hero, options){
+  const previous=hero.getObjectByName('NexusCostume');if(previous)hero.remove(previous);
+  if(options.style==='none')return;
+  const group=new THREE.Group();group.name='NexusCostume';hero.add(group);
+  const mat=(color,metal=0)=>new THREE.MeshStandardMaterial({color,metalness:metal,roughness:metal?.34:.72,side:THREE.DoubleSide});
+  const primary=mat(options.primary,options.style==='armor'?.65:.08),accent=mat(options.accent,.48),dark=mat('#152139',.36);
+  const box=(w,h,d,x,y,z,m)=>{const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);mesh.position.set(x,y,z);group.add(mesh);return mesh};
+  const cyl=(top,bottom,height,x,y,z,m,rotation=0)=>{const mesh=new THREE.Mesh(new THREE.CylinderGeometry(top,bottom,height,12),m);mesh.position.set(x,y,z);mesh.rotation.z=rotation;group.add(mesh);return mesh};
+  const armor=options.style==='armor',tactical=options.style==='tactical',cosmic=options.style==='cosmic';
+  // Centered in the character's rest pose. Costume pieces are visual overlays, not skinned clothing.
+  box(.53,.43,.29,0,1.36,0,primary);
+  box(.49,.15,.28,0,1.085,0,primary);
+  box(.47,.07,.30,0,1.025,0,accent);
+  for(const side of [-1,1]){
+    const shoulder=cyl(armor?.16:.13,armor?.14:.11,.19,side*.33,1.48,0,armor?accent:primary,side*.33);
+    if(armor){box(.18,.28,.23,side*.37,1.26,0,primary);box(.17,.24,.21,side*.40,1.00,0,dark)}
+    if(tactical){box(.16,.19,.26,side*.32,1.37,.06,dark);box(.12,.14,.14,side*.24,1.07,.16,accent)}
+    box(.21,.29,.24,side*.15,.81,0,primary);
+    box(.20,.22,.25,side*.15,.49,0,primary);
+    if(armor)box(.24,.17,.30,side*.15,.26,.06,accent);
+  }
+  if(armor){box(.34,.24,.34,0,1.35,.045,accent);box(.26,.12,.36,0,1.11,.02,dark)}
+  if(tactical){box(.25,.30,.34,0,1.37,.04,dark);box(.18,.12,.36,0,1.13,.04,accent)}
+  if(cosmic){const glow=new THREE.MeshStandardMaterial({color:options.accent,emissive:options.accent,emissiveIntensity:1.6});box(.08,.41,.31,0,1.36,.02,glow);box(.39,.065,.32,0,1.41,.04,glow)}
+  if(options.emblem!=='none'){
+    const m=mat(options.accent,.4);
+    if(options.emblem==='star'){
+      const shape=new THREE.Shape();for(let i=0;i<10;i++){const a=i*Math.PI/5-Math.PI/2,r=i%2?.058:.13;const x=Math.cos(a)*r,y=Math.sin(a)*r;if(!i)shape.moveTo(x,y);else shape.lineTo(x,y)}shape.closePath();
+      const star=new THREE.Mesh(new THREE.ShapeGeometry(shape),m);star.position.set(0,1.40,.17);group.add(star);
+    }else if(options.emblem==='bolt'){
+      const shape=new THREE.Shape();[[-.04,.13],[.075,.13],[.01,.02],[.085,.02],[-.065,-.15],[-.025,-.025],[-.095,-.025]].forEach(([x,y],i)=>i?shape.lineTo(x,y):shape.moveTo(x,y));shape.closePath();const bolt=new THREE.Mesh(new THREE.ShapeGeometry(shape),m);bolt.position.set(0,1.40,.17);group.add(bolt);
+    }else{const shield=new THREE.Mesh(new THREE.ConeGeometry(.12,.21,3),m);shield.position.set(0,1.39,.18);shield.rotation.z=Math.PI;group.add(shield)}
+  }
+  if(options.mask!=='none'){
+    const helmet=options.mask==='helmet';
+    const head=new THREE.Mesh(new THREE.SphereGeometry(helmet?.165:.153,20,14,0,Math.PI*2,0,helmet?Math.PI*.85:Math.PI*.55),helmet?primary:dark);
+    head.position.set(0,1.69,0);group.add(head);
+    if(helmet){const visor=box(.23,.07,.025,0,1.715,.145,accent);visor.material.emissive=new THREE.Color(options.accent);visor.material.emissiveIntensity=.3}
+  }
+  if(options.cape){
+    const shape=new THREE.Shape();shape.moveTo(-.26,1.48);shape.lineTo(.26,1.48);shape.lineTo(.39,.25);shape.quadraticCurveTo(0,.14,-.39,.25);shape.closePath();
+    const cape=new THREE.Mesh(new THREE.ShapeGeometry(shape),mat(options.secondary));cape.position.z=-.21;group.add(cape);
+  }
+  group.scale.x=options.build||1;
+}
+
   const loader=new GLTFLoader();
   function render(){if(renderer)renderer.render(scene,camera)}
   function applyAppearance(){
    if(!character)return;
    const v=read(),width=v.build==='heavy'?1.12:v.build==='slim'?.9:1;
    character.scale.x=character.userData.baseScale*width;
-   const tint=new THREE.Color(v.primary);
+   const tint=new THREE.Color(v.primary).multiply(new THREE.Color(v.skinTone));
    character.traverse(obj=>{
     if(!obj.isMesh)return;
     const mats=Array.isArray(obj.material)?obj.material:[obj.material];
@@ -944,6 +992,7 @@ No join request sent.
      if(mat.name?.includes('Superhero_')){mat.color.copy(tint);mat.needsUpdate=true}else if(mat.name?.includes('Hair_')){mat.color.set(v.hair);mat.needsUpdate=true}
     }
    });
+   nxCostume(THREE,character,{style:v.suit,primary:v.secondary,accent:v.accent,secondary:v.secondary,mask:v.headgear,emblem:v.emblem,cape:v.cape,build:v.build==='heavy'?1.12:v.build==='slim'?.9:1});
    render();
   }
   async function loadModel(){
