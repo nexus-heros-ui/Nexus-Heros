@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexus Heroes | Live 3D Character Preview</title><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script><style>body{margin:0;background:#080e1b;color:#f2f6ff;font:16px Arial,sans-serif}header{padding:20px 4vw;background:#121e36;border-bottom:1px solid #375783}h1{margin:0;color:#93c5fd}p{color:#c3d4ef}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,1fr);gap:18px;margin:20px auto;max-width:1250px;padding:0 18px}#viewport{height:min(73vh,700px);min-height:420px;border:2px solid #4769a4;border-radius:16px;background:radial-gradient(ellipse at 50% 30%,#2b416c,#0a1020 70%);touch-action:none;overflow:hidden}canvas{width:100%;height:100%;display:block}aside{max-height:82vh;overflow-y:auto;background:#16243c;border-radius:16px;padding:20px}label{display:block;margin:20px 0 7px;font-weight:bold}select,input,button{font:inherit}input[type=range]{width:100%;accent-color:#60a5fa}select,input[type=color]{width:100%;height:44px;border-radius:8px;background:#0b1629;color:white;border:1px solid #6184b4}button,a.button{display:inline-block;background:#2865c9;color:white;padding:12px 16px;border:0;border-radius:9px;text-decoration:none;margin-top:14px;cursor:pointer}#status{color:#aee2ff;min-height:45px}.hint{font-size:14px}a{color:#b7d5ff}@media(max-width:800px){.layout{grid-template-columns:1fr}#viewport{height:52vh;min-height:360px}}</style></head><body><header><h1>⚡ Nexus Heroes — Costume Lab (Preview Only)</h1><p>Preview-only workshop: test eight fitted suit patterns, non-T-pose stances, hairstyles, and animated capes. Your main game is unchanged.</p></header><main class="layout"><div><div id="viewport"></div><p class="hint">Drag to rotate • Scroll to zoom • Change hero model on the right.</p></div><aside><h2>Character Creator</h2><label for="gender">Hero model</label><select id="gender"><option value="Male">Male Superhero</option><option value="Female">Female Superhero</option></select><label for="pose">Hero stance</label><select id="pose"><option value="relaxed">Relaxed hero stance</option><option value="confident">Confident stance</option><option value="action">Action ready</option></select><label for="build">Body build</label><select id="build"><option value="1">Athletic</option><option value="0.9">Slim</option><option value="1.12">Broad</option></select><label for="color">Original body tint</label><input type="color" id="color" value="#ffffff"><label for="skin">Skin tone</label><input type="color" id="skin" value="#ffffff"><p class="hint">Skin tone affects exposed skin. Outfit design changes the fitted bodysuit, not the character’s size.</p><label for="hairstyle">Hairstyle</label><select id="hairstyle"><option value="none">Bald / Original</option><option value="Buzzed">Close Cut</option><option value="SimpleParted">Side Part</option><option value="Long">Long Flowing Hair</option><option value="Buns">Twin Buns</option></select><label for="hair">Hair color</label><input type="color" id="hair" value="#51301d">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexus Heroes | Live 3D Character Preview</title><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script><style>body{margin:0;background:#080e1b;color:#f2f6ff;font:16px Arial,sans-serif}header{padding:20px 4vw;background:#121e36;border-bottom:1px solid #375783}h1{margin:0;color:#93c5fd}p{color:#c3d4ef}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,1fr);gap:18px;margin:20px auto;max-width:1250px;padding:0 18px}#viewport{height:min(73vh,700px);min-height:420px;border:2px solid #4769a4;border-radius:16px;background:radial-gradient(ellipse at 50% 30%,#2b416c,#0a1020 70%);touch-action:none;overflow:hidden}canvas{width:100%;height:100%;display:block}aside{max-height:82vh;overflow-y:auto;background:#16243c;border-radius:16px;padding:20px}label{display:block;margin:20px 0 7px;font-weight:bold}select,input,button{font:inherit}input[type=range]{width:100%;accent-color:#60a5fa}select,input[type=color]{width:100%;height:44px;border-radius:8px;background:#0b1629;color:white;border:1px solid #6184b4}button,a.button{display:inline-block;background:#2865c9;color:white;padding:12px 16px;border:0;border-radius:9px;text-decoration:none;margin-top:14px;cursor:pointer}#status{color:#aee2ff;min-height:45px}.hint{font-size:14px}a{color:#b7d5ff}@media(max-width:800px){.layout{grid-template-columns:1fr}#viewport{height:52vh;min-height:360px}}</style></head><body><header><h1>⚡ Nexus Heroes — Costume Lab (Preview Only)</h1><p>Preview-only workshop (Pose Fix v3 (reversed arm direction)): test eight fitted suit patterns, non-T-pose stances, hairstyles, and animated capes. Your main game is unchanged.</p></header><main class="layout"><div><div id="viewport"></div><p class="hint">Drag to rotate • Scroll to zoom • Change hero model on the right.</p></div><aside><h2>Character Creator</h2><label for="gender">Hero model</label><select id="gender"><option value="Male">Male Superhero</option><option value="Female">Female Superhero</option></select><label for="pose">Hero stance</label><select id="pose"><option value="relaxed">Relaxed hero stance</option><option value="confident">Confident stance</option><option value="action">Action ready</option></select><label for="build">Body build</label><select id="build"><option value="1">Athletic</option><option value="0.9">Slim</option><option value="1.12">Broad</option></select><label for="color">Original body tint</label><input type="color" id="color" value="#ffffff"><label for="skin">Skin tone</label><input type="color" id="skin" value="#ffffff"><p class="hint">Skin tone affects exposed skin. Outfit design changes the fitted bodysuit, not the character’s size.</p><label for="hairstyle">Hairstyle</label><select id="hairstyle"><option value="none">Bald / Original</option><option value="Buzzed">Close Cut</option><option value="SimpleParted">Side Part</option><option value="Long">Long Flowing Hair</option><option value="Buns">Twin Buns</option></select><label for="hair">Hair color</label><input type="color" id="hair" value="#51301d">
 <label for="outfit">Outfit collection — 8 fitted suit designs</label><select id="outfit"><option value="none">Original model</option><option value="classic">Classic Comic Hero</option><option value="armor">Armored Guardian</option><option value="tactical">Tactical Defender</option><option value="cosmic">Cosmic Champion</option><option value="speedster">Velocity Runner</option><option value="shadow">Shadow Vigilante</option><option value="royal">Royal Sentinel</option><option value="tech">Tech Vanguard</option></select>
 <label for="outfitColor">Outfit color</label><input id="outfitColor" type="color" value="#2563eb">
 <label for="accentColor">Accent / emblem color</label><input id="accentColor" type="color" value="#facc15">
@@ -156,30 +156,52 @@ async function loadHair(){
   hero.add(obj);activeHair=obj;draw();
  }catch(e){console.warn('Hairstyle missing',e);status.textContent='Hairstyle files missing. Upload the included assets/heroes/hair folder.'}
 }
+// Pose v4: aim actual shoulder-to-elbow bones, not assumed local/world axes.
+// This works with Quaternius's rotated upper-arm bind transforms.
 let poseBones=null;
+const vUp=new THREE.Vector3(0,1,0), vDown=new THREE.Vector3(), vArm=new THREE.Vector3();
+const qBone=new THREE.Quaternion(),qParent=new THREE.Quaternion(),qHero=new THREE.Quaternion();
+const qCorrection=new THREE.Quaternion(),qDelta=new THREE.Quaternion();
 function setupPose(){
-  if(!hero)return;
-  const names=['upperarm_l','upperarm_r','lowerarm_l','lowerarm_r','spine_01','thigh_l','thigh_r'];
   poseBones={};
-  hero.traverse(o=>{if(o.isBone&&names.includes(o.name))poseBones[o.name]={bone:o,base:o.quaternion.clone()}});
+  hero.traverse(o=>{if(o.isBone&&['upperarm_l','upperarm_r'].includes(o.name)){
+    poseBones[o.name]={bone:o,base:o.quaternion.clone()};
+  }});
+  if(!poseBones.upperarm_l||!poseBones.upperarm_r)
+    status.textContent='Arm pose bones not found; please send a screenshot.';
 }
 function animatePose(t){
- if(!poseBones)return;
- const mode=document.getElementById('pose').value;
- const sway=Math.sin(t*1.25)*.012;
- const amount=mode==='action'?.83:mode==='confident'?.56:.68;
- for(const [name,data] of Object.entries(poseBones)){
-  const {bone,base}=data;bone.quaternion.copy(base);
-  if(name==='upperarm_l'||name==='upperarm_r'){
-   const sign=name.endsWith('_l')?1:-1;
-   bone.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),sign*(amount+sway)));
+  if(!poseBones||!hero)return;
+  const mode=document.getElementById('pose').value;
+  const out=mode==='action'?.42:mode==='confident'?.22:.13;
+  const sway=Math.sin(t*1.2)*.012;
+  for(const data of Object.values(poseBones))data.bone.quaternion.copy(data.base);
+  hero.updateMatrixWorld(true);
+  hero.getWorldQuaternion(qHero);
+  const xAxis=new THREE.Vector3(1,0,0).applyQuaternion(qHero);
+  const target=new THREE.Vector3();
+  const from=new THREE.Vector3();
+  const shoulder=new THREE.Vector3();
+  const elbow=new THREE.Vector3();
+  for(const name of ['upperarm_l','upperarm_r']){
+    const data=poseBones[name];if(!data)continue;
+    const bone=data.bone;
+    const child=bone.children.find(c=>c.isBone && c.name.startsWith('lowerarm'));
+    if(!child)continue;
+    // Use actual shoulder-to-elbow direction, not the bone's local Y.
+    // The source rig rotates upper-arm local axes into its bind pose.
+    bone.getWorldPosition(shoulder);
+    child.getWorldPosition(elbow);
+    from.subVectors(elbow,shoulder).normalize();
+    const side=name.endsWith('_l')?-1:1;
+    target.set(0,-1,0).addScaledVector(xAxis,side*(out+sway)).normalize();
+    target.applyQuaternion(qHero); // target down follows model rotation
+    qDelta.setFromUnitVectors(from,target);
+    bone.parent.getWorldQuaternion(qParent);
+    qCorrection.copy(qParent).invert().multiply(qDelta).multiply(qParent);
+    bone.quaternion.premultiply(qCorrection);
+    hero.updateMatrixWorld(true);
   }
-  if(name==='lowerarm_l'||name==='lowerarm_r'){
-   const sign=name.endsWith('_l')?1:-1;
-   bone.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),sign*(mode==='action'?.25:.08)));
-  }
-  if(name==='spine_01')bone.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),sway));
- }
 }
 function animateCape(time){
  if(!activeCape)return;
