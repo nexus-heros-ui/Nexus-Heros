@@ -1,17 +1,17 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexus Heroes | Live 3D Character Preview</title><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script><style>body{margin:0;background:#080e1b;color:#f2f6ff;font:16px Arial,sans-serif}header{padding:20px 4vw;background:#121e36;border-bottom:1px solid #375783}h1{margin:0;color:#93c5fd}p{color:#c3d4ef}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,1fr);gap:18px;margin:20px auto;max-width:1250px;padding:0 18px}#viewport{height:min(73vh,700px);min-height:420px;border:2px solid #4769a4;border-radius:16px;background:radial-gradient(ellipse at 50% 30%,#2b416c,#0a1020 70%);touch-action:none;overflow:hidden}canvas{width:100%;height:100%;display:block}aside{background:#16243c;border-radius:16px;padding:20px}label{display:block;margin:20px 0 7px;font-weight:bold}select,input,button{font:inherit}select,input[type=color]{width:100%;height:44px;border-radius:8px;background:#0b1629;color:white;border:1px solid #6184b4}button,a.button{display:inline-block;background:#2865c9;color:white;padding:12px 16px;border:0;border-radius:9px;text-decoration:none;margin-top:14px;cursor:pointer}#status{color:#aee2ff;min-height:45px}.hint{font-size:14px}a{color:#b7d5ff}@media(max-width:800px){.layout{grid-template-columns:1fr}#viewport{height:52vh;min-height:360px}}</style></head><body><header><h1>⚡ Nexus Heroes — 3D Character Preview</h1><p>See the actual Quaternius male and female superhero models before using them in the full game.</p></header><main class="layout"><div><div id="viewport"></div><p class="hint">Drag to rotate • Scroll to zoom • Change hero model on the right.</p></div><aside><h2>Character Creator</h2><label for="gender">Hero model</label><select id="gender"><option value="Male">Male Superhero</option><option value="Female">Female Superhero</option></select><label for="build">Body build</label><select id="build"><option value="1">Athletic</option><option value="0.9">Slim</option><option value="1.12">Broad</option></select><label for="color">Original body tint</label><input type="color" id="color" value="#ffffff"><label for="skin">Skin tone</label><input type="color" id="skin" value="#ffffff"><p class="hint">Skin tone affects exposed skin. Outfit design changes the fitted bodysuit, not the character’s size.</p><label for="hair">Hair color</label><input type="color" id="hair" value="#ffffff">
-<label for="outfit">Outfit design</label><select id="outfit"><option value="none">Original model</option><option value="classic">Classic Comic Hero</option><option value="armor">Armored Guardian</option><option value="tactical">Tactical Defender</option><option value="cosmic">Cosmic Champion</option></select>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nexus Heroes | Live 3D Character Preview</title><script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script><style>body{margin:0;background:#080e1b;color:#f2f6ff;font:16px Arial,sans-serif}header{padding:20px 4vw;background:#121e36;border-bottom:1px solid #375783}h1{margin:0;color:#93c5fd}p{color:#c3d4ef}.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,1fr);gap:18px;margin:20px auto;max-width:1250px;padding:0 18px}#viewport{height:min(73vh,700px);min-height:420px;border:2px solid #4769a4;border-radius:16px;background:radial-gradient(ellipse at 50% 30%,#2b416c,#0a1020 70%);touch-action:none;overflow:hidden}canvas{width:100%;height:100%;display:block}aside{max-height:82vh;overflow-y:auto;background:#16243c;border-radius:16px;padding:20px}label{display:block;margin:20px 0 7px;font-weight:bold}select,input,button{font:inherit}input[type=range]{width:100%;accent-color:#60a5fa}select,input[type=color]{width:100%;height:44px;border-radius:8px;background:#0b1629;color:white;border:1px solid #6184b4}button,a.button{display:inline-block;background:#2865c9;color:white;padding:12px 16px;border:0;border-radius:9px;text-decoration:none;margin-top:14px;cursor:pointer}#status{color:#aee2ff;min-height:45px}.hint{font-size:14px}a{color:#b7d5ff}@media(max-width:800px){.layout{grid-template-columns:1fr}#viewport{height:52vh;min-height:360px}}</style></head><body><header><h1>⚡ Nexus Heroes — 3D Character Preview</h1><p>See the actual Quaternius male and female superhero models before using them in the full game.</p></header><main class="layout"><div><div id="viewport"></div><p class="hint">Drag to rotate • Scroll to zoom • Change hero model on the right.</p></div><aside><h2>Character Creator</h2><label for="gender">Hero model</label><select id="gender"><option value="Male">Male Superhero</option><option value="Female">Female Superhero</option></select><label for="build">Body build</label><select id="build"><option value="1">Athletic</option><option value="0.9">Slim</option><option value="1.12">Broad</option></select><label for="color">Original body tint</label><input type="color" id="color" value="#ffffff"><label for="skin">Skin tone</label><input type="color" id="skin" value="#ffffff"><p class="hint">Skin tone affects exposed skin. Outfit design changes the fitted bodysuit, not the character’s size.</p><label for="hairstyle">Hairstyle</label><select id="hairstyle"><option value="none">Bald / Original</option><option value="Buzzed">Close Cut</option><option value="SimpleParted">Side Part</option><option value="Long">Long Flowing Hair</option><option value="Buns">Twin Buns</option></select><label for="hair">Hair color</label><input type="color" id="hair" value="#51301d">
+<label for="outfit">Outfit design — fitted texture, not block armor</label><select id="outfit"><option value="none">Original model</option><option value="classic">Classic Comic Hero</option><option value="armor">Armored Guardian</option><option value="tactical">Tactical Defender</option><option value="cosmic">Cosmic Champion</option></select>
 <label for="outfitColor">Outfit color</label><input id="outfitColor" type="color" value="#2563eb">
 <label for="accentColor">Accent / emblem color</label><input id="accentColor" type="color" value="#facc15">
 <label for="capeColor">Cape color</label><input id="capeColor" type="color" value="#be123c">
 <label for="headgear">Headgear</label><select id="headgear"><option value="none">None</option><option value="mask">Mask</option><option value="helmet">Helmet</option></select>
 <label for="emblem">Chest emblem</label><select id="emblem"><option value="star">Star</option><option value="bolt">Lightning Bolt</option><option value="shield">Shield</option><option value="none">None</option></select>
-<label><input id="cape" type="checkbox"> Add cape</label>
+<label><input id="cape" type="checkbox"> Add animated flowing cape</label><label for="wind">Cape movement</label><input type="range" id="wind" min="0" max="100" value="55"><p class="hint">Cloth-like wind animation (visual preview; not a physics simulation).</p>
 <label for="backdrop">Background</label><select id="backdrop"><option value="blue">Nexus Blue</option><option value="purple">Cosmic Purple</option><option value="black">Shadow Black</option></select>
-<button id="reset">Reset appearance</button><button id="save">Save look on this device</button><button id="photo">Save avatar picture</button><p id="status">Loading 3D engine…</p><a class="button" href="index.html">Open Full Nexus Heroes Game →</a><p class="hint">This preview uses the real downloaded models. Suit colors and panels are applied directly to the rigged character surface. The optional cape and emblem are preview-only attachments; they do not yet follow animation.</p></aside></main><script type="module">
+<button id="reset">Reset appearance</button><button id="save">Save look on this device</button><button id="photo">Save avatar picture</button><p id="status">Loading 3D engine…</p><a class="button" href="index.html">Open Full Nexus Heroes Game →</a><p class="hint">This preview uses the real downloaded models. Outfit colors and pattern bands are drawn on the original character mesh. Cape waves in the preview; it is not physically simulated or rigged for combat animations. Hairstyle models are from the Quaternius pack.</p></aside></main><script type="module">
 import * as THREE from 'three';
 import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/loaders/GLTFLoader.js';
 const el=document.getElementById('viewport'),status=document.getElementById('status'),gender=document.getElementById('gender'),build=document.getElementById('build'),color=document.getElementById('color');
-const skin=document.getElementById('skin'),hair=document.getElementById('hair'),backdrop=document.getElementById('backdrop');const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(40,1,.1,100);let renderer,hero=null,angle=0,zoom=6,request=0,drag=false,last=0;
+const skin=document.getElementById('skin'),hair=document.getElementById('hair'),backdrop=document.getElementById('backdrop');const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(40,1,.1,100);let renderer,hero=null,angle=0,zoom=6,request=0,drag=false,last=0,activeCape=null,activeHair=null,hairRequest=0;const hairstyle=document.getElementById('hairstyle'),wind=document.getElementById('wind');
 try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;el.appendChild(renderer.domElement)}catch(e){status.textContent='WebGL unavailable: '+e.message;throw e}
 scene.add(new THREE.HemisphereLight(0xffffff,0x304164,2.2));let light=new THREE.DirectionalLight(0xffffff,3);light.position.set(4,7,5);scene.add(light);light=new THREE.DirectionalLight(0x80baff,1.4);light.position.set(-4,5,-4);scene.add(light);const pedestal=new THREE.Mesh(new THREE.CylinderGeometry(1.4,1.5,.15,48),new THREE.MeshStandardMaterial({color:0x213454}));pedestal.position.y=-.09;scene.add(pedestal);
 
@@ -23,7 +23,7 @@ function installSuitMaterial(root){
   if(!o.isMesh)return;
   const apply=m=>{
    if(!m.name?.includes('Superhero_'))return m;
-   const c=m.clone();c.name='NX_Fitted_'+m.name;c.color.set('#ffffff');
+   const c=m.clone();c.name='NX_Fitted_'+m.name;c.color.set('#ffffff');c.metalness=.12;c.roughness=.68;
    c.onBeforeCompile=shader=>{
     Object.assign(shader.uniforms,outfitUniforms);
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vNxRest;');
@@ -85,7 +85,7 @@ function nxCostume(THREE,root,options){
  outfitUniforms.uSuit.value.set(options.primary);
  outfitUniforms.uAccent.value.set(options.accent);
  outfitUniforms.uSkin.value.set(skin.value);
- if(options.style==='none')return;
+ if(options.style==='none'){activeCape=null;return;}
  const group=new THREE.Group();group.name='NexusCostume';root.add(group);
  // Only emblem and optional cape are added geometry; the actual costume follows
  // the character's skinned mesh, so it cannot float as rectangular blocks.
@@ -100,13 +100,45 @@ function nxCostume(THREE,root,options){
   shape.closePath();const symbol=new THREE.Mesh(new THREE.ShapeGeometry(shape),emblemMat);
   symbol.position.set(0,1.36,.142);group.add(symbol);
  }
- if(options.cape){
-  const shape=new THREE.Shape();shape.moveTo(-.21,1.47);shape.lineTo(.21,1.47);shape.lineTo(.30,.32);shape.quadraticCurveTo(0,.23,-.30,.32);shape.closePath();
-  const cape=new THREE.Mesh(new THREE.ShapeGeometry(shape),new THREE.MeshStandardMaterial({color:options.secondary,side:THREE.DoubleSide,roughness:.88}));cape.position.z=-.18;group.add(cape);
- }
+  if(options.cape){
+   const w=.62,h=1.15,cols=18,rows=28;
+   const geo=new THREE.PlaneGeometry(w,h,cols,rows);
+   // Anchor the cape at the shoulder blades, extending downward.
+   geo.translate(0,-h/2,0);
+   const cape=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color:options.secondary,side:THREE.DoubleSide,roughness:.82,metalness:.04}));
+   cape.name='NexusFlowCape';cape.position.set(0,1.48,-.18);
+   cape.userData.original=Float32Array.from(geo.attributes.position.array);
+   group.add(cape);activeCape=cape;
+  }else activeCape=null;
 }
 
-const loader=new GLTFLoader();function draw(){renderer.render(scene,camera)}function resize(){const b=el.getBoundingClientRect();camera.aspect=b.width/b.height;camera.updateProjectionMatrix();renderer.setSize(b.width,b.height,false);draw()}new ResizeObserver(resize).observe(el);
+const loader=new GLTFLoader();
+async function loadHair(){
+ const req=++hairRequest;const style=hairstyle.value;
+ if(activeHair&&hero){hero.remove(activeHair);activeHair=null}
+ if(!hero||style==='none'){draw();return}
+ try{
+  const result=await loader.loadAsync('assets/heroes/hair/Hair_'+style+'.gltf');
+  if(req!==hairRequest||!hero)return;
+  const obj=result.scene;obj.name='NexusHairstyle';
+  // The Quaternius Origin-at-0 hairstyles use the same coordinate system as the body.
+  obj.traverse(o=>{if(o.isMesh){o.material=o.material.clone();o.material.color.set(hair.value);o.material.needsUpdate=true}});
+  hero.add(obj);activeHair=obj;draw();
+ }catch(e){console.warn('Hairstyle missing',e);status.textContent='Hairstyle files missing. Upload the included assets/heroes/hair folder.'}
+}
+function animateCape(time){
+ if(!activeCape)return;
+ const a=activeCape.geometry.attributes.position,src=activeCape.userData.original;
+ const strength=Number(wind.value)/100;
+ for(let i=0;i<a.count;i++){
+  const x=src[i*3],y=src[i*3+1];const t=Math.max(0,Math.min(1,-y/1.15));
+  a.setXYZ(i,x+Math.sin(time*1.7+t*5+x*4)*(.045+.085*t)*t*strength,y, -t*t*(.08+.15*strength)+Math.sin(time*2.4+t*8+x*3)*.12*t*strength);
+ }
+ a.needsUpdate=true;activeCape.geometry.computeVertexNormals();
+}
+function frame(time){animateCape(time*.001);draw();requestAnimationFrame(frame)}
+requestAnimationFrame(frame);
+function draw(){renderer.render(scene,camera)}function resize(){const b=el.getBoundingClientRect();camera.aspect=b.width/b.height;camera.updateProjectionMatrix();renderer.setSize(b.width,b.height,false);draw()}new ResizeObserver(resize).observe(el);
 function costumeOptions(){return {style:document.getElementById('outfit').value,primary:document.getElementById('outfitColor').value,accent:document.getElementById('accentColor').value,secondary:document.getElementById('capeColor').value,mask:document.getElementById('headgear').value,emblem:document.getElementById('emblem').value,cape:document.getElementById('cape').checked,build:Number(build.value)}}
 function update(){if(!hero)return;hero.scale.x=hero.userData.scale*Number(build.value);const tint=new THREE.Color(color.value);hero.traverse(o=>{if(o.isMesh){const materials=Array.isArray(o.material)?o.material:[o.material];materials.forEach(m=>{if(m.name?.includes('Superhero_') && !m.name?.startsWith('NX_Fitted_')){m.color.copy(tint);m.needsUpdate=true}else if(m.name?.includes('Hair_')){m.color.set(hair.value);m.needsUpdate=true}})}});nxCostume(THREE,hero,costumeOptions());draw()}
 async function load(){const id=++request;status.textContent='Loading '+gender.value+' superhero…';try{const gltf=await loader.loadAsync('assets/heroes/Superhero_'+gender.value+'_FullBody.gltf');if(id!==request)return;if(hero)scene.remove(hero);hero=gltf.scene;// Quaternius full-body meshes are authored in meters (about 1.8 tall).
@@ -122,13 +154,13 @@ camera.position.set(0,0.95,zoom);
 camera.lookAt(0,0.95,0);
 camera.near=0.05;camera.far=100;camera.updateProjectionMatrix();
 window.nexusPreviewCenter=new THREE.Vector3(0,0.95,0);
-update();status.textContent=gender.value+' superhero loaded successfully.'}catch(e){console.error(e);status.textContent='Model failed to load. Use a local web server or GitHub Pages and keep the assets folder next to this HTML. '+e.message}}
+update();await loadHair();status.textContent=gender.value+' superhero loaded successfully.'}catch(e){console.error(e);status.textContent='Model failed to load. Use a local web server or GitHub Pages and keep the assets folder next to this HTML. '+e.message}}
 const backgrounds={blue:['#2b416c','#0a1020'],purple:['#483069','#110a25'],black:['#263043','#030409']};
 function updateBackground(){const c=backgrounds[backdrop.value]||backgrounds.blue;el.style.background=`radial-gradient(ellipse at 50% 30%,${c[0]},${c[1]} 70%)`}
-function saveLook(){localStorage.setItem('nexusHeroPreviewAppearance',JSON.stringify({gender:gender.value,build:build.value,color:color.value,skin:skin.value,hair:hair.value,backdrop:backdrop.value,...costumeOptions()}));status.textContent='Appearance saved in this browser.'}
+function saveLook(){localStorage.setItem('nexusHeroPreviewAppearance',JSON.stringify({gender:gender.value,build:build.value,color:color.value,skin:skin.value,hair:hair.value,hairstyle:hairstyle.value,wind:wind.value,backdrop:backdrop.value,...costumeOptions()}));status.textContent='Appearance saved in this browser.'}
 document.getElementById('save').onclick=saveLook;
 document.getElementById('photo').onclick=()=>{draw();const a=document.createElement('a');a.href=renderer.domElement.toDataURL('image/png');a.download='nexus-hero-avatar.png';a.click()};
-try{const v=JSON.parse(localStorage.getItem('nexusHeroPreviewAppearance')||'null');if(v){if(['Male','Female'].includes(v.gender))gender.value=v.gender;if(['1','0.9','1.12'].includes(v.build))build.value=v.build;if(/^#[0-9a-f]{6}$/i.test(v.color||''))color.value=v.color;if(/^#[0-9a-f]{6}$/i.test(v.hair||''))hair.value=v.hair;if(/^#[0-9a-f]{6}$/i.test(v.skin||''))skin.value=v.skin;if(backgrounds[v.backdrop])backdrop.value=v.backdrop;const fields={outfit:'style',outfitColor:'primary',accentColor:'accent',capeColor:'secondary',headgear:'mask',emblem:'emblem'};for(const [id,key] of Object.entries(fields)){if(v[key]!==undefined)document.getElementById(id).value=v[key]}document.getElementById('cape').checked=!!v.cape}}catch(e){}
-for(const id of ['outfit','outfitColor','accentColor','capeColor','headgear','emblem','cape'])document.getElementById(id).addEventListener('input',update);skin.addEventListener('input',update);hair.addEventListener('input',update);backdrop.addEventListener('change',updateBackground);updateBackground();
-gender.addEventListener('change',load);build.addEventListener('change',update);color.addEventListener('input',update);document.getElementById('reset').onclick=()=>{build.value='1';document.getElementById('outfit').value='none';document.getElementById('cape').checked=false;color.value='#ffffff';hair.value='#ffffff';skin.value='#ffffff';backdrop.value='blue';updateBackground();angle=0;if(hero)hero.rotation.y=0;update()};el.addEventListener('pointerdown',e=>{drag=true;last=e.clientX;el.setPointerCapture(e.pointerId)});el.addEventListener('pointermove',e=>{if(!drag)return;angle+=(e.clientX-last)*.009;last=e.clientX;if(hero)hero.rotation.y=angle;draw()});el.addEventListener('pointerup',()=>drag=false);el.addEventListener('pointercancel',()=>drag=false);el.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(3.6,Math.min(11,zoom+e.deltaY*.006));camera.position.z=(window.nexusPreviewCenter?.z||0)+zoom;draw()},{passive:false});resize();load();
+try{const v=JSON.parse(localStorage.getItem('nexusHeroPreviewAppearance')||'null');if(v){if(['Male','Female'].includes(v.gender))gender.value=v.gender;if(['1','0.9','1.12'].includes(v.build))build.value=v.build;if(/^#[0-9a-f]{6}$/i.test(v.color||''))color.value=v.color;if(/^#[0-9a-f]{6}$/i.test(v.hair||''))hair.value=v.hair;if(/^#[0-9a-f]{6}$/i.test(v.skin||''))skin.value=v.skin;if(backgrounds[v.backdrop])backdrop.value=v.backdrop;if(['none','Buzzed','SimpleParted','Long','Buns'].includes(v.hairstyle))hairstyle.value=v.hairstyle;if(v.wind!==undefined)wind.value=v.wind;const fields={outfit:'style',outfitColor:'primary',accentColor:'accent',capeColor:'secondary',headgear:'mask',emblem:'emblem'};for(const [id,key] of Object.entries(fields)){if(v[key]!==undefined)document.getElementById(id).value=v[key]}document.getElementById('cape').checked=!!v.cape}}catch(e){}
+for(const id of ['outfit','outfitColor','accentColor','capeColor','headgear','emblem','cape'])document.getElementById(id).addEventListener('input',update);skin.addEventListener('input',update);hair.addEventListener('input',update);hairstyle.addEventListener('change',loadHair);wind.addEventListener('input',draw);backdrop.addEventListener('change',updateBackground);updateBackground();
+gender.addEventListener('change',load);build.addEventListener('change',update);color.addEventListener('input',update);document.getElementById('reset').onclick=()=>{build.value='1';document.getElementById('outfit').value='none';document.getElementById('cape').checked=false;color.value='#ffffff';hair.value='#51301d';hairstyle.value='none';loadHair();skin.value='#ffffff';backdrop.value='blue';updateBackground();angle=0;if(hero)hero.rotation.y=0;update()};el.addEventListener('pointerdown',e=>{drag=true;last=e.clientX;el.setPointerCapture(e.pointerId)});el.addEventListener('pointermove',e=>{if(!drag)return;angle+=(e.clientX-last)*.009;last=e.clientX;if(hero)hero.rotation.y=angle;draw()});el.addEventListener('pointerup',()=>drag=false);el.addEventListener('pointercancel',()=>drag=false);el.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(3.6,Math.min(11,zoom+e.deltaY*.006));camera.position.z=(window.nexusPreviewCenter?.z||0)+zoom;draw()},{passive:false});resize();load();
 </script></body></html>
