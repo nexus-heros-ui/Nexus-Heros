@@ -691,7 +691,6 @@ input,select{
 #rulebookPortal .nexus-manual-extra li{margin:6px 0}
 @media(max-width:700px){#gmPortal{width:100%}#gmPortal>.card{padding:9px}}
 </style>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script>
 </head>
 
 <body>
@@ -896,34 +895,7 @@ No join request sent.
 <button onclick="spinWeaknessWheel()">🎡 Spin Weakness</button>
 </div>
 
-<!-- NEXUS HEROES 3D APPEARANCE STUDIO: START -->
-<style>
-#nx3d-studio{background:linear-gradient(145deg,#101a35,#111827);color:#e5edff;border:1px solid #4166ac;border-radius:15px;padding:18px;margin:20px 0;font-family:Arial,sans-serif}
-#nx3d-studio *{box-sizing:border-box}#nx3d-studio .nx3d-future{display:block}#nx3d-studio h2{color:#8fd4ff;margin:0 0 10px}#nx3d-studio .nx3d-layout{display:grid;grid-template-columns:minmax(240px,1.2fr) minmax(240px,1fr);gap:16px}#nx3d-stage{height:430px;background:radial-gradient(ellipse at 50% 35%,#253d69,#070e1d 75%);border:1px solid #38537f;border-radius:12px;position:relative;overflow:hidden;touch-action:none}#nx3d-stage canvas{display:block;width:100%;height:100%}#nx3d-studio label{display:block;margin:10px 0 5px;font-size:13px;color:#bcd2ff}#nx3d-studio select,#nx3d-studio input[type=color]{width:100%;min-height:36px;border-radius:6px;background:#172b4c;color:white;border:1px solid #5575a9;padding:5px}#nx3d-studio input[type=color]{padding:2px}#nx3d-studio button{background:#205bc0;color:white;border:1px solid #6ba8ff;border-radius:7px;padding:10px 12px;margin:5px 5px 5px 0;cursor:pointer}#nx3d-studio button:hover{background:#3476e9}#nx3d-studio button:disabled{opacity:.45;cursor:not-allowed}#nx3d-studio .nx3d-hint{font-size:12px;color:#afc6e5}#nx3d-status{min-height:22px;color:#bce6ff;font-size:13px}#nx3d-studio .nx3d-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}#nx3d-studio .nx3d-check{display:flex;align-items:center;gap:8px}#nx3d-studio .nx3d-check input{width:auto}#nx3d-studio .nx3d-check label{margin:0}#nx3d-studio .nx3d-portrait{max-width:95px;max-height:95px;border-radius:8px;margin-top:8px} @media(max-width:760px){#nx3d-studio .nx3d-layout{grid-template-columns:1fr}#nx3d-stage{height:350px}}
-</style>
-<section id="nx3d-studio" aria-label="3D Hero Appearance Studio" style="max-width:1400px;margin:22px auto;padding:16px;border:1px solid #5677b1;border-radius:16px;background:#111f38;color:#eaf2ff">
-<h2>🦸 Nexus Heroes — Outfit & Appearance Creator</h2>
-<p>Customize your hero after completing the Species and Origin wheels. Outfits are painted onto the character mesh instead of floating armor blocks.</p>
-<iframe title="Nexus Heroes 3D Character Creator" src="preview.html" style="width:100%;height:830px;border:0;border-radius:12px;background:#080e1b" loading="lazy"></iframe>
-<p>Choose your hairstyle, costume, colors and flowing cape in the preview above. Click <strong>Save look on this device</strong> inside the creator first, then click below to attach the look to your saved hero.</p>
-<button type="button" id="nx-new-save" style="padding:12px 18px;background:#2865c9;color:white;border:0;border-radius:9px;cursor:pointer">💾 Attach Appearance to Saved Hero</button>
-<p id="nx-new-status" aria-live="polite"></p>
-</section>
-<script>
-document.getElementById('nx-new-save').addEventListener('click',()=>{
- const status=document.getElementById('nx-new-status');
- try{
-  const appearance=JSON.parse(localStorage.getItem('nexusHeroPreviewAppearance')||'null');
-  const saved=JSON.parse(localStorage.getItem('savedHero')||'null');
-  if(!appearance){status.textContent='Save your look inside the creator first.';return}
-  if(!saved){status.textContent='Generate and save your hero in the Hero Sheet first.';return}
-  saved.appearance3D={version:3,...appearance};
-  localStorage.setItem('savedHero',JSON.stringify(saved));
-  status.textContent='Appearance attached to your saved hero on this device.';
- }catch(err){status.textContent='Could not save appearance: '+err.message}
-});
-</script>
-<!-- NEXUS HEROES 3D APPEARANCE STUDIO: END -->
+
 <div class="card">
 <h2>Hero Sheet</h2>
 
@@ -3901,8 +3873,7 @@ function getCurrentHeroForMultiplayer(){
        equipment:document.getElementById("equipment").innerText,
        weaknesses:document.getElementById("weaknesses").innerText,
 
-       markerStyle:getSelectedMarkerStyle(),
-       appearance3D:(function(){try{const h=JSON.parse(localStorage.getItem("savedHero")||"null");return h && h.name===heroName ? (h.appearance3D||null) : null}catch(e){return null}})()
+       markerStyle:getSelectedMarkerStyle()
     };
 }
 
