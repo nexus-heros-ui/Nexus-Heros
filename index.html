@@ -777,6 +777,7 @@ input,select{
 <button onclick="loadHero()">📂 Load Hero</button>
 </div>
 
+<section class="card" id="nexusSoloMode" style="text-align:left;border:2px solid #22c55e"><h2>🎮 No-GM Adventure — Solo / Local Co-op</h2><p>Play without a Game Master or Firebase. Generate a hero above, then start an encounter. Enemy turns, damage, shields, and status effects use the regular combat engine.</p><div id="nexusSoloStatus" class="game-panel" aria-live="polite">Ready to start a local adventure.</div><button onclick="nexusSoloStart()">▶ Start No-GM Encounter</button><button onclick="nexusSoloAddHero()">➕ Add Current Hero</button><button onclick="nexusSoloNextEncounter()">👹 Next Enemy</button><div id="nexusSoloActions" style="display:none"><h3>Choose your hero's action</h3><div id="nexusSoloTurn" class="result"></div><button onclick="nexusSoloAction('Attack')">⚔ Attack</button><button onclick="nexusSoloAction('Heavy Attack')">💥 Heavy Attack</button><button onclick="nexusSoloAction('Power Attack')">✨ Power Attack</button><button onclick="nexusSoloAction('Defend')">🛡 Defend</button><button onclick="nexusSoloAction('Heal')">💚 Heal</button><button onclick="nexusSoloAction('Dodge')">💨 Dodge</button></div><div id="nexusSoloLog" class="game-panel" style="white-space:pre-wrap;max-height:260px;overflow:auto">No encounter started.</div></section>
 <div class="card">
 <h2>🌍 Join Multiplayer World</h2>
 
@@ -9556,6 +9557,28 @@ document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if(
   if(sharedWorldRole==='gm')window.nexusV9Unsub=worldRef.collection('combatActions').where('status','==','pending').onSnapshot(s=>s.docs.forEach(d=>window.nexusV9Resolve(d)),e=>console.warn('V9 action listener:',e));
  };
  document.addEventListener('DOMContentLoaded',()=>setTimeout(window.nexusV9Refresh,400));
+})();
+</script>
+<script id="nexusV10Solo">
+/* V10 local no-GM gameplay. Uses existing combat turn order, damage and enemy AI. */
+(function(){
+ 'use strict';
+ let solo=false,wins=0;
+ const $=id=>document.getElementById(id);
+ const status=s=>{if($('nexusSoloStatus'))$('nexusSoloStatus').textContent=s;};
+ const write=s=>{const el=$('nexusSoloLog');if(el)el.textContent=s+'\n'+el.textContent.slice(0,4500);};
+ const playerName=()=>String($('name')?.textContent||'').trim();
+ function ensureLocal(){if(typeof sharedWorldRole!=='undefined'&&sharedWorldRole==='gm'&&typeof getSharedWorldRef==='function'&&getSharedWorldRef()){status('Disconnect your hosted multiplayer world before starting a local adventure.');return false;}return true;}
+ function addHero(){const name=playerName();if(!name||name==='--'){status('Generate or load a hero first in the Hero Generator.');return false;}if(managedPlayers.some(p=>p.name===name)){status(name+' is already in the party.');return true;}managedPlayers.push({name,heroClass:$('heroClass')?.textContent||'Hero',rank:$('rank')?.textContent||'Hero',location:'Nexus City',health:100,maxHealth:100,energy:100,shield:0,status:'Ready',turn:'Waiting',nxcEffects:[]});updatePlayerManager();refreshCombatSelectors();return true;}
+ function newEnemy(){const level=Math.min(4,Math.floor(wins/2));const types=['Minion','Elite','Villain','Boss','Cosmic Threat'];const hp=[40,80,120,250,500][level];const enemy={name:types[level]+' Encounter '+(wins+1),type:types[level],health:hp,maxHealth:hp,energy:60+level*40,shield:level*8,aiStyle:level%2?'Tactical':'Aggressive',status:'Ready',attacks:[{name:'Strike',damage:10+level*4,energyCost:0,cooldown:0},{name:'Power Blast',damage:16+level*5,energyCost:10,cooldown:2,effect:level>=1?'Weakness':'',duration:2}]};enemies.push(enemy);updateEnemyManager();refreshCombatSelectors();write('👹 '+enemy.name+' appears!');}
+ function render(){if(!solo)return;const aliveHeroes=managedPlayers.filter(p=>p.health>0),aliveEnemies=enemies.filter(e=>e.health>0);if(!aliveHeroes.length){status('Party defeated. Start another encounter to retry.');resetTurns();$('nexusSoloActions').style.display='none';return;}if(!aliveEnemies.length){if(combatActive)resetTurns();wins++;status('🏆 Victory! '+wins+' encounter(s) won. Select Next Enemy to continue.');$('nexusSoloActions').style.display='none';return;}const actor=combatActive?turnOrder[currentTurnIndex]:null;status('Round '+combatRound+' | '+aliveHeroes.map(p=>p.name+': '+p.health+' HP').join(', ')+' | '+aliveEnemies.map(e=>e.name+': '+e.health+' HP').join(', '));$('nexusSoloTurn').textContent=actor?'Current turn: '+actor.name:'No turn active';$('nexusSoloActions').style.display=actor&&managedPlayers.includes(actor)?'block':'none';}
+ window.nexusSoloAddHero=function(){if(!ensureLocal())return;addHero();render();};
+ window.nexusSoloStart=function(){if(!ensureLocal())return;if(combatActive){status('Finish the current combat first.');return;}solo=true;wins=0;managedPlayers.length=0;enemies.length=0;if(!addHero())return;newEnemy();startTurns();render();};
+ window.nexusSoloNextEncounter=function(){if(!solo){status('Start No-GM Encounter first.');return;}if(enemies.some(e=>e.health>0)){status('Defeat the current enemy first.');return;}enemies.length=0;managedPlayers.forEach(p=>{p.health=Math.max(1,p.health);p.energy=Math.min(100,(p.energy||0)+20);p.nxcEffects=[];});newEnemy();startTurns();render();};
+ window.nexusSoloAction=function(action){if(!solo||!combatActive)return;if(!['Attack','Heavy Attack','Power Attack','Defend','Heal','Dodge'].includes(action))return;const actor=turnOrder[currentTurnIndex];if(!managedPlayers.includes(actor))return;const foe=enemies.find(e=>e.health>0);if(!foe)return render();if((actor.nxcEffects||[]).some(e=>e.name==='Stun'&&e.turns>0)){actor.nxcEffects=actor.nxcEffects.filter(e=>e.name!=='Stun');write(actor.name+' loses a turn to Stun.');}else if(action==='Defend'){actor.shield=(actor.shield||0)+10;write(actor.name+' gains 10 shield.');}else if(action==='Dodge'){actor.nxcDodge=true;write(actor.name+' prepares to dodge.');}else if(action==='Heal'){actor.health=Math.min(actor.maxHealth||100,actor.health+20);write(actor.name+' heals 20 HP.');}else{const roll=1+Math.floor(Math.random()*20),threshold=action==='Heavy Attack'?12:10;if(roll>=threshold){const damage=action==='Heavy Attack'?25:action==='Power Attack'?20:15;const absorbed=nexusCombatDamage(foe,damage);write(actor.name+' uses '+action+' for '+damage+' damage ('+absorbed+' absorbed).');}else write(actor.name+' misses ('+roll+').');}updatePlayerManager();updateEnemyManager();if(enemies.some(e=>e.health>0))endCurrentTurn();else resetTurns();render();};
+ // Refresh the local display after automatic enemy turns without changing AI behavior.
+ const original=window.nxcAutoEnemyTurn;
+ if(typeof original==='function')window.nxcAutoEnemyTurn=function(){const result=original.apply(this,arguments);if(solo){const alive=managedPlayers.filter(p=>p.health>0);write('🤖 Enemy turn resolved. '+(alive.map(p=>p.name+' '+p.health+' HP').join(', ')||'Party defeated.'));render();}return result;};
 })();
 </script>
 </body>
