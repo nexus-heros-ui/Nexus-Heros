@@ -5626,7 +5626,7 @@ function ensureSharedWorldUI(){
             </div>
             <div class="shared-world-panel">
                 <h3>👹 Nearby Threats</h3>
-                <div id="playerNearbyThreats">No nearby threats.</div><div id="nexusLiveCombat" class="game-panel" aria-live="polite">Combat status will appear here when the GM starts an encounter.</div>
+                <div id="playerNearbyThreats">No nearby threats.</div><div id="nexusLiveCombat" class="game-panel" aria-live="polite">Combat status will appear here when the GM starts an encounter.</div><div id="nexusV9PlayerCombat" class="game-panel"><strong>⚔ Your Combat Turn</strong><p class="small-muted">Standard actions resolve automatically on the GM host. Custom powers still require GM approval.</p><select id="nexusV9Action"><option>Attack</option><option>Heavy Attack</option><option>Power Attack</option><option>Defend</option><option>Heal</option><option>Dodge</option></select><select id="nexusV9Target"><option value="">Select target</option></select><button onclick="nexusV9SubmitAction()">Submit Combat Action</button><div id="nexusV9Message" class="small-muted"></div></div>
             </div>
             <div class="shared-world-panel">
                 <h3>⚔ Submit an Action</h3>
@@ -5720,6 +5720,7 @@ function connectSharedWorld(worldCode, role="player", playerId=null){
     sharedWorldRole=role;
     sharedWorldPlayerId=playerId || firebaseUser?.uid || null;
     const worldRef=firebaseDb.collection("worlds").doc(code);
+    if(typeof window.nexusV9Connect==="function")window.nexusV9Connect(worldRef);
 
     sharedWorldUnsubscribers.push(worldRef.onSnapshot(snapshot=>{
         if(!snapshot.exists) return;
@@ -5735,6 +5736,7 @@ function connectSharedWorld(worldCode, role="player", playerId=null){
         if(world.currentMission) sharedWorldMission=world.currentMission;
         sharedWorldCombat=world.combatState||null;
         if(typeof window.nexusRenderLiveCombat==="function")window.nexusRenderLiveCombat(sharedWorldCombat);
+        if(typeof window.nexusV9Refresh==="function")window.nexusV9Refresh();
         if(typeof window.nxcReceiveWorldCrisis==="function") window.nxcReceiveWorldCrisis(world.nexusCrisis||null);
         renderSharedWorldPanels();
     },error=>console.error("World listener failed:",error)));
@@ -5748,6 +5750,7 @@ function connectSharedWorld(worldCode, role="player", playerId=null){
         renderAllSharedMarkers();
         updateMultiplayerPlayersDisplay();
         renderSharedWorldPanels();
+        if(typeof window.nexusV9Refresh==="function")window.nexusV9Refresh();
     },error=>console.error("Players listener failed:",error)));
 
     sharedWorldUnsubscribers.push(worldRef.collection("enemies").onSnapshot(snapshot=>{
@@ -9469,6 +9472,90 @@ document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if(
    catch(err){console.warn('Combat snapshot sync failed:',err);}
   },120);
  };
+})();
+</script>
+<script id="nexusV9CombatActions">
+/* V9: Standard player actions are queued once, and resolved by the GM's existing combat engine. */
+(function(){
+ const $=id=>document.getElementById(id);
+ const message=s=>{if($('nexusV9Message'))$('nexusV9Message').textContent=s;};
+ const actions=['Attack','Heavy Attack','Power Attack','Defend','Heal','Dodge'];
+ const self=()=>typeof sharedWorldPlayers!=='undefined'?sharedWorldPlayers.find(p=>p.id===sharedWorldPlayerId||p.playerId===sharedWorldPlayerId):null;
+ const heroName=p=>String(p?.hero?.name||p?.heroName||p?.characterName||p?.playerName||'');
+ window.nexusV9Refresh=function(){
+  const select=$('nexusV9Target');if(!select)return;
+  const enemies=Array.isArray(sharedWorldCombat?.enemies)?sharedWorldCombat.enemies:[];
+  const previous=select.value;select.replaceChildren();
+  const blank=document.createElement('option');blank.value='';blank.textContent='Select target';select.appendChild(blank);
+  enemies.filter(e=>Number(e.hp)>0).forEach(e=>{const o=document.createElement('option');o.value=e.name;o.textContent=e.name+' ('+e.hp+' HP)';select.appendChild(o)});
+  select.value=enemies.some(e=>e.name===previous&&e.hp>0)?previous:'';
+  const p=self(),state=sharedWorldCombat;
+  if(!p){message('Join an approved world to take a turn.');return;}
+  if(!state?.active){message('Waiting for combat to start.');return;}
+  message(state.turn===heroName(p)?'It is your turn. Choose one action.':'Waiting for '+(state.turn||'the next fighter')+'.');
+ };
+ window.nexusV9SubmitAction=async function(){
+  const p=self(),state=sharedWorldCombat,action=$('nexusV9Action')?.value,target=$('nexusV9Target')?.value;
+  if(sharedWorldRole!=='player'||!p||!sharedWorldCode||!firebaseDb)return message('Join an approved multiplayer world first.');
+  if(!state?.active||state.turn!==heroName(p))return message('It is not your turn.');
+  if(!actions.includes(action))return message('Invalid action.');
+  if(['Attack','Heavy Attack','Power Attack'].includes(action)&&!target)return message('Choose an enemy target.');
+  if(['Attack','Heavy Attack','Power Attack'].includes(action)&&!state.enemies?.some(e=>e.name===target&&e.hp>0))return message('Target is no longer available.');
+  const turnKey=String(state.round)+'_'+String(state.turn);
+  const id=encodeURIComponent(String(sharedWorldPlayerId)).replace(/%/g,'_')+'_'+encodeURIComponent(turnKey).replace(/%/g,'_');
+  const ref=firebaseDb.collection('worlds').doc(sharedWorldCode).collection('combatActions').doc(id);
+  try{
+   await firebaseDb.runTransaction(async tx=>{const doc=await tx.get(ref);if(doc.exists)throw Error('You already submitted an action this turn.');tx.set(ref,{playerId:String(sharedWorldPlayerId),heroName:heroName(p),action,target:target||'',round:Number(state.round),turn:state.turn,status:'pending',createdAt:Date.now()})});
+   message('Action submitted. Waiting for automatic resolution.');
+  }catch(e){message(e.message||'Unable to submit action.');}
+ };
+ const processing=new Set();
+ window.nexusV9Resolve=async function(doc){
+  if(sharedWorldRole!=='gm'||!firebaseDb||!sharedWorldCode||processing.has(doc.id))return;
+  const req=doc.data();if(req.status!=='pending')return;
+  processing.add(doc.id);
+  const ref=doc.ref;
+  try{
+   const actor=typeof managedPlayers!=='undefined'?managedPlayers.find(p=>p.name===req.heroName&&p.health>0):null;
+   const allowed=typeof sharedWorldPlayers!=='undefined'&&sharedWorldPlayers.some(p=>(p.id===req.playerId||p.playerId===req.playerId)&&heroName(p)===req.heroName);
+   const valid=allowed&&actor&&combatActive&&turnOrder[currentTurnIndex]===actor&&Number(req.round)===combatRound&&req.turn===actor.name&&actions.includes(req.action);
+   if(!valid){await ref.update({status:'rejected',reason:'Turn expired or hero not authorized.'});return;}
+   let target=null;
+   if(['Attack','Heavy Attack','Power Attack'].includes(req.action)){
+    target=enemies.find(e=>e.name===req.target&&e.health>0);
+    if(!target){await ref.update({status:'rejected',reason:'Target unavailable.'});return;}
+   }
+   // Claim the action before resolving; do not replay a completed attack after reconnect.
+   const claimed=await firebaseDb.runTransaction(async tx=>{const latest=await tx.get(ref);if(latest.data()?.status!=='pending')return false;tx.update(ref,{status:'resolving'});return true});
+   if(!claimed)return;
+   if((actor.nxcEffects||[]).some(x=>x.name==='Stun'&&x.turns>0)){
+    actor.nxcEffects=actor.nxcEffects.filter(x=>x.name!=='Stun');nexusCombatLog(actor.name+' loses their turn to Stun.');
+   }else if(req.action==='Defend'){
+    actor.shield=(Number(actor.shield)||0)+10;nexusCombatLog('🛡 '+actor.name+' defends (+10 shield).');
+   }else if(req.action==='Heal'){
+    actor.health=Math.min(Number(actor.maxHealth)||100,(Number(actor.health)||0)+20);nexusCombatLog('💚 '+actor.name+' heals 20 HP.');
+   }else if(req.action==='Dodge'){
+    actor.nxcDodge=true;nexusCombatLog('🛡 '+actor.name+' prepares to dodge.');
+   }else{
+    const roll=Math.floor(Math.random()*20)+1,threshold=req.action==='Heavy Attack'?12:10;
+    if(roll>=threshold){const damage=req.action==='Heavy Attack'?25:req.action==='Power Attack'?20:15;const absorbed=nexusCombatDamage(target,damage);nexusCombatLog('⚔ '+actor.name+' uses '+req.action+' on '+target.name+' (d20 '+roll+', '+damage+' damage, '+absorbed+' shield absorbed).');}
+    else nexusCombatLog('⚔ '+actor.name+' misses '+target.name+' (d20 '+roll+').');
+   }
+   if(typeof updatePlayerManager==='function')updatePlayerManager();
+   if(typeof updateEnemyManager==='function')updateEnemyManager();
+   if(typeof refreshCombatSelectors==='function')refreshCombatSelectors();
+   await ref.update({status:'resolved',resolvedAt:Date.now()});
+   endCurrentTurn();if(typeof nexusQueueCombatSync==='function')nexusQueueCombatSync();
+  }catch(e){console.warn('V9 combat resolution:',e);try{await ref.update({status:'error',reason:String(e.message||e).slice(0,150)})}catch(_){}}
+  finally{processing.delete(doc.id)}
+ };
+ const oldConnect=window.connectSharedWorld;
+ // Listener installation is invoked from the existing world subscription below.
+ window.nexusV9Connect=function(worldRef){
+  if(window.nexusV9Unsub){window.nexusV9Unsub();window.nexusV9Unsub=null;}
+  if(sharedWorldRole==='gm')window.nexusV9Unsub=worldRef.collection('combatActions').where('status','==','pending').onSnapshot(s=>s.docs.forEach(d=>window.nexusV9Resolve(d)),e=>console.warn('V9 action listener:',e));
+ };
+ document.addEventListener('DOMContentLoaded',()=>setTimeout(window.nexusV9Refresh,400));
 })();
 </script>
 </body>
