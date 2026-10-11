@@ -1513,7 +1513,7 @@ No multiplayer players accepted.
 <h3>🌎 World Crisis & Hero Decisions</h3>
 <p class="small-muted">Select an enemy and unleash a configured threat. Heroes choose one action per crisis round: attack the enemy, dodge, rescue civilians, protect infrastructure, or contain the disaster. Crisis state is shared through the current Firebase world. Players can respond from the Live World panel; GM crisis controls remain available here.</p>
 <div class="nexus-enemy-grid"><label>Enemy<select id="nxcEnemy"></select></label><label>Hero<select id="nxcHero"></select></label></div>
-<div style="display:flex;gap:7px;flex-wrap:wrap"><button onclick="nxcLaunch()">🌋 Unleash Threat</button><button onclick="nxcEnemyAttack()">🧪 Enemy Special Attack</button><button onclick="nxcNextRound()">⏳ Advance Crisis Round</button></div>
+<div style="display:flex;gap:7px;flex-wrap:wrap"><button onclick="nxcLaunch()">🌋 Unleash Threat</button><button onclick="nxcEnemyAttack()">🧪 Enemy Special Attack</button><button type="button" onclick="nxcAutoEnemyTurn()">🤖 Automatic Enemy Turn</button><button onclick="nxcNextRound()">⏳ Advance Crisis Round</button></div>
 <div id="nxcEvents" aria-live="polite" style="margin:12px 0"></div>
 <div style="display:flex;gap:7px;flex-wrap:wrap"><button onclick="nxcHeroAction('Attack')">⚔ Attack</button><button onclick="nxcHeroAction('Dodge')">💨 Dodge</button><button onclick="nxcHeroAction('Rescue')">🧑‍🚒 Save Civilians</button><button onclick="nxcHeroAction('Protect')">🏢 Protect Buildings</button><button onclick="nxcHeroAction('Contain')">🌊 Stop Catastrophe</button></div>
 <div id="nxcLog" class="result" role="status" style="white-space:pre-wrap;max-height:220px;overflow:auto"></div>
@@ -9045,6 +9045,7 @@ function gmApprovePlayerAction(){
     const label=document.getElementById('chosenPlayerAction');if(label)label.textContent='None';
 }
 function combatEnemyAttack(){
+    if(combatActive){if(typeof nxcAutoEnemyTurn==='function')return nxcAutoEnemyTurn();return;}
     const livingEnemies=enemies.filter(e=>e.health>0);
     const livingHeroes=managedPlayers.filter(p=>p.health>0);
     if(!livingEnemies.length||!livingHeroes.length){alert('Add a living enemy and hero first.');return;}
@@ -9234,7 +9235,54 @@ async function publish(next,message){crisis=normalize(next);render();const ref=w
 function refresh(){for(const [id,items] of [['nxcEnemy',typeof enemies==='undefined'?[]:enemies],['nxcHero',typeof managedPlayers==='undefined'?[]:managedPlayers]]){const el=$(id);if(!el)continue;const old=el.value;el.replaceChildren();items.forEach((v,i)=>{const o=document.createElement('option');o.value=String(i);o.textContent=v.name+' ('+(v.health??0)+' HP)';el.appendChild(o)});if([...el.options].some(o=>o.value===old))el.value=old}render()}
 window.nxcLaunch=async function(){const e=enemy();if(!e)return log('Select an enemy first.');if(crisis&&!confirm('Replace the current crisis?'))return;const h=e.hazard||{};const type=hazards.includes(h.type)?h.type:(e.type==='Cosmic Threat'?'Earth Core Fracture':e.type==='Boss'?'Earthquake':'Civilians in Danger');const severity=scale(e.type,h.severity||caps[e.type]||1);const severityBase=[0,3,7,14,24][severity];const next={type,location:e.location||'Nexus City',sourceEnemyId:e.id||null,sourceEnemyName:e.name,sourceEnemyType:e.type,severity,remaining:clamp(h.countdown||5,1,20),required:Math.max(severityBase,Number(h.rescueDifficulty)||0),progress:0,civilians:[0,3,10,30,100][severity],buildings:[0,1,4,12,35][severity],round:1,actions:{},damage:0};round=1;await publish(next,e.name+' triggers '+labels[severity].toLowerCase()+' '+type+' at '+next.location+'. Heroes must respond!')};
 function statusTick(p){if(!Array.isArray(p.nxcEffects))return;for(const s of p.nxcEffects){if(s.name==='Poison')p.health=Math.max(0,(Number(p.health)||0)-4);if(s.name==='Stamina Drain')p.energy=Math.max(0,(Number(p.energy)||0)-5);s.turns--}p.nxcEffects=p.nxcEffects.filter(s=>s.turns>0)}
-window.nxcEnemyAttack=function(){const e=enemy(),p=hero();if(!e||!p)return log('Select an enemy and hero.');const phase=(e.bossPhases||[]).filter(x=>(Number(e.health)||0)<=((Number(e.maxHealth)||1)*Number(x.hpPercent)/100)).sort((a,b)=>a.hpPercent-b.hpPercent)[0];if(phase&&phase.aiStyle)e.aiStyle=phase.aiStyle;const cooldowns=e.nxcCooldowns||{};const attacks=(e.attacks||[]).filter(a=>(Number(e.energy)||0)>=(Number(a.energyCost)||0)&&!(cooldowns[a.name]>0));const a=attacks[Math.floor(Math.random()*attacks.length)]||{name:'Basic Strike',damage:10,energyCost:0};e.nxcCooldowns={...cooldowns};if(a.cooldown)e.nxcCooldowns[a.name]=Number(a.cooldown)+1;e.energy=Math.max(0,(Number(e.energy)||0)-(Number(a.energyCost)||0));let hit=Math.random()<.75;if(p.nxcDodge){hit=hit&&Math.random()<.45;p.nxcDodge=false}if(hit){const dmg=Math.max(0,Number(a.damage)||0);if(typeof nexusCombatDamage==='function')nexusCombatDamage(p,dmg);else p.health=Math.max(0,(Number(p.health)||0)-dmg);log(e.name+' hits '+p.name+' with '+a.name+' for '+dmg+'.');if(effects[a.effect]){p.nxcEffects=p.nxcEffects||[];p.nxcEffects.push({name:a.effect,turns:Math.max(1,Number(a.duration)||2)});log(p.name+' suffers '+a.effect)}}else log(p.name+' dodges '+a.name+'.');if(typeof updatePlayerManager==='function')updatePlayerManager();refresh()};
+function activeEffect(p,name){return (p.nxcEffects||[]).some(x=>x.name===name&&x.turns>0)}
+function enemyChoice(e,heroes){
+ const style=String(e.aiStyle||'Tactical');
+ if(style==='Aggressive')return [...heroes].sort((a,b)=>(a.health||0)-(b.health||0))[0];
+ if(style==='Tactical')return [...heroes].sort((a,b)=>(a.shield||0)-(b.shield||0))[0];
+ if(style==='Defensive')return [...heroes].sort((a,b)=>(b.health||0)-(a.health||0))[0];
+ return heroes[Math.floor(Math.random()*heroes.length)];
+}
+function performEnemyAttack(e,p){
+ if(!e||!p||e.health<=0||p.health<=0)return false;
+ const phase=(e.bossPhases||[]).filter(x=>e.health<=Math.max(1,e.maxHealth||1)*Number(x.hpPercent)/100).sort((a,b)=>a.hpPercent-b.hpPercent)[0];
+ if(phase?.aiStyle)e.aiStyle=phase.aiStyle;
+ const cooldowns=e.nxcCooldowns||{};
+ const available=(e.attacks||[]).filter(a=>(e.energy||0)>=(Number(a.energyCost)||0)&&!(cooldowns[a.name]>0));
+ let a;
+ if(e.aiStyle==='Aggressive')a=[...available].sort((x,y)=>(y.damage||0)-(x.damage||0))[0];
+ else if(e.aiStyle==='Support')a=available.find(x=>['Weakness','Slowness','Stamina Drain','Stun'].includes(x.effect));
+ else if(e.aiStyle==='Tactical')a=available.find(x=>x.effect&&!activeEffect(p,x.effect));
+ else if(e.aiStyle==='Defensive'&&e.health<e.maxHealth*.4){e.shield=(Number(e.shield)||0)+8;log(e.name+' takes cover and gains 8 shield.');return true;}
+ a=a||available[Math.floor(Math.random()*available.length)]||{name:'Basic Strike',damage:10,energyCost:0,cooldown:0};
+ e.nxcCooldowns={...cooldowns};if(a.cooldown)e.nxcCooldowns[a.name]=Math.max(1,Number(a.cooldown));
+ e.energy=Math.max(0,(Number(e.energy)||0)-(Number(a.energyCost)||0));
+ let chance=.75;if(activeEffect(e,'Off Balance'))chance-=.2;
+ if(p.nxcDodge){chance-=.4;p.nxcDodge=false;}
+ if(Math.random()<Math.max(.1,chance)){
+  const dmg=Math.max(0,Number(a.damage)||0);
+  if(typeof nexusCombatDamage==='function')nexusCombatDamage(p,dmg);else p.health=Math.max(0,(Number(p.health)||0)-dmg);
+  log(e.name+' hits '+p.name+' with '+a.name+' for '+dmg+' damage.');
+  if(effects[a.effect]){p.nxcEffects=p.nxcEffects||[];p.nxcEffects=p.nxcEffects.filter(x=>x.name!==a.effect);p.nxcEffects.push({name:a.effect,turns:Math.max(1,Math.min(10,Number(a.duration)||2))});log(p.name+' suffers '+a.effect+'.');}
+ }else log(e.name+' misses '+p.name+' with '+a.name+'.');
+ if(typeof updatePlayerManager==='function')updatePlayerManager();
+ if(typeof updateEnemyManager==='function')updateEnemyManager();refresh();return true;
+}
+window.nxcEnemyAttack=function(){
+ const e=enemy(),p=hero();if(!e||!p)return log('Select an enemy and hero.');
+ if(typeof combatActive!=='undefined'&&combatActive)return log('Combat is active. Use Automatic Enemy Turn to follow turn order.');
+ performEnemyAttack(e,p);
+};
+window.nxcAutoEnemyTurn=function(){
+ if(typeof combatActive==='undefined'||!combatActive||!turnOrder.length)return log('Start combat turns first.');
+ const actor=turnOrder[currentTurnIndex];
+ if(!enemies.includes(actor))return log('It is a hero turn. Choose a hero action.');
+ const heroes=managedPlayers.filter(p=>p.health>0);
+ if(!heroes.length)return log('No living heroes remain.');
+ const target=enemyChoice(actor,heroes);
+ if(performEnemyAttack(actor,target))endCurrentTurn();
+};
+
 async function respond(action,actorId,actorName){
  if(!crisis)return log('No active crisis.');
  if(!['Attack','Dodge','Rescue','Protect','Contain'].includes(action))return;
@@ -9282,8 +9330,35 @@ async function respond(action,actorId,actorName){
  if(crisis.progress>=crisis.required){log('Catastrophe contained!');crisis=null}render();
 }
 window.nxcPlayerRespond=async function(action){const id=typeof sharedWorldPlayerId!=='undefined'?sharedWorldPlayerId:null;const players=typeof sharedWorldPlayers!=='undefined'?sharedWorldPlayers:[];const own=players.find(p=>p.id===id||p.playerId===id);if(!id||!own)return log('Join and be accepted into the world to respond.');await respond(action,String(id),own.hero?.name||own.playerName||'Hero')};
-window.nxcHeroAction=async function(action){const p=hero(),e=enemy();if(!p||!e)return log('Select a hero and enemy.');if((Number(p.health)||0)<=0)return log('Hero is defeated.');if(['Rescue','Protect','Contain'].includes(action)){await respond(action,'gm:'+p.name,p.name);return}if(action==='Dodge'){p.nxcDodge=true;log(p.name+' prepares to dodge.')}else if(action==='Attack'){const fx=p.nxcEffects||[];let chance=.8;if(fx.some(s=>['Off Balance','Blindness'].includes(s.name)))chance-=.3;if(fx.some(s=>s.name==='Slowness'))chance-=.1;if(Math.random()<chance){const dmg=fx.some(s=>s.name==='Weakness')?8:15;if(typeof nexusCombatDamage==='function')nexusCombatDamage(e,dmg);else e.health=Math.max(0,(Number(e.health)||0)-dmg);log(p.name+' attacks '+e.name+' for '+dmg)}else log(p.name+' misses.')}if(typeof updatePlayerManager==='function')updatePlayerManager();if(typeof updateEnemyManager==='function')updateEnemyManager();refresh()};
-window.nxcNextRound=async function(){if(typeof sharedWorldRole!=='undefined'&&sharedWorldRole==='player')return log('Only the GM can advance a crisis round in GM mode.');round++;if(typeof managedPlayers!=='undefined')managedPlayers.forEach(statusTick);if(typeof enemies!=='undefined')enemies.forEach(e=>{if(e.nxcCooldowns)Object.keys(e.nxcCooldowns).forEach(k=>e.nxcCooldowns[k]=Math.max(0,e.nxcCooldowns[k]-1))});if(!crisis)return refresh();const c={...crisis,round,remaining:crisis.remaining-1,actions:{}};if(c.remaining<=0){const loss=c.civilians,buildings=c.buildings;await publish(null,'CATASTROPHE: '+c.type+' strikes '+c.location+'. '+loss+' civilians endangered; '+buildings+' buildings damaged.');log('CATASTROPHE: '+c.type+' impacts! '+loss+' civilians and '+buildings+' buildings remained at risk.')}else{await publish(c,c.type+' escalates: '+c.remaining+' rounds remain.')}refresh()};
+window.nxcHeroAction=async function(action){const p=hero(),e=enemy();if(typeof combatActive!=='undefined'&&combatActive){if(turnOrder[currentTurnIndex]!==p)return log('Not this hero’s turn.');if(activeEffect(p,'Stun')){log(p.name+' loses the turn to Stun.');p.nxcEffects=p.nxcEffects.filter(x=>x.name!=='Stun');endCurrentTurn();return;}}if(!p||!e)return log('Select a hero and enemy.');if((Number(p.health)||0)<=0)return log('Hero is defeated.');if(['Rescue','Protect','Contain'].includes(action)){await respond(action,'gm:'+p.name,p.name);return}if(action==='Dodge'){p.nxcDodge=true;log(p.name+' prepares to dodge.')}else if(action==='Attack'){const fx=p.nxcEffects||[];let chance=.8;if(fx.some(s=>['Off Balance','Blindness'].includes(s.name)))chance-=.3;if(fx.some(s=>s.name==='Slowness'))chance-=.1;if(Math.random()<chance){const dmg=fx.some(s=>s.name==='Weakness')?8:15;if(typeof nexusCombatDamage==='function')nexusCombatDamage(e,dmg);else e.health=Math.max(0,(Number(e.health)||0)-dmg);log(p.name+' attacks '+e.name+' for '+dmg)}else log(p.name+' misses.')}if(typeof updatePlayerManager==='function')updatePlayerManager();if(typeof updateEnemyManager==='function')updateEnemyManager();refresh();if(typeof combatActive!=='undefined'&&combatActive)endCurrentTurn()};
+window.nxcNextRound=async function(){
+ if(typeof sharedWorldRole!=='undefined'&&sharedWorldRole==='player')return log('Only the GM can advance a crisis round.');
+ const ref=world();
+ if(ref){
+  try{
+   const result=await firebaseDb.runTransaction(async tx=>{
+    const snap=await tx.get(ref),c=normalize(snap.data()?.nexusCrisis);
+    if(!c)return {empty:true};
+    const next={...c,round:c.round+1,remaining:c.remaining-1,actions:{}};
+    const impact=next.remaining<=0;
+    tx.update(ref,{nexusCrisis:impact?null:next});
+    return {impact,next};
+   });
+   if(result.empty)return log('No active crisis.');
+   round=result.next.round;
+   if(result.impact){const c=result.next;const message='CATASTROPHE: '+c.type+' strikes '+c.location+'. '+c.civilians+' civilians still endangered; '+c.buildings+' buildings damaged.';log(message);if(typeof addWorldFeedEvent==='function')await addWorldFeedEvent(message,'crisis');}
+   else log(result.next.type+' escalates: '+result.next.remaining+' rounds remain.');
+  }catch(e){log('Could not advance crisis: '+e.message);return;}
+ }else if(crisis){
+  const c={...crisis,round:crisis.round+1,remaining:crisis.remaining-1,actions:{}};round=c.round;
+  if(c.remaining<=0){log('CATASTROPHE: '+c.type+' impacts!');crisis=null;}else crisis=c;
+ }
+ if(typeof managedPlayers!=='undefined')managedPlayers.forEach(statusTick);
+ if(typeof enemies!=='undefined')enemies.forEach(e=>{if(e.nxcCooldowns)Object.keys(e.nxcCooldowns).forEach(k=>e.nxcCooldowns[k]=Math.max(0,e.nxcCooldowns[k]-1))});
+ if(typeof updatePlayerManager==='function')updatePlayerManager();
+ refresh();
+};
+
 document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if($('nxcEnemy')&&document.visibilityState==='visible')refresh()},2500)});
 })();
 </script>
