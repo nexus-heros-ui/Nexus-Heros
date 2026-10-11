@@ -1,11 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Nexus Heroes Beta</title>
-
 <style>
 body{
     margin:0;
@@ -650,7 +649,6 @@ input,select{
 @media(max-width:650px){body{padding:6px}.card,#playerWorldView.nexus-game-workspace{width:100%;padding:12px}.nexus-play-actions .power-creator-grid,#playerSharedControls,.nexus-play-actions #playerSharedControls{grid-template-columns:1fr}.nexus-topnav{top:0}.nexus-topnav button{font-size:12px;padding:9px}}
 
 </style>
-
 <style>
 /* Independent player gameplay portal: map and powers side by side. */
 #playerWorldView.portal {width:min(1600px,calc(100% - 24px));max-width:none;margin:16px auto;box-sizing:border-box}
@@ -670,7 +668,6 @@ input,select{
 .nexus-enemy-panel {border:2px solid #e87979;border-radius:10px;padding:10px;margin-bottom:10px}
 @media(max-width:900px){#playerWorldView .nexus-play-grid{grid-template-columns:1fr}}
 </style>
-
 <style id="nexus-gm-compact-style">
 /* Compact GM dashboard without removing existing controls. */
 #gmPortal{width:min(1500px,calc(100% - 20px));max-width:none;margin:auto}
@@ -692,221 +689,156 @@ input,select{
 @media(max-width:700px){#gmPortal{width:100%}#gmPortal>.card{padding:9px}}
 </style>
 <style id="nesStyle">#nexusEnemyStudio{text-align:left} .nexus-enemy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px;margin:10px 0} .nexus-enemy-grid label{display:flex;flex-direction:column;gap:4px;color:#bfdbfe;font-size:13px} .nexus-enemy-grid input,.nexus-enemy-grid select{width:100%;box-sizing:border-box;background:#111827;color:#fff;border:1px solid #475569;margin:0} #nexusEnemyStudio button{font-size:13px}</style>
-</head>
-
+<style id="nexusV23Responsive">
+/* V23 responsive, touch-friendly command deck */
+:root{--n23-edge:#475569;--n23-focus:#facc15}html{scroll-behavior:smooth;scroll-padding-top:86px}body{overflow-x:hidden}button,select,input,textarea{font:inherit}button{touch-action:manipulation}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--n23-focus);outline-offset:2px}
+#playerPortal,#gmPortal{max-width:1500px;margin:auto}#playerPortal>.card,#gmPortal>.card{box-sizing:border-box;width:100%;max-width:none;margin:12px auto;padding:clamp(10px,2vw,18px)}
+.n23-bar{position:sticky;top:0;z-index:900;background:#0b1120f5;border:1px solid var(--n23-edge);border-radius:12px;padding:8px;display:flex;gap:6px;align-items:center;overflow-x:auto;scrollbar-width:thin;box-shadow:0 5px 16px #0007}.n23-bar button{white-space:nowrap;flex:0 0 auto;padding:10px 12px;margin:0;min-height:44px;font-size:14px}.n23-bar .n23-primary{background:#1d4ed8}.n23-bar strong{white-space:nowrap;color:#bfdbfe;font-size:13px;padding:0 4px}
+.n23-card{position:relative}.n23-card-title{display:flex;align-items:center;gap:8px;justify-content:space-between;margin:0 0 8px}.n23-card-title h2,.n23-card-title h3{margin:0!important;font-size:clamp(16px,2.2vw,21px)!important;line-height:1.3}.n23-collapse{background:#24324a;border:1px solid #64748b;padding:8px 12px!important;min-width:88px;min-height:42px;margin:0!important;flex-shrink:0}.n23-collapsed>.n23-body{display:none!important}.n23-body{min-width:0}.n23-body>*{max-width:100%}.n23-body .game-panel{box-sizing:border-box;overflow-wrap:anywhere}.n23-body table{display:block;max-width:100%;overflow-x:auto}.n23-body img,.n23-body svg{max-width:100%}.n23-body input,.n23-body select,.n23-body textarea{max-width:100%;box-sizing:border-box}
+.n23-modal{border:1px solid #60a5fa;border-radius:16px;background:#101d33;color:#fff;padding:0;width:min(580px,calc(100vw - 20px));max-width:calc(100vw - 20px);max-height:min(85dvh,900px);box-shadow:0 12px 60px #000c}.n23-modal::backdrop{background:#020617c9;backdrop-filter:blur(3px)}.n23-modal-head{position:sticky;top:0;background:#162640;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #475569;z-index:1}.n23-modal-head h2{margin:0;font-size:18px}.n23-modal-body{padding:12px;overflow:auto;max-height:calc(85dvh - 72px)}.n23-modal-body button{min-height:48px;text-align:left}.n23-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.n23-grid button{margin:0;width:100%;white-space:normal}.n23-quick{background:#1e40af!important}.n23-action-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.n23-action-choices button{margin:0;width:100%;min-height:56px;text-align:center}.n23-action-settings{padding:10px;background:#0b1222;border:1px solid #334155;border-radius:9px;margin-bottom:12px}.n23-action-settings select{max-width:100%;width:100%;margin:6px 0;background:#1e293b;color:#fff}.n23-note{color:#cbd5e1;font-size:13px;line-height:1.5}
+#nexusSoloMode .n23-action-launch{background:#1d4ed8;border:2px solid #93c5fd;min-height:52px;font-weight:bold}#nexusSoloActions .n23-original-actions{display:none!important}#nexusSoloActions .n23-action-launch{display:inline-block}#nexusSoloActions .n23-intensity-holder{display:none}#nexusSoloActions .n23-action-shell{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+@media(max-width:760px){body{padding:5px!important;font-size:15px;line-height:1.5}h1{font-size:22px;margin:8px 0}#playerPortal,#gmPortal{width:100%!important}#playerPortal>.card,#gmPortal>.card{padding:10px!important;margin:8px auto!important}#nexusSoloMode{padding:10px!important}#nexusSoloMode>button{font-size:14px;padding:10px 12px;min-height:44px}#nexusSoloMode .game-panel{padding:10px}#nexusSoloMode input,#nexusSoloMode select{max-width:100%;box-sizing:border-box}#nexusSoloMode #nexusSoloLog{max-height:160px!important;overflow:auto}#nexusSoloMode #nexusSquadOverview{overflow-x:auto}.n23-grid,.n23-action-choices{grid-template-columns:1fr 1fr}.n23-bar{border-radius:8px;padding:5px}.n23-bar button{font-size:13px;padding:9px 10px}#gmPortal .combat-arena,.combat-arena{grid-template-columns:1fr!important}#gmPortal .shared-world-grid,.shared-world-grid{grid-template-columns:1fr!important}#gmPortal .world-map{aspect-ratio:4/3}#nexusSoloMode .n23-body>button{min-height:44px}}
+@media(max-width:390px){.n23-grid,.n23-action-choices{grid-template-columns:1fr}.n23-modal-body{padding:9px}.n23-modal-head h2{font-size:16px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+</style></head>
 <body>
-
 <h1>NEXUS HEROES BETA</h1>
-
 <button onclick="showPortal('playerPortal')">Player Portal</button>
 <button onclick="showPortal('gmPortal')">GM Portal</button>
 <button onclick="showPortal('rulebookPortal')">Game Manual</button>
-
- <div id="playerPortal" class="portal">
-
-<div class="card">
-<h2>🌐 Multiplayer Status</h2>
+<div class="portal" id="playerPortal"><div aria-label="🦸 Player quick navigation" class="n23-bar" role="navigation"><strong>🦸 Player</strong><button class="" onclick="n23OpenMenu()" type="button">☰ Menu</button><button class="n23-primary" onclick="n23OpenActions()" type="button">⚔ Actions</button></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>🌐 Multiplayer Status</h2><button aria-expanded="false" aria-label="Expand or collapse 🌐 Multiplayer Status" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <div id="firebaseConnectionStatus">
 🟡 Connecting to multiplayer...
 </div>
-</div>
-     
-<div class="card">
-<h2>Hero Generator</h2>
+</div></div>
+<div class="card n23-card"><div class="n23-card-title"><h2>Hero Generator</h2><button aria-expanded="true" aria-label="Expand or collapse Hero Generator" class="n23-collapse" type="button">Close</button></div><div class="n23-body">
 
-<input id="customName" placeholder="Enter Hero Name">
-
-<br>
-
+<input id="customName" placeholder="Enter Hero Name"/>
+<br/>
 <h3>Character Marker</h3>
-
 <label for="markerIcon">Character Symbol</label>
-
 <select id="markerIcon">
-    <option value="🦸">🦸 Hero</option>
-    <option value="🥷">🥷 Ninja</option>
-    <option value="🧙">🧙 Mystic</option>
-    <option value="🤖">🤖 Robot</option>
-    <option value="👽">👽 Alien</option>
-    <option value="🛡️">🛡️ Guardian</option>
-    <option value="⚡">⚡ Energy Hero</option>
-    <option value="🔥">🔥 Fire Hero</option>
-    <option value="❄️">❄️ Ice Hero</option>
-    <option value="🌌">🌌 Cosmic Hero</option>
+<option value="🦸">🦸 Hero</option>
+<option value="🥷">🥷 Ninja</option>
+<option value="🧙">🧙 Mystic</option>
+<option value="🤖">🤖 Robot</option>
+<option value="👽">👽 Alien</option>
+<option value="🛡️">🛡️ Guardian</option>
+<option value="⚡">⚡ Energy Hero</option>
+<option value="🔥">🔥 Fire Hero</option>
+<option value="❄️">❄️ Ice Hero</option>
+<option value="🌌">🌌 Cosmic Hero</option>
 </select>
-
-<br>
-
+<br/>
 <label for="markerColor">Marker Color</label>
-
-<input
-    type="color"
-    id="markerColor"
-    value="#2563EB"
->
-
+<input id="markerColor" type="color" value="#2563EB"/>
 <label for="markerBorderColor">Border Color</label>
-
-<input
-    type="color"
-    id="markerBorderColor"
-    value="#FFFFFF"
->
-
-<br>
-
+<input id="markerBorderColor" type="color" value="#FFFFFF"/>
+<br/>
 <label for="markerShape">Marker Shape</label>
-
 <select id="markerShape">
-    <option value="circle">Circle</option>
-    <option value="square">Square</option>
-    <option value="diamond">Diamond</option>
-    <option value="shield">Shield</option>
+<option value="circle">Circle</option>
+<option value="square">Square</option>
+<option value="diamond">Diamond</option>
+<option value="shield">Shield</option>
 </select>
-
-<div id="markerPreview" class="marker-preview">
+<div class="marker-preview" id="markerPreview">
     🦸
 </div>
-
-<br>
-    
+<br/>
 <button onclick="generateRandomName()">🎲 Random Name</button>
 <button onclick="generateHero()">⚡ Generate Hero</button>
 <button onclick="saveHero()">💾 Save Hero</button>
 <button onclick="loadHero()">📂 Load Hero</button>
-</div>
-
-<section class="card" id="nexusSoloMode" style="text-align:left;border:2px solid #22c55e"><h2>🎮 No-GM Adventure — Solo / Co-op (V22)</h2><p>No Game Master required. Local co-op works on one device; online co-op lets friends join from their own devices. The hosting player keeps their browser open while automatic enemy AI runs.</p><div id="nexusSoloStatus" class="game-panel" aria-live="polite">Ready to start a local adventure.</div><button onclick="nexusSoloStart()">▶ Start No-GM Encounter</button><button onclick="nexusSoloAddHero()">➕ Add Current Hero</button><button onclick="nexusSoloNextEncounter()">👹 Next Mission</button><button onclick="nexusSoloRest()">🏥 Recover Between Missions</button><button onclick="nexusSaveAdventure()">💾 Save Adventure</button><button onclick="nexusLoadAdventure()">📂 Resume Adventure</button><button onclick="nexusExportSave()">⬇ Backup Save</button><label style="display:inline-block">⬆ Restore Backup <input type="file" accept=".json,application/json" onchange="nexusImportSave(event)" style="max-width:220px"></label><div class="game-panel"><h3>🌐 Online No-GM Co-op</h3><p>Host creates a code. Friends enter the code and join with their generated heroes. No GM approval needed. The host manages shared reward spins in this version.</p><button onclick="nexusCoopHost()">🌍 Host Online Party</button><input id="nexusCoopCode" placeholder="Party code" maxlength="16"><button onclick="nexusCoopJoin()">🤝 Join Online Party</button><button onclick="nexusCoopLeave()">Leave Online Party</button><div id="nexusCoopInfo" class="result">Not in an online party.</div></div><div class="game-panel" id="nexusV15Setup"><h3>🗺 Mission Command Center</h3><label for="nexusMissionSelect">Mission: </label><select id="nexusMissionSelect"><option value="cycle">Campaign sequence</option><option value="0">Harbor Evacuation</option><option value="1">Omega Labs Containment</option><option value="2">Nexus City Quake</option><option value="3">Ashfall Emergency</option><option value="4">Core Fracture</option><option value="5">Blackgate Breakout</option><option value="6">Dimensional Rift</option><option value="7">Citywide Blackout</option><option value="8">Titan Fortress Siege</option><option value="9">Shadow Realm Incursion</option></select><label for="nexusDifficulty"> Difficulty: </label><select id="nexusDifficulty"><option value="story">Story</option><option value="normal" selected>Heroic</option><option value="hard">Legendary</option></select><div id="nexusCampaignStats" class="small-muted">Campaign not started.</div><button type="button" onclick="nexusCampaignExport()">⬇ Export Campaign Report</button></div><div id="nexusMissionBoard" class="game-panel" style="display:none;border-color:#facc15" aria-live="polite"><h3>📜 No-GM Mission</h3><div id="nexusMissionTitle"></div><p id="nexusMissionStory"></p><div id="nexusMissionObjectives"></div><div id="nexusMissionClock"></div><div id="nexusMissionOutcome"></div></div><div class="game-panel" id="nexusV22PowerLab"><h3>✨ No-GM Power Actions</h3><p class="small-muted">Use a named hero power in combat without a GM. Choose its effect and the automatic rules resolve accuracy, energy, and resistance. Each use takes one turn.</p><label for="nexusPowerMoveName">Power / signature move name: </label><input id="nexusPowerMoveName" maxlength="70" placeholder="e.g. Thunder Pulse"><label for="nexusPowerMoveEffect"> Effect: </label><select id="nexusPowerMoveEffect"><option value="blast">Energy Blast — attack an enemy</option><option value="barrier">Protective Barrier — shield the team</option><option value="restore">Healing Surge — heal an ally</option><option value="rescue">Rescue Burst — save civilians</option><option value="contain">Containment Field — stop disaster</option></select><button type="button" onclick="nexusSoloPowerAction()">✨ Use Power (1 Turn)</button><div id="nexusPowerFeedback" class="small-muted" aria-live="polite">Generate a hero and begin a No-GM mission to use powers.</div></div><div class="game-panel" id="nexusV22TestPanel"><h3>🧪 Beta Test Tools</h3><button type="button" onclick="nexusV22Check()">Run System Check</button><button type="button" onclick="nexusV22ExportLog()">Export Combat Log</button><div id="nexusV22CheckResult" class="small-muted" aria-live="polite">Run System Check before your first playtest.</div></div><div id="nexusSoloActions" style="display:none"><h3>Choose your hero's action</h3><p class="small-muted">Complete Rescue, Protect and Contain objectives before defeating the final enemy for the best mission grade. Controlled attacks conserve energy; Maximum Effort can cause recoil. Recover restores stamina during combat.</p><label for="nexusAttackIntensity">Attack intensity: </label><select id="nexusAttackIntensity"><option value="controlled">Controlled (safe, low cost)</option><option value="powerful">Powerful (higher damage and fatigue)</option><option value="maximum">Maximum Effort (high damage, injury risk)</option></select><div id="nexusCombatVitals" class="small-muted" aria-live="polite"></div><div id="nexusSoloTurn" class="result"></div><button onclick="nexusSoloAction('Attack')">⚔ Attack</button><button onclick="nexusSoloAction('Heavy Attack')">💥 Heavy Attack</button><button onclick="nexusSoloAction('Power Attack')">✨ Power Attack</button><button onclick="nexusSoloAction('Defend')">🛡 Defend</button><button onclick="nexusSoloAction('Heal')">💚 Heal</button><button onclick="nexusSoloAction('Dodge')">💨 Dodge</button><button onclick="nexusSoloAction('Rescue')">🧑‍🚒 Rescue Civilians</button><button onclick="nexusSoloAction('Protect')">🏢 Protect Infrastructure</button><button onclick="nexusSoloAction('Contain')">🌊 Contain Disaster</button><button onclick="nexusSoloAction('Recover')">🔋 Recover Energy</button><button onclick="nexusSoloAction('Rally')">📣 Rally the Team</button><button onclick="nexusSoloAction('Stabilize')">🩺 Stabilize Ally</button></div><div id="nexusRewardPanel" class="game-panel" style="display:none"><h3>🎡 Victory Advancement — Two Spins</h3><p>Each surviving hero earns a two-part reward for a completed mission, including partial-credit victories. First wheel: 9 equal spaces — seven stats, Choose Your Stat, and Equipment Reward. Equipment is awarded randomly; players cannot choose equipment. Second wheel: 0–4 stat points or Common/Rare/Epic/Legendary equipment rarity.</p><div id="nexusRewardInfo" class="result"></div><button onclick="nexusRewardSpinStat()">🎡 Spin 1: Stat / Equipment</button><div id="nexusRewardChoice" style="display:none;margin:10px 0"><label for="nexusRewardSelect">⭐ Choose Your Stat (special wheel result)</label><select id="nexusRewardSelect"></select><button onclick="nexusRewardConfirmChoice()">Confirm Choice</button></div><div id="nexusRewardProgress" class="game-panel" aria-live="polite"></div><div id="nexusEquipmentReward" class="game-panel" aria-live="polite"></div><button onclick="nexusRewardSpinGain()">🎡 Spin 2: Points / Rarity</button></div><div class="small-muted" style="padding:10px">V22: Nine-space rewards with random equipment only, improved combat instructions, expanded mission library, enemy tactics, online support and adventure backups. Rescue / Protect / Contain advance 2–3 points on success. Containment reduces disaster damage; protection grants shields. Equipment and Speed can evade enemy attacks; Durability and armor reduce damage. Partial victories can earn rewards. Add another local hero at any time using the Hero Generator and Add Current Hero.</div><div id="nexusGearManager" class="game-panel"><h3>🎒 Equipment Loadout</h3><p>Earned equipment must be equipped to provide its combat bonuses. One item per slot; damaged gear can be repaired between missions.</p><div id="nexusGearControls">Generate a hero to manage equipment.</div></div><div id="nexusV19Operations" class="game-panel"><h3>🧭 Squad Operations</h3><div id="nexusSquadOverview">Start a mission to see the team.</div><label for="nexusAllyTarget">Support target: </label><select id="nexusAllyTarget"></select><p class="small-muted">Recover restores energy and reduces fatigue. Rally grants shields and energy to allies. Stabilize restores health to a selected ally. All use a hero turn.</p><div id="nexusMissionGrade"></div></div><div id="nexusEnemyIntent" class="game-panel" aria-live="polite">Enemy tactics appear when combat starts.</div><div id="nexusTacticalReport" class="game-panel" aria-live="polite">Mission tactical report appears here.</div><div id="nexusSoloLog" class="game-panel" style="white-space:pre-wrap;max-height:260px;overflow:auto">No encounter started.</div></section>
-<div class="card">
-<h2>🌍 Join Multiplayer World</h2>
+</div></div>
+<section class="card n23-card" id="nexusSoloMode" style="text-align:left;border:2px solid #22c55e"><div class="n23-card-title"><h2>🎮 No-GM Adventure — Solo / Co-op (V23)</h2><button aria-expanded="true" aria-label="Expand or collapse 🎮 No-GM Adventure — Solo / Co-op (V22)" class="n23-collapse" type="button">Close</button></div><div class="n23-body"><p>No Game Master required. Local co-op works on one device; online co-op lets friends join from their own devices. The hosting player keeps their browser open while automatic enemy AI runs.</p><div aria-live="polite" class="game-panel" id="nexusSoloStatus">Ready to start a local adventure.</div><button onclick="nexusSoloStart()">▶ Start No-GM Encounter</button><button onclick="nexusSoloAddHero()">➕ Add Current Hero</button><button onclick="nexusSoloNextEncounter()">👹 Next Mission</button><button onclick="nexusSoloRest()">🏥 Recover Between Missions</button><button onclick="nexusSaveAdventure()">💾 Save Adventure</button><button onclick="nexusLoadAdventure()">📂 Resume Adventure</button><button onclick="nexusExportSave()">⬇ Backup Save</button><label style="display:inline-block">⬆ Restore Backup <input accept=".json,application/json" onchange="nexusImportSave(event)" style="max-width:220px" type="file"/></label><div class="game-panel"><h3>🌐 Online No-GM Co-op</h3><p>Host creates a code. Friends enter the code and join with their generated heroes. No GM approval needed. The host manages shared reward spins in this version.</p><button onclick="nexusCoopHost()">🌍 Host Online Party</button><input id="nexusCoopCode" maxlength="16" placeholder="Party code"/><button onclick="nexusCoopJoin()">🤝 Join Online Party</button><button onclick="nexusCoopLeave()">Leave Online Party</button><div class="result" id="nexusCoopInfo">Not in an online party.</div></div><div class="game-panel" id="nexusV15Setup"><h3>🗺 Mission Command Center</h3><label for="nexusMissionSelect">Mission: </label><select id="nexusMissionSelect"><option value="cycle">Campaign sequence</option><option value="0">Harbor Evacuation</option><option value="1">Omega Labs Containment</option><option value="2">Nexus City Quake</option><option value="3">Ashfall Emergency</option><option value="4">Core Fracture</option><option value="5">Blackgate Breakout</option><option value="6">Dimensional Rift</option><option value="7">Citywide Blackout</option><option value="8">Titan Fortress Siege</option><option value="9">Shadow Realm Incursion</option></select><label for="nexusDifficulty"> Difficulty: </label><select id="nexusDifficulty"><option value="story">Story</option><option selected="" value="normal">Heroic</option><option value="hard">Legendary</option></select><div class="small-muted" id="nexusCampaignStats">Campaign not started.</div><button onclick="nexusCampaignExport()" type="button">⬇ Export Campaign Report</button></div><div aria-live="polite" class="game-panel" id="nexusMissionBoard" style="display:none;border-color:#facc15"><h3>📜 No-GM Mission</h3><div id="nexusMissionTitle"></div><p id="nexusMissionStory"></p><div id="nexusMissionObjectives"></div><div id="nexusMissionClock"></div><div id="nexusMissionOutcome"></div></div><div class="game-panel" id="nexusV22PowerLab"><h3>✨ No-GM Power Actions</h3><p class="small-muted">Use a named hero power in combat without a GM. Choose its effect and the automatic rules resolve accuracy, energy, and resistance. Each use takes one turn.</p><label for="nexusPowerMoveName">Power / signature move name: </label><input id="nexusPowerMoveName" maxlength="70" placeholder="e.g. Thunder Pulse"/><label for="nexusPowerMoveEffect"> Effect: </label><select id="nexusPowerMoveEffect"><option value="blast">Energy Blast — attack an enemy</option><option value="barrier">Protective Barrier — shield the team</option><option value="restore">Healing Surge — heal an ally</option><option value="rescue">Rescue Burst — save civilians</option><option value="contain">Containment Field — stop disaster</option></select><button onclick="nexusSoloPowerAction()" type="button">✨ Use Power (1 Turn)</button><div aria-live="polite" class="small-muted" id="nexusPowerFeedback">Generate a hero and begin a No-GM mission to use powers.</div></div><div class="game-panel" id="nexusV22TestPanel"><h3>🧪 Beta Test Tools</h3><button onclick="nexusV22Check()" type="button">Run System Check</button><button onclick="nexusV22ExportLog()" type="button">Export Combat Log</button><div aria-live="polite" class="small-muted" id="nexusV22CheckResult">Run System Check before your first playtest.</div></div><div id="nexusSoloActions" style="display:none"><h3>Choose your hero's action</h3><p class="small-muted">Complete Rescue, Protect and Contain objectives before defeating the final enemy for the best mission grade. Controlled attacks conserve energy; Maximum Effort can cause recoil. Recover restores stamina during combat.</p><label for="nexusAttackIntensity">Attack intensity: </label><select id="nexusAttackIntensity"><option value="controlled">Controlled (safe, low cost)</option><option value="powerful">Powerful (higher damage and fatigue)</option><option value="maximum">Maximum Effort (high damage, injury risk)</option></select><div aria-live="polite" class="small-muted" id="nexusCombatVitals"></div><div class="result" id="nexusSoloTurn"></div><button class="n23-action-launch" id="n23ActionLaunch" onclick="n23OpenActions()" type="button">⚔ Choose Action / Open Combat Menu</button><button class="n23-original-actions" onclick="nexusSoloAction('Attack')">⚔ Attack</button><button class="n23-original-actions" onclick="nexusSoloAction('Heavy Attack')">💥 Heavy Attack</button><button class="n23-original-actions" onclick="nexusSoloAction('Power Attack')">✨ Power Attack</button><button class="n23-original-actions" onclick="nexusSoloAction('Defend')">🛡 Defend</button><button class="n23-original-actions" onclick="nexusSoloAction('Heal')">💚 Heal</button><button class="n23-original-actions" onclick="nexusSoloAction('Dodge')">💨 Dodge</button><button class="n23-original-actions" onclick="nexusSoloAction('Rescue')">🧑‍🚒 Rescue Civilians</button><button class="n23-original-actions" onclick="nexusSoloAction('Protect')">🏢 Protect Infrastructure</button><button class="n23-original-actions" onclick="nexusSoloAction('Contain')">🌊 Contain Disaster</button><button class="n23-original-actions" onclick="nexusSoloAction('Recover')">🔋 Recover Energy</button><button class="n23-original-actions" onclick="nexusSoloAction('Rally')">📣 Rally the Team</button><button class="n23-original-actions" onclick="nexusSoloAction('Stabilize')">🩺 Stabilize Ally</button></div><div class="game-panel" id="nexusRewardPanel" style="display:none"><h3>🎡 Victory Advancement — Two Spins</h3><p>Each surviving hero earns a two-part reward for a completed mission, including partial-credit victories. First wheel: 9 equal spaces — seven stats, Choose Your Stat, and Equipment Reward. Equipment is awarded randomly; players cannot choose equipment. Second wheel: 0–4 stat points or Common/Rare/Epic/Legendary equipment rarity.</p><div class="result" id="nexusRewardInfo"></div><button onclick="nexusRewardSpinStat()">🎡 Spin 1: Stat / Equipment</button><div id="nexusRewardChoice" style="display:none;margin:10px 0"><label for="nexusRewardSelect">⭐ Choose Your Stat (special wheel result)</label><select id="nexusRewardSelect"></select><button onclick="nexusRewardConfirmChoice()">Confirm Choice</button></div><div aria-live="polite" class="game-panel" id="nexusRewardProgress"></div><div aria-live="polite" class="game-panel" id="nexusEquipmentReward"></div><button onclick="nexusRewardSpinGain()">🎡 Spin 2: Points / Rarity</button></div><div class="small-muted" style="padding:10px">V22: Nine-space rewards with random equipment only, improved combat instructions, expanded mission library, enemy tactics, online support and adventure backups. Rescue / Protect / Contain advance 2–3 points on success. Containment reduces disaster damage; protection grants shields. Equipment and Speed can evade enemy attacks; Durability and armor reduce damage. Partial victories can earn rewards. Add another local hero at any time using the Hero Generator and Add Current Hero.</div><div class="game-panel" id="nexusGearManager"><h3>🎒 Equipment Loadout</h3><p>Earned equipment must be equipped to provide its combat bonuses. One item per slot; damaged gear can be repaired between missions.</p><div id="nexusGearControls">Generate a hero to manage equipment.</div></div><div class="game-panel" id="nexusV19Operations"><h3>🧭 Squad Operations</h3><div id="nexusSquadOverview">Start a mission to see the team.</div><label for="nexusAllyTarget">Support target: </label><select id="nexusAllyTarget"></select><p class="small-muted">Recover restores energy and reduces fatigue. Rally grants shields and energy to allies. Stabilize restores health to a selected ally. All use a hero turn.</p><div id="nexusMissionGrade"></div></div><div aria-live="polite" class="game-panel" id="nexusEnemyIntent">Enemy tactics appear when combat starts.</div><div aria-live="polite" class="game-panel" id="nexusTacticalReport">Mission tactical report appears here.</div><div class="game-panel" id="nexusSoloLog" style="white-space:pre-wrap;max-height:260px;overflow:auto">No encounter started.</div></div></section>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>🌍 Join Multiplayer World</h2><button aria-expanded="false" aria-label="Expand or collapse 🌍 Join Multiplayer World" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <p>
 Create or load your hero first. Then enter the world code the GM gave you.
 </p>
-
-<input
-    id="multiplayerPlayerName"
-    placeholder="Enter Your Player Name"
-    maxlength="30"
->
-
-<br>
-
-<input
-    id="joinWorldInput"
-    placeholder="Enter World Code"
-    maxlength="20"
->
-
-<br>
-
+<input id="multiplayerPlayerName" maxlength="30" placeholder="Enter Your Player Name"/>
+<br/>
+<input id="joinWorldInput" maxlength="20" placeholder="Enter World Code"/>
+<br/>
 <button onclick="checkMultiplayerWorld()">
 🔎 Check World
 </button>
-
 <button onclick="sendHeroJoinRequest()">
 📨 Send Hero To GM
 </button>
-
-<div id="joinedWorldDisplay" class="result">
+<div class="result" id="joinedWorldDisplay">
 Not connected to a world.
 </div>
-
-<div id="playerJoinStatus" class="game-panel">
+<div class="game-panel" id="playerJoinStatus">
 No join request sent.
 </div>
-</div>
-
-
-     
-<div class="card">
-<h2>Power Wheels</h2>
+</div></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>Power Wheels</h2><button aria-expanded="false" aria-label="Expand or collapse Power Wheels" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <h3>Power Chance</h3>
-<div id="powerChanceResult" class="result">--</div>
+<div class="result" id="powerChanceResult">--</div>
 <button onclick="spinPowerChanceWheel()">🎡 Spin Power Chance</button>
-
 <h3>Power Count</h3>
-<div id="powerWheelResult" class="result">--</div>
+<div class="result" id="powerWheelResult">--</div>
 <button onclick="spinPowerWheel()">🎡 Spin Power Count</button>
-
 <h3>Power Wheel</h3>
-<div id="powerResult" class="result">--</div>
+<div class="result" id="powerResult">--</div>
 <button onclick="spinPowerWheel2()">🎡 Spin Power</button>
-</div>
+</div></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>Stat Wheels</h2><button aria-expanded="false" aria-label="Expand or collapse Stat Wheels" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
-<div class="card">
-<h2>Stat Wheels</h2>
-
-<div id="strengthWheelResult" class="result">Strength: --</div>
+<div class="result" id="strengthWheelResult">Strength: --</div>
 <button onclick="spinStatWheel('Strength', strengthLevels, 'currentStrength', 'strengthWheelResult')">🎡 Spin Strength</button>
-
-<div id="speedWheelResult" class="result">Speed: --</div>
+<div class="result" id="speedWheelResult">Speed: --</div>
 <button onclick="spinStatWheel('Speed', speedLevels, 'currentSpeed', 'speedWheelResult')">🎡 Spin Speed</button>
-
-<div id="durabilityWheelResult" class="result">Durability: --</div>
+<div class="result" id="durabilityWheelResult">Durability: --</div>
 <button onclick="spinStatWheel('Durability', durabilityLevels, 'currentDurability', 'durabilityWheelResult')">🎡 Spin Durability</button>
-
-<div id="intelligenceWheelResult" class="result">Intelligence: --</div>
+<div class="result" id="intelligenceWheelResult">Intelligence: --</div>
 <button onclick="spinStatWheel('Intelligence', intelligenceLevels, 'currentIntelligence', 'intelligenceWheelResult')">🎡 Spin Intelligence</button>
-
-<div id="combatWheelResult" class="result">Combat: --</div>
+<div class="result" id="combatWheelResult">Combat: --</div>
 <button onclick="spinStatWheel('Combat', combatLevels, 'currentCombat', 'combatWheelResult')">🎡 Spin Combat</button>
-
-<div id="staminaWheelResult" class="result">Stamina: --</div>
+<div class="result" id="staminaWheelResult">Stamina: --</div>
 <button onclick="spinStatWheel('Stamina', staminaLevels, 'currentStamina', 'staminaWheelResult')">🎡 Spin Stamina</button>
-
-<div id="powerControlWheelResult" class="result">Power Control: --</div>
+<div class="result" id="powerControlWheelResult">Power Control: --</div>
 <button onclick="spinStatWheel('Power Control', powerControlLevels, 'currentPowerControl', 'powerControlWheelResult')">🎡 Spin Power Control</button>
-</div>
-
-<div class="card">
-<h2>Additional Wheels</h2>
+</div></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>Additional Wheels</h2><button aria-expanded="false" aria-label="Expand or collapse Additional Wheels" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <h3>Species</h3>
-<div id="speciesWheelResult" class="result">--</div>
+<div class="result" id="speciesWheelResult">--</div>
 <button onclick="spinSpeciesWheel()">🎡 Spin Species</button>
-
 <h3>Origin</h3>
-<div id="originWheelResult" class="result">--</div>
+<div class="result" id="originWheelResult">--</div>
 <button onclick="spinOriginWheel()">🎡 Spin Origin</button>
-
 <h3>Alignment</h3>
-<div id="alignmentWheelResult" class="result">--</div>
+<div class="result" id="alignmentWheelResult">--</div>
 <button onclick="spinAlignmentWheel()">🎡 Spin Alignment</button>
-
 <h3>Equipment Chance</h3>
-<div id="equipmentChanceResult" class="result">--</div>
+<div class="result" id="equipmentChanceResult">--</div>
 <button onclick="spinEquipmentChanceWheel()">🎡 Spin Equipment Chance</button>
-
 <h3>Equipment Count</h3>
-<div id="equipmentCountResult" class="result">--</div>
+<div class="result" id="equipmentCountResult">--</div>
 <button onclick="spinEquipmentCountWheel()">🎡 Spin Equipment Count</button>
-
 <h3>Equipment Wheel</h3>
-<div id="equipmentWheelResult" class="result">--</div>
+<div class="result" id="equipmentWheelResult">--</div>
 <button onclick="spinEquipmentWheel()">🎡 Spin Equipment</button>
-
 <h3>Weakness Count</h3>
-<div id="weaknessCountResult" class="result">--</div>
+<div class="result" id="weaknessCountResult">--</div>
 <button onclick="spinWeaknessCountWheel()">🎡 Spin Weakness Count</button>
-
 <h3>Weakness Wheel</h3>
-<div id="weaknessWheelResult" class="result">--</div>
+<div class="result" id="weaknessWheelResult">--</div>
 <button onclick="spinWeaknessWheel()">🎡 Spin Weakness</button>
-</div>
-
-
-<div class="card">
-<h2>Hero Sheet</h2>
+</div></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>Hero Sheet</h2><button aria-expanded="false" aria-label="Expand or collapse Hero Sheet" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <p><strong>Name:</strong> <span id="name">--</span></p>
 <p><strong>Species:</strong> <span id="species">--</span></p>
 <p><strong>Origin:</strong> <span id="origin">--</span></p>
 <p><strong>Alignment:</strong> <span id="alignment">--</span></p>
 <p><strong>Power Count:</strong> <span id="powerCount">--</span></p>
-
 <h3>Stats</h3>
 <p><strong>Strength:</strong> <span id="strength">--</span></p>
 <p><strong>Speed:</strong> <span id="speed">--</span></p>
@@ -915,493 +847,293 @@ No join request sent.
 <p><strong>Combat:</strong> <span id="combat">--</span></p>
 <p><strong>Stamina:</strong> <span id="stamina">--</span></p>
 <p><strong>Power Control:</strong> <span id="powerControl">--</span></p>
-
 <p><strong>Power Score:</strong> <span id="powerScore">--</span></p>
 <p><strong>Archetype:</strong> <span id="archetype">--</span></p>
 <p><strong>Class:</strong> <span id="heroClass">--</span></p>
 <p><strong>Rank:</strong> <span id="rank">--</span></p>
-
 <h3>Equipment</h3>
 <div id="equipment">--</div>
-
 <h3>Mission Equipment Earned</h3><div id="nexusEarnedEquipment">No mission equipment earned yet.</div><h3>Powers</h3>
 <div id="powers">--</div>
-
 <h3>Weaknesses</h3>
 <div id="weaknesses">--</div>
-</div>
-
+</div></div>
 <!-- =====================================================
      NEXUS HEROES BETA 4.0
      PLAYER POWER CREATOR
      ===================================================== -->
+<div class="card n23-card n23-collapsed" id="playerPowerCreatorCard"><div class="n23-card-title"><h2>✨ Create Power Action</h2><button aria-expanded="false" aria-label="Expand or collapse ✨ Create Power Action" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
-<div class="card" id="playerPowerCreatorCard">
-
-    <h2>✨ Create Power Action</h2>
-
-    <p>
+<p>
         Describe what you want your hero to attempt using one of their powers.
         Your Power Control determines how difficult the action may be.
         The GM makes the final ruling.
     </p>
-
-    <div class="power-control-meter">
-
-        <strong>Power Control:</strong>
-
-        <span id="creatorPowerControl">
+<div class="power-control-meter">
+<strong>Power Control:</strong>
+<span id="creatorPowerControl">
             --
         </span>
-
-        <div class="power-control-bar">
-            <div
-                id="creatorPowerControlFill"
-                class="power-control-fill"
-            ></div>
-        </div>
-
-        <div
-            id="creatorPowerControlDescription"
-            class="small-muted"
-            style="margin-top:8px;"
-        >
+<div class="power-control-bar">
+<div class="power-control-fill" id="creatorPowerControlFill"></div>
+</div>
+<div class="small-muted" id="creatorPowerControlDescription" style="margin-top:8px;">
             Generate or load a hero first.
         </div>
-
-    </div>
-
-
-    <div class="power-creator-grid">
-
-        <div class="power-creator-field">
-
-            <label for="creatorPowerSelect">
+</div>
+<div class="power-creator-grid">
+<div class="power-creator-field">
+<label for="creatorPowerSelect">
                 Choose Power
             </label>
-
-            <select id="creatorPowerSelect">
-                <option value="">
+<select id="creatorPowerSelect">
+<option value="">
                     Select a power
                 </option>
-            </select>
-
-        </div>
-
-
-        <div class="power-creator-field">
-
-            <label for="creatorTarget">
+</select>
+</div>
+<div class="power-creator-field">
+<label for="creatorTarget">
                 Target
             </label>
-
-            <input
-                id="creatorTarget"
-                type="text"
-                placeholder="Enemy, object, ally, area, self..."
-                maxlength="100"
-            >
-
-        </div>
-
-    </div>
-
-
-    <div class="power-creator-field">
-
-        <label for="creatorActionDescription">
+<input id="creatorTarget" maxlength="100" placeholder="Enemy, object, ally, area, self..." type="text"/>
+</div>
+</div>
+<div class="power-creator-field">
+<label for="creatorActionDescription">
             What do you want your power to do?
         </label>
-
-        <textarea
-            id="creatorActionDescription"
-            maxlength="500"
-            placeholder="Example: I use my fire manipulation to create a ring of fire around the enemies so they cannot escape."
-        ></textarea>
-
-    </div>
-
-
-    <div class="power-creator-grid">
-
-        <div class="power-creator-field">
-
-            <label for="creatorScale">
+<textarea id="creatorActionDescription" maxlength="500" placeholder="Example: I use my fire manipulation to create a ring of fire around the enemies so they cannot escape."></textarea>
+</div>
+<div class="power-creator-grid">
+<div class="power-creator-field">
+<label for="creatorScale">
                 Intended Scale
             </label>
-
-            <select id="creatorScale">
-
-                <option value="1">
+<select id="creatorScale">
+<option value="1">
                     Small / Single Target
                 </option>
-
-                <option value="2">
+<option value="2">
                     Moderate
                 </option>
-
-                <option value="3">
+<option value="3">
                     Large / Multiple Targets
                 </option>
-
-                <option value="4">
+<option value="4">
                     Massive / Battlefield
                 </option>
-
-                <option value="5">
+<option value="5">
                     Extreme
                 </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="power-creator-field">
-
-            <label for="creatorPrecision">
+</select>
+</div>
+<div class="power-creator-field">
+<label for="creatorPrecision">
                 Precision Required
             </label>
-
-            <select id="creatorPrecision">
-
-                <option value="1">
+<select id="creatorPrecision">
+<option value="1">
                     Basic
                 </option>
-
-                <option value="2">
+<option value="2">
                     Controlled
                 </option>
-
-                <option value="3">
+<option value="3">
                     Precise
                 </option>
-
-                <option value="4">
+<option value="4">
                     Extremely Precise
                 </option>
-
-            </select>
-
-        </div>
-
-    </div>
-
-
-    <button
-        onclick="assessCreatedPowerAction()"
-    >
+</select>
+</div>
+</div>
+<button onclick="assessCreatedPowerAction()">
         🧠 Assess Power Action
     </button>
-
-    <button
-        onclick="submitCreatedPowerAction()"
-    >
+<button onclick="submitCreatedPowerAction()">
         📨 Send To GM
     </button>
-
-
-    <div
-        id="powerActionAssessment"
-        class="power-assessment"
-    >
+<div class="power-assessment" id="powerActionAssessment">
         Create an action to receive a Power Control assessment.
     </div>
-
-
-    <h3>⭐ Signature Moves</h3>
-
-    <div id="signatureMovesDisplay">
+<h3>⭐ Signature Moves</h3>
+<div id="signatureMovesDisplay">
         No signature moves saved.
     </div>
-
+</div></div>
 </div>
-
-</div>
-
 <!-- =====================================================
      PLAYER WORLD VIEW
      Hidden until the GM accepts the player
      ===================================================== -->
-
-<div
-    class="card portal"
-    id="playerWorldView"
-    style="display:none;"
->
-
+<div class="card portal" id="playerWorldView" style="display:none;">
 <h2>🌍 Live World</h2>
-
-<div id="nxcPlayerCrisis" class="game-panel" style="margin:10px 0" aria-live="polite">No active world catastrophe.</div>
-<div id="playerWorldStatus" class="result">
+<div aria-live="polite" class="game-panel" id="nxcPlayerCrisis" style="margin:10px 0">No active world catastrophe.</div>
+<div class="result" id="playerWorldStatus">
 Map preview — join a world and wait for GM approval to see live gameplay.
 </div>
-
 <div class="world-map">
-
-    <!-- Accepted player and enemy markers appear here -->
-    <div
-        id="playerLiveMapMarkers"
-        class="live-marker-layer"
-    ></div>
-
-    <!-- Opens when the player clicks a character marker -->
-    <div
-        id="playerMarkerInfoPopup"
-        class="marker-info-popup"
-    >
+<!-- Accepted player and enemy markers appear here -->
+<div class="live-marker-layer" id="playerLiveMapMarkers"></div>
+<!-- Opens when the player clicks a character marker -->
+<div class="marker-info-popup" id="playerMarkerInfoPopup">
         Click a character marker.
     </div>
-
-    <!-- Map roads -->
-    <svg
-        class="roadLayer"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-    >
-        <path class="roadPath" d="M45 29 L47 13" />
-        <path class="roadPath" d="M45 29 L21 43" />
-        <path class="roadPath" d="M45 29 L21 78" />
-        <path class="roadPath" d="M45 29 L61 39" />
-        <path class="roadPath" d="M61 39 L78 24" />
-        <path class="roadPath" d="M61 39 L85 57" />
-        <path class="roadPath" d="M45 29 L48 59" />
-        <path class="roadPath" d="M48 59 L50 86" />
-        <path class="roadPath" d="M48 59 L73 82" />
-    </svg>
-
-    <!-- Player map locations are visual only.
+<!-- Map roads -->
+<svg class="roadLayer" preserveaspectratio="none" viewbox="0 0 100 100">
+<path class="roadPath" d="M45 29 L47 13"></path>
+<path class="roadPath" d="M45 29 L21 43"></path>
+<path class="roadPath" d="M45 29 L21 78"></path>
+<path class="roadPath" d="M45 29 L61 39"></path>
+<path class="roadPath" d="M61 39 L78 24"></path>
+<path class="roadPath" d="M61 39 L85 57"></path>
+<path class="roadPath" d="M45 29 L48 59"></path>
+<path class="roadPath" d="M48 59 L50 86"></path>
+<path class="roadPath" d="M48 59 L73 82"></path>
+</svg>
+<!-- Player map locations are visual only.
          They do not contain GM controls. -->
-
-    <div
-        class="mapMarker city"
-        title="Nexus City"
-    >
+<div class="mapMarker city" title="Nexus City">
         🏙
     </div>
-
-    <div
-        class="mapMarker harbor"
-        title="Harbor District"
-    >
+<div class="mapMarker harbor" title="Harbor District">
         ⚓
     </div>
-
-    <div
-        class="mapMarker prison"
-        title="Blackgate Prison"
-    >
+<div class="mapMarker prison" title="Blackgate Prison">
         🚔
     </div>
-
-    <div
-        class="mapMarker labs"
-        title="Omega Labs"
-    >
+<div class="mapMarker labs" title="Omega Labs">
         🧪
     </div>
-
-    <div
-        class="mapMarker crash"
-        title="Crash Site"
-    >
+<div class="mapMarker crash" title="Crash Site">
         🛸
     </div>
-
-    <div
-        class="mapMarker ruins"
-        title="Ancient Ruins"
-    >
+<div class="mapMarker ruins" title="Ancient Ruins">
         🏛
     </div>
-
-    <div
-        class="mapMarker wasteland"
-        title="Wasteland Desert"
-    >
+<div class="mapMarker wasteland" title="Wasteland Desert">
         🏜
     </div>
-
-    <div
-        class="mapMarker sanctuary"
-        title="Hidden Sanctuary"
-    >
+<div class="mapMarker sanctuary" title="Hidden Sanctuary">
         🛡
     </div>
-
-    <div
-        class="mapMarker fortress"
-        title="Titan Fortress"
-    >
+<div class="mapMarker fortress" title="Titan Fortress">
         🏰
     </div>
-
-    <div
-        class="mapMarker portalMarker"
-        title="Dimensional Portal"
-    >
+<div class="mapMarker portalMarker" title="Dimensional Portal">
         🌀
     </div>
-
-    <div
-        class="mapMarker powerplant"
-        title="Power Plant"
-    >
+<div class="mapMarker powerplant" title="Power Plant">
         ⚡
     </div>
-
-    <div
-        class="mapMarker shadow"
-        title="Shadow Realm"
-    >
+<div class="mapMarker shadow" title="Shadow Realm">
         💀
     </div>
-
 </div>
-
-
 <!-- PLAYER CHARACTER STATUS -->
-
 <div class="game-panel">
-
 <h3>🦸 Your Character</h3>
-
 <p>
-    <strong>Location:</strong>
-    <span id="playerCurrentLocation">
+<strong>Location:</strong>
+<span id="playerCurrentLocation">
         --
     </span>
 </p>
-
 <p>
-    <strong>Health:</strong>
-    <span id="playerCurrentHealth">
+<strong>Health:</strong>
+<span id="playerCurrentHealth">
         --
     </span>
 </p>
-
 <p>
-    <strong>Energy:</strong>
-    <span id="playerCurrentEnergy">
+<strong>Energy:</strong>
+<span id="playerCurrentEnergy">
         --
     </span>
 </p>
-
 <p>
-    <strong>Shield:</strong>
-    <span id="playerCurrentShield">
+<strong>Shield:</strong>
+<span id="playerCurrentShield">
         --
     </span>
 </p>
-
 <p>
-    <strong>Status:</strong>
-    <span id="playerCurrentStatus">
+<strong>Status:</strong>
+<span id="playerCurrentStatus">
         --
     </span>
 </p>
-
 <p>
-    <strong>World Turn:</strong>
-    <span id="playerWorldTurn">
+<strong>World Turn:</strong>
+<span id="playerWorldTurn">
         --
     </span>
 </p>
-
 </div>
-
-
 <!-- WORLD INFORMATION -->
-
 <div class="game-panel">
-
 <h3>📡 Live World Information</h3>
-
 <p>
     Accepted heroes will appear as customized character markers.
 </p>
-
 <p>
     Enemy markers will appear after enemy Firebase syncing is added.
 </p>
-
 <p>
     The GM controls travel, missions, combat, health, enemies, and world events.
 </p>
-
 </div>
-
 </div>
-
 <!-- =====================================================
      END PLAYER WORLD VIEW
      ===================================================== -->
+<div class="portal" id="gmPortal"><div aria-label="🎮 GM quick navigation" class="n23-bar" role="navigation"><strong>🎮 GM</strong><button class="" onclick="n23OpenMenu()" type="button">☰ Menu</button><button class="n23-primary" onclick="n23GoCombat()" type="button">⚔ Combat</button></div>
+<div class="card n23-card"><div class="n23-card-title"><h2>GM Dashboard</h2><button aria-expanded="true" aria-label="Expand or collapse GM Dashboard" class="n23-collapse" type="button">Close</button></div><div class="n23-body">
 
-<div id="gmPortal" class="portal">
-
-<div class="card">
-<h2>GM Dashboard</h2>
-
-<input id="worldNameInput" placeholder="World Name">
+<input id="worldNameInput" placeholder="World Name"/>
 <button onclick="createWorldCode(event)">
 🌍 Create Multiplayer World
 </button>
-    
 <button onclick="toggleTeamMode()">🔁 Toggle Team / Solo</button>
 <button onclick="addHeroToWorld()">➕ Add Hero To World</button>
-
 <p><strong>World Code:</strong> <span id="worldCodeDisplay">--</span></p>
 <p><strong>Mode:</strong> <span id="teamModeDisplay">Mode: Solo</span></p>
-
-<hr>
-
+<hr/>
 <h3>🌐 Multiplayer World Status</h3>
-
-<div id="gmMultiplayerStatus" class="result">
+<div class="result" id="gmMultiplayerStatus">
 No multiplayer world active.
 </div>
-
 <button onclick="startGMJoinRequestListener()">
 🔄 Refresh Join Requests
 </button>
-
 <h3>Pending Join Requests</h3>
-
-<div id="gmJoinRequestsDisplay" class="game-panel">
+<div class="game-panel" id="gmJoinRequestsDisplay">
 No pending join requests.
 </div>
-
 <h3>Accepted Multiplayer Players</h3>
-
-<div id="multiplayerPlayersDisplay" class="game-panel">
+<div class="game-panel" id="multiplayerPlayersDisplay">
 No multiplayer players accepted.
 </div>
-
-</div>
-
-<div class="card">
-<h2>World Map Control Center</h2>
+</div></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>World Map Control Center</h2><button aria-expanded="false" aria-label="Expand or collapse World Map Control Center" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <div class="world-map">
-
-<div id="liveMapMarkers" class="live-marker-layer"></div>
-
-<div id="markerInfoPopup" class="marker-info-popup">
+<div class="live-marker-layer" id="liveMapMarkers"></div>
+<div class="marker-info-popup" id="markerInfoPopup">
     Click a character marker.
 </div>
-    
-<svg class="roadLayer" viewBox="0 0 100 100" preserveAspectRatio="none">
-    <path class="roadPath" d="M45 29 L47 13" />
-    <path class="roadPath" d="M45 29 L21 43" />
-    <path class="roadPath" d="M45 29 L21 78" />
-    <path class="roadPath" d="M45 29 L61 39" />
-    <path class="roadPath" d="M61 39 L78 24" />
-    <path class="roadPath" d="M61 39 L85 57" />
-    <path class="roadPath" d="M45 29 L48 59" />
-    <path class="roadPath" d="M48 59 L50 86" />
-    <path class="roadPath" d="M48 59 L73 82" />
+<svg class="roadLayer" preserveaspectratio="none" viewbox="0 0 100 100">
+<path class="roadPath" d="M45 29 L47 13"></path>
+<path class="roadPath" d="M45 29 L21 43"></path>
+<path class="roadPath" d="M45 29 L21 78"></path>
+<path class="roadPath" d="M45 29 L61 39"></path>
+<path class="roadPath" d="M61 39 L78 24"></path>
+<path class="roadPath" d="M61 39 L85 57"></path>
+<path class="roadPath" d="M45 29 L48 59"></path>
+<path class="roadPath" d="M48 59 L50 86"></path>
+<path class="roadPath" d="M48 59 L73 82"></path>
 </svg>
-
 <button class="mapMarker city" onclick="selectMapLocation('Nexus City','Safe Zone','Main city. Heroes, shops, missions, civilians.')">🏙</button>
 <button class="mapMarker harbor" onclick="selectMapLocation('Harbor District','Mission Zone','Trade, ships, smuggling, sea threats.')">⚓</button>
 <button class="mapMarker prison" onclick="selectMapLocation('Blackgate Prison','Danger Zone','Villains, escapes, prison breaks.')">🚔</button>
@@ -1414,49 +1146,36 @@ No multiplayer players accepted.
 <button class="mapMarker portalMarker" onclick="selectMapLocation('Dimensional Portal','Mystery Zone','Travel, unstable reality, portals.')">🌀</button>
 <button class="mapMarker powerplant" onclick="selectMapLocation('Power Plant','Danger Zone','Energy core, danger, sabotage.')">⚡</button>
 <button class="mapMarker shadow" onclick="selectMapLocation('Shadow Realm','Boss Zone','Dark magic, demons, final threats.')">💀</button>
-
 </div>
-
 <div class="map-panel">
 <h3>Selected Location</h3>
 <p><strong>Name:</strong> <span id="selectedMapLocation">None</span></p>
 <p><strong>Type:</strong> <span id="selectedMapType">--</span></p>
 <p><strong>Details:</strong> <span id="mapLocationDetails">Click a location.</span></p>
-
-<hr>
-
+<hr/>
 <p><strong>Threat Level:</strong> <span id="worldThreatLevel">Moderate</span></p>
 <p><strong>Active Events:</strong> <span id="activeEvents">0</span></p>
 <p><strong>Turn:</strong> <span id="worldTurn">1</span></p>
-
 <button onclick="addCurrentHeroToMap()">➕ Add Hero To Map</button>
 <button onclick="addCurrentHeroToPlayerManager()">➕ Add Hero To Player Manager</button>
 <button onclick="travelSelectedHero()">🚶 Travel Here</button>
 <button onclick="nextWorldTurn()">➡ Next World Turn</button>
-
 <h3>Travel Event</h3>
 <div id="travelEventResult">No travel yet.</div>
 </div>
-</div>
-
-<div class="card">
-<h2>Mission + Enemy Control</h2>
+</div></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>Mission + Enemy Control</h2><button aria-expanded="false" aria-label="Expand or collapse Mission + Enemy Control" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <p><strong>Mission Location:</strong></p>
 <div id="missionLocation">No location selected</div>
-
 <button onclick="generateFullMission()">📜 Generate Mission</button>
-
 <h3>Mission Brief</h3>
 <div id="fullMissionResult">--</div>
-
-<hr>
-
+<hr/>
 <button onclick="generateVillain()">😈 Generate Villain</button>
 <button onclick="addGeneratedVillainToEnemies()">➕ Add Villain</button>
 <button onclick="addMinion()">➕ Add Minion</button>
 <button onclick="addElite()">⭐ Add Elite</button>
-
 <h3>Villain Sheet</h3>
 <p><strong>Name:</strong> <span id="villainName">--</span></p>
 <p><strong>Species:</strong> <span id="villainSpecies">--</span></p>
@@ -1465,225 +1184,171 @@ No multiplayer players accepted.
 <p><strong>Class:</strong> <span id="villainClass">--</span></p>
 <p><strong>Score:</strong> <span id="villainScore">--</span></p>
 <p><strong>Rank:</strong> <span id="villainRank">--</span></p>
-
-<section id="nexusEnemyStudio" class="game-panel" style="margin-top:16px">
-<h3>🧬 Enemy Creator & Preset Library</h3>
+<section class="game-panel" id="nexusEnemyStudio" style="margin-top:16px">
+<h3>🧬 Enemy Creator &amp; Preset Library</h3>
 <p class="small-muted">Generate a complete enemy or edit every field. Presets are saved in this browser; export them to keep a backup or transfer devices.</p>
 <div class="nexus-enemy-grid">
-<label>Enemy Name<input id="nesName" maxlength="65" placeholder="Enemy name"></label>
-<label>Enemy Type<select id="nesType"><option>Minion</option><option>Elite</option><option selected>Villain</option><option>Boss</option><option>Cosmic Threat</option></select></label>
-<label>Species<input id="nesSpecies" maxlength="70"></label>
-<label>Origin<input id="nesOrigin" maxlength="90"></label>
-<label>Threat Level<select id="nesThreat"><option>Low</option><option selected>Moderate</option><option>High</option><option>Extreme</option><option>Cosmic</option></select></label>
-<label>AI Style<select id="nesAI"><option>Aggressive</option><option>Defensive</option><option selected>Tactical</option><option>Support</option><option>Unpredictable</option></select></label>
-<label>Max Health<input id="nesHP" type="number" min="1" max="100000" value="120"></label>
-<label>Max Energy<input id="nesEnergy" type="number" min="0" max="100000" value="100"></label>
-<label>Shield<input id="nesShield" type="number" min="0" max="100000" value="0"></label>
-<label>Weakness<input id="nesWeakness" maxlength="150" placeholder="Optional weakness"></label>
-<label>Motivation<input id="nesMotivation" maxlength="200" placeholder="Why they fight"></label>
-<label>Preset Name<input id="nesPresetName" maxlength="80" placeholder="e.g. Omega Labs Boss"></label>
+<label>Enemy Name<input id="nesName" maxlength="65" placeholder="Enemy name"/></label>
+<label>Enemy Type<select id="nesType"><option>Minion</option><option>Elite</option><option selected="">Villain</option><option>Boss</option><option>Cosmic Threat</option></select></label>
+<label>Species<input id="nesSpecies" maxlength="70"/></label>
+<label>Origin<input id="nesOrigin" maxlength="90"/></label>
+<label>Threat Level<select id="nesThreat"><option>Low</option><option selected="">Moderate</option><option>High</option><option>Extreme</option><option>Cosmic</option></select></label>
+<label>AI Style<select id="nesAI"><option>Aggressive</option><option>Defensive</option><option selected="">Tactical</option><option>Support</option><option>Unpredictable</option></select></label>
+<label>Max Health<input id="nesHP" max="100000" min="1" type="number" value="120"/></label>
+<label>Max Energy<input id="nesEnergy" max="100000" min="0" type="number" value="100"/></label>
+<label>Shield<input id="nesShield" max="100000" min="0" type="number" value="0"/></label>
+<label>Weakness<input id="nesWeakness" maxlength="150" placeholder="Optional weakness"/></label>
+<label>Motivation<input id="nesMotivation" maxlength="200" placeholder="Why they fight"/></label>
+<label>Preset Name<input id="nesPresetName" maxlength="80" placeholder="e.g. Omega Labs Boss"/></label>
 </div>
 <h4>Enemy Stats (same 1–14 tiers as heroes)</h4>
-<div id="nesStats" class="nexus-enemy-grid"></div>
+<div class="nexus-enemy-grid" id="nesStats"></div>
 <h4>Custom Attacks</h4>
 <p class="small-muted">One attack per line: Name | Damage | Energy Cost | Cooldown | Debuff | Duration. Example: Toxic Blast | 18 | 12 | 2 | Poison | 3</p>
-<textarea id="nesAttacks" rows="4" style="width:100%;box-sizing:border-box;background:#111827;color:white;border:1px solid #64748b;border-radius:8px;padding:10px" placeholder="Basic Strike | 10 | 0 | 0"></textarea>
+<textarea id="nesAttacks" placeholder="Basic Strike | 10 | 0 | 0" rows="4" style="width:100%;box-sizing:border-box;background:#111827;color:white;border:1px solid #64748b;border-radius:8px;padding:10px"></textarea>
 <h4>Debuffs and Battlefield Threats</h4>
 <p class="small-muted">Attack format: Name | Damage | Energy | Cooldown | Effect | Duration. Effects: Poison, Weakness, Slowness, Stamina Drain, Off Balance, Blindness, Stun. Leave effect blank for a normal attack.</p>
 <p class="small-muted">Example: Venom Cloud | 12 | 15 | 2 | Poison | 3</p>
 <div class="nexus-enemy-grid">
 <label>Environmental Threat<select id="nesHazard"><option value="">None</option><option>Building Collapse</option><option>Civilians in Danger</option><option>Earthquake</option><option>Volcanic Eruption</option><option>Tsunami</option><option>Citywide Blackout</option><option>Earth Core Fracture</option></select></label>
 <label>Catastrophe Severity (capped by enemy type)<select id="nesSeverity"><option value="1">Local</option><option value="2">District</option><option value="3">Citywide</option><option value="4">Global</option></select></label>
-<label>Disaster Countdown (rounds)<input id="nesCountdown" type="number" min="1" max="20" value="3"></label>
-<label>Rescue Difficulty (effort points)<input id="nesRescue" type="number" min="1" max="100" value="4"></label>
+<label>Disaster Countdown (rounds)<input id="nesCountdown" max="20" min="1" type="number" value="3"/></label>
+<label>Rescue Difficulty (effort points)<input id="nesRescue" max="100" min="1" type="number" value="4"/></label>
 </div>
 <h4>Boss Phases (optional)</h4>
 <p class="small-muted">Use HP thresholds to switch AI style and announce an ability. These are stored for the upcoming automated combat engine.</p>
 <div class="nexus-enemy-grid"><label>At or below 50% HP<select id="nesPhase50"><option value="">No change</option><option>Aggressive</option><option>Defensive</option><option>Tactical</option><option>Support</option><option>Unpredictable</option></select></label><label>At or below 25% HP<select id="nesPhase25"><option value="">No change</option><option>Aggressive</option><option>Defensive</option><option>Tactical</option><option>Support</option><option>Unpredictable</option></select></label></div>
 <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px">
-<button type="button" onclick="nesGenerate()">🎲 Generate Full Enemy</button>
-<button type="button" onclick="nesAddToWorld()">➕ Add This Enemy To World</button>
-<button type="button" onclick="nesSavePreset()">💾 Save Preset</button>
-<button type="button" onclick="nesExportPresets()">⬇ Export Presets</button>
-<label style="display:inline-block;background:#1f2937;border-radius:8px;padding:8px">⬆ Import Presets <input id="nesImport" type="file" accept=".json,application/json" onchange="nesImportPresets(event)" style="max-width:190px"></label>
+<button onclick="nesGenerate()" type="button">🎲 Generate Full Enemy</button>
+<button onclick="nesAddToWorld()" type="button">➕ Add This Enemy To World</button>
+<button onclick="nesSavePreset()" type="button">💾 Save Preset</button>
+<button onclick="nesExportPresets()" type="button">⬇ Export Presets</button>
+<label style="display:inline-block;background:#1f2937;border-radius:8px;padding:8px">⬆ Import Presets <input accept=".json,application/json" id="nesImport" onchange="nesImportPresets(event)" style="max-width:190px" type="file"/></label>
 </div>
-<div class="nexus-enemy-grid"><label>Saved Presets<select id="nesPresetSelect"></select></label><div><button type="button" onclick="nesLoadPreset()">📂 Load Preset</button><button type="button" onclick="nesDeletePreset()">🗑 Delete Preset</button></div></div>
-<div id="nesMessage" role="status" class="result"></div>
+<div class="nexus-enemy-grid"><label>Saved Presets<select id="nesPresetSelect"></select></label><div><button onclick="nesLoadPreset()" type="button">📂 Load Preset</button><button onclick="nesDeletePreset()" type="button">🗑 Delete Preset</button></div></div>
+<div class="result" id="nesMessage" role="status"></div>
 </section>
 <section class="game-panel" id="nexusCrisisBoard" style="margin-top:12px">
-<h3>🌎 World Crisis & Hero Decisions</h3>
+<h3>🌎 World Crisis &amp; Hero Decisions</h3>
 <p class="small-muted">Select an enemy and unleash a configured threat. Heroes choose one action per crisis round: attack the enemy, dodge, rescue civilians, protect infrastructure, or contain the disaster. Crisis state is shared through the current Firebase world. Players can respond from the Live World panel; GM crisis controls remain available here.</p>
 <div class="nexus-enemy-grid"><label>Enemy<select id="nxcEnemy"></select></label><label>Hero<select id="nxcHero"></select></label></div>
-<div style="display:flex;gap:7px;flex-wrap:wrap"><button onclick="nxcLaunch()">🌋 Unleash Threat</button><button onclick="nxcEnemyAttack()">🧪 Enemy Special Attack</button><button type="button" onclick="nxcAutoEnemyTurn()">🤖 Resolve Enemy Turn</button><button onclick="nxcNextRound()">⏳ Advance Crisis Round</button></div>
-<div id="nxcEvents" aria-live="polite" style="margin:12px 0"></div>
+<div style="display:flex;gap:7px;flex-wrap:wrap"><button onclick="nxcLaunch()">🌋 Unleash Threat</button><button onclick="nxcEnemyAttack()">🧪 Enemy Special Attack</button><button onclick="nxcAutoEnemyTurn()" type="button">🤖 Resolve Enemy Turn</button><button onclick="nxcNextRound()">⏳ Advance Crisis Round</button></div>
+<div aria-live="polite" id="nxcEvents" style="margin:12px 0"></div>
 <div style="display:flex;gap:7px;flex-wrap:wrap"><button onclick="nxcHeroAction('Attack')">⚔ Attack</button><button onclick="nxcHeroAction('Dodge')">💨 Dodge</button><button onclick="nxcHeroAction('Rescue')">🧑‍🚒 Save Civilians</button><button onclick="nxcHeroAction('Protect')">🏢 Protect Buildings</button><button onclick="nxcHeroAction('Contain')">🌊 Stop Catastrophe</button></div>
-<div id="nxcLog" class="result" role="status" style="white-space:pre-wrap;max-height:220px;overflow:auto"></div>
+<div class="result" id="nxcLog" role="status" style="white-space:pre-wrap;max-height:220px;overflow:auto"></div>
 </section>
-</div>
-
-<div class="card">
-<h2>Inventory + Loot + Shops</h2>
+</div></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>Inventory + Loot + Shops</h2><button aria-expanded="false" aria-label="Expand or collapse Inventory + Loot + Shops" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <div class="inventory-grid">
-
 <div class="game-panel">
 <h3>Player Inventory</h3>
 <p><strong>Credits:</strong> <span id="playerCredits">0</span></p>
-
 <button onclick="giveCredits(100)">➕ Give 100 Credits</button>
 <button onclick="generateLoot()">🎁 Generate Loot</button>
 <button onclick="clearInventory()">🗑 Clear Inventory</button>
-
 <h3>Inventory</h3>
 <div id="inventoryDisplay">No items.</div>
 </div>
-
 <div class="game-panel">
 <h3>Equipped Gear</h3>
 <p><strong>Weapon:</strong> <span id="equippedWeapon">None</span></p>
 <p><strong>Armor:</strong> <span id="equippedArmor">None</span></p>
 <p><strong>Artifact:</strong> <span id="equippedArtifact">None</span></p>
 </div>
-
 <div class="game-panel">
 <h3>Nexus City Shop</h3>
-
 <button onclick="refreshShop()">🔄 Refresh Shop</button>
 <button onclick="buySelectedShopItem()">🛒 Buy Selected Item</button>
-
 <select id="shopSelect"></select>
-
 <div id="shopDisplay">No shop loaded.</div>
 </div>
-
 </div>
-
 <h3>Mission Reward</h3>
 <div id="rewardDisplay">No rewards yet.</div>
-</div>
-
-<div class="card">
-<h2>Players + Enemies</h2>
+</div></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>Players + Enemies</h2><button aria-expanded="false" aria-label="Expand or collapse Players + Enemies" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <h3>World Players</h3>
 <div id="worldPlayersDisplay">No Players</div>
-
-<hr>
-
+<hr/>
 <h3>Map Characters</h3>
 <div id="mapCharactersDisplay">No characters on map.</div>
-
-<hr>
-
+<hr/>
 <h3>Player Manager</h3>
 <div id="playerManagerDisplay">No players added.</div>
-
-<hr>
-
+<hr/>
 <h3>Enemy Manager</h3>
 <div id="enemyManagerDisplay">No enemies added.</div>
-</div>
-
+</div></div>
 <!-- =====================================================
      GM CUSTOM POWER APPROVAL
      ===================================================== -->
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>✨ Player Power Requests</h2><button aria-expanded="false" aria-label="Expand or collapse ✨ Player Power Requests" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
-<div class="card">
-
-    <h2>✨ Player Power Requests</h2>
-
-    <p>
+<p>
         Review player-created power actions.
         Power Control provides guidance, but the GM always makes the final ruling.
     </p>
-
-    <div id="gmPowerRequestsDisplay">
+<div id="gmPowerRequestsDisplay">
 
         No custom power requests.
 
     </div>
-
-</div>
-
-<div class="card">
-    
-    <h2>⚔ Combat Arena</h2>
+</div></div>
+<div class="card n23-card"><div class="n23-card-title"><h2>⚔ Combat Arena</h2><button aria-expanded="true" aria-label="Expand or collapse ⚔ Combat Arena" class="n23-collapse" type="button">Close</button></div><div class="n23-body">
 
 <button onclick="startTurns()">▶ Start Turns</button>
 <button onclick="endCurrentTurn()">⏭ End Turn</button>
 <button onclick="resetTurns()">🔄 Reset Turns</button>
-
 <div id="turnTrackerDisplay">No turn order started.</div>
-
-<hr>
-
+<hr/>
 <button onclick="refreshCombatSelectors()">🔄 Refresh Fighters</button>
-
 <div class="combat-arena">
-
 <div class="combat-side">
 <h2>🦸 Player Action</h2>
-
 <h3>Fighters</h3>
-<div id="combatFighterDisplay" class="fighter-row">
+<div class="fighter-row" id="combatFighterDisplay">
 No fighters loaded.
 </div>
-
-<hr>
-
+<hr/>
 <h3>Player Choice</h3>
 <button onclick="playerChooseAction('Attack')">⚔ Attack</button>
 <button onclick="playerChooseAction('Defend')">🛡 Defend</button>
 <button onclick="playerChooseAction('Heal')">💚 Heal</button>
 <button onclick="playerChooseAction('Heavy Attack')">💥 Heavy Attack</button>
 <button onclick="playerChooseAction('Power Attack')">✨ Power Attack</button>
-
 <p><strong>Chosen Action:</strong> <span id="chosenPlayerAction">None</span></p>
-
 <button onclick="gmApprovePlayerAction()">✅ GM Approve Action</button>
-
 <h3>Attacker</h3>
 <select id="combatAttacker"></select>
 </div>
-
 <div class="combat-side enemy-side">
 <h2>👹 Target</h2>
-
 <h3>Target</h3>
 <select id="combatTarget"></select>
-
 <button class="big-action" onclick="combatEnemyAttack()">👹 Enemy Attack</button>
 <button class="big-action" onclick="rollEnemyTurn()">🎲 Enemy AI Turn</button>
 </div>
-
 </div>
-
 <h3>Combat Log</h3>
-<div id="combatLog" class="combat-log">No combat yet.</div>
-
+<div class="combat-log" id="combatLog">No combat yet.</div>
 <h3>Quick Battle Result</h3>
 <div id="battleResult">--</div>
-</div>
-
-<div class="card">
-<h2>💾 Campaign Save</h2>
+</div></div>
+<div class="card n23-card n23-collapsed"><div class="n23-card-title"><h2>💾 Campaign Save</h2><button aria-expanded="false" aria-label="Expand or collapse 💾 Campaign Save" class="n23-collapse" type="button">Open</button></div><div class="n23-body">
 
 <button onclick="saveCampaign()">💾 Save Campaign</button>
 <button onclick="loadCampaign()">📂 Load Campaign</button>
 <button onclick="resetCampaign()">🗑 Reset Campaign</button>
-
-<div id="campaignSaveDisplay" class="game-panel">
+<div class="game-panel" id="campaignSaveDisplay">
 No campaign save loaded.
 </div>
+</div></div>
 </div>
-
-</div>
-
- <div id="rulebookPortal" class="portal">
-
+<div class="portal" id="rulebookPortal">
 <div class="card">
 <h2>📖 Nexus Heroes Game Manual</h2>
-
 <button onclick="showManualSection('quickStart')">Quick Start</button>
 <button onclick="showManualSection('playerHandbook')">Player Handbook</button>
 <button onclick="showManualSection('gmHandbook')">GM Handbook</button>
@@ -1692,718 +1357,499 @@ No campaign save loaded.
 <button onclick="showManualSection('shopGuide')">Shop</button>
 <button onclick="showManualSection('saveGuide')">Saving</button>
 </div>
-
 <div class="card manualSection" id="quickStart" style="display:block;">
 <h2>Quick Start</h2>
 <div class="rulebook-item">
-1. Create a hero in Player Portal.<br>
-2. GM creates a world code.<br>
-3. Add hero to world, map, and player manager.<br>
-4. Generate enemies and a mission.<br>
+1. Create a hero in Player Portal.<br/>
+2. GM creates a world code.<br/>
+3. Add hero to world, map, and player manager.<br/>
+4. Generate enemies and a mission.<br/>
 5. Refresh fighters and start combat.
 </div>
 </div>
-
 <div class="card manualSection" id="playerHandbook">
 <h2>Player Handbook</h2>
 <div class="rulebook-item">
 Players choose actions like Attack, Defend, Heal, Heavy Attack, or Power Attack. The GM approves the action before it happens.
 </div>
 </div>
-
 <div class="card manualSection" id="gmHandbook">
-
 <h2>🎮 Game Master Handbook</h2>
-
 <div class="rulebook-item">
 The Game Master creates the world, accepts players, controls missions,
 moves characters, spawns enemies, runs combat, gives rewards, and makes
 the final ruling when something is not covered by the game system.
 </div>
-
 <div class="gm-warning">
 <strong>Important:</strong> Wait until the website says
 <strong>🟢 Multiplayer Connected</strong> before creating or joining a world.
 </div>
-
-
 <!-- STARTING A WORLD -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmStartWorld')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmStartWorld')">
 🌍 1. Starting a Multiplayer World
 </button>
-
 <div class="gm-guide-content" id="gmStartWorld">
-
 <div class="gm-step">
 <strong>Step 1:</strong> Open the GM Portal using the button at the top of the page.
 </div>
-
 <div class="gm-step">
 <strong>Step 2:</strong> Enter a name in the World Name box.
 </div>
-
 <div class="gm-step">
 <strong>Step 3:</strong> Choose Solo or Team mode using
 <strong>Toggle Team / Solo</strong>.
 </div>
-
 <div class="gm-step">
 <strong>Step 4:</strong> Press
 <strong>🌍 Create Multiplayer World</strong>.
 </div>
-
 <div class="gm-step">
 <strong>Step 5:</strong> Copy the generated world code and give it to the players.
 </div>
-
 <p>
 Keep the GM page open while players join. The world code is used by every
 player who wants to enter the campaign.
 </p>
-
 </div>
 </div>
-
-
 <!-- ACCEPTING PLAYERS -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmAcceptPlayers')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmAcceptPlayers')">
 🦸 2. Accepting Players
 </button>
-
 <div class="gm-guide-content" id="gmAcceptPlayers">
-
 <p>Each player must:</p>
-
 <div class="gm-step">
 1. Open the same published Nexus Heroes website.
 </div>
-
 <div class="gm-step">
 2. Create or load a hero.
 </div>
-
 <div class="gm-step">
 3. Enter their player name and the GM's world code.
 </div>
-
 <div class="gm-step">
 4. Press <strong>Check World</strong>.
 </div>
-
 <div class="gm-step">
 5. Press <strong>Send Hero To GM</strong>.
 </div>
-
 <p>
 The request will appear under <strong>Pending Join Requests</strong>.
 </p>
-
 <p>
 Review the player's hero name, class, rank, and power score.
 </p>
-
 <p>
 Press <strong>✅ Accept</strong> to add the player or
 <strong>❌ Decline</strong> to reject the request.
 </p>
-
 <p>Accepted players begin with:</p>
-
 <ul>
-    <li>100 Health</li>
-    <li>100 Maximum Health</li>
-    <li>100 Energy</li>
-    <li>0 Shield</li>
-    <li>Ready status</li>
-    <li>No injuries</li>
-    <li>Nexus City starting location</li>
+<li>100 Health</li>
+<li>100 Maximum Health</li>
+<li>100 Energy</li>
+<li>0 Shield</li>
+<li>Ready status</li>
+<li>No injuries</li>
+<li>Nexus City starting location</li>
 </ul>
-
 </div>
 </div>
-
-
 <!-- WORLD MAP -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmWorldMap')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmWorldMap')">
 🗺 3. Using the World Map
 </button>
-
 <div class="gm-guide-content" id="gmWorldMap">
-
 <p>
 Click a map location before creating missions, spawning enemies, or moving
 characters.
 </p>
-
 <p>Available locations include:</p>
-
 <ul>
-    <li>Nexus City</li>
-    <li>Harbor District</li>
-    <li>Blackgate Prison</li>
-    <li>Omega Labs</li>
-    <li>Crash Site</li>
-    <li>Ancient Ruins</li>
-    <li>Wasteland Desert</li>
-    <li>Hidden Sanctuary</li>
-    <li>Titan Fortress</li>
-    <li>Dimensional Portal</li>
-    <li>Power Plant</li>
-    <li>Shadow Realm</li>
+<li>Nexus City</li>
+<li>Harbor District</li>
+<li>Blackgate Prison</li>
+<li>Omega Labs</li>
+<li>Crash Site</li>
+<li>Ancient Ruins</li>
+<li>Wasteland Desert</li>
+<li>Hidden Sanctuary</li>
+<li>Titan Fortress</li>
+<li>Dimensional Portal</li>
+<li>Power Plant</li>
+<li>Shadow Realm</li>
 </ul>
-
 <div class="gm-step">
 <strong>Add Hero To Map:</strong> Adds the hero shown on the current Hero Sheet
 to the local map-character list.
 </div>
-
 <div class="gm-step">
 <strong>Add Hero To Player Manager:</strong> Creates a manageable version of
 the hero with health, energy, shield, status, injuries, and location.
 </div>
-
 <div class="gm-step">
 <strong>Travel Here:</strong> Moves the selected hero to the currently selected
 location.
 </div>
-
 <div class="gm-step">
 <strong>Next World Turn:</strong> Advances time outside combat and may create
 travel or world events.
 </div>
-
 <div class="gm-warning">
 World turns and combat turns are different. World turns control travel,
 missions, and events. Combat turns control who acts during a battle.
 </div>
-
 </div>
 </div>
-
-
 <!-- MISSIONS -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmMissions')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmMissions')">
 📜 4. Creating Missions
 </button>
-
 <div class="gm-guide-content" id="gmMissions">
-
 <div class="gm-step">
 <strong>Step 1:</strong> Select the map location where the mission will happen.
 </div>
-
 <div class="gm-step">
 <strong>Step 2:</strong> Confirm the location appears under Mission Location.
 </div>
-
 <div class="gm-step">
 <strong>Step 3:</strong> Press <strong>📜 Generate Mission</strong>.
 </div>
-
 <div class="gm-step">
 <strong>Step 4:</strong> Read the generated mission brief and explain the
 situation to the players.
 </div>
-
 <p>
 The generated mission is a story prompt. The GM can change names, enemies,
 objectives, and details to fit the campaign.
 </p>
-
 <p>Possible mission objectives include:</p>
-
 <ul>
-    <li>Defeat a villain</li>
-    <li>Rescue civilians</li>
-    <li>Capture an escaped enemy</li>
-    <li>Protect a location</li>
-    <li>Disable a machine</li>
-    <li>Retrieve an artifact</li>
-    <li>Escape a dangerous area</li>
-    <li>Survive a certain number of rounds</li>
+<li>Defeat a villain</li>
+<li>Rescue civilians</li>
+<li>Capture an escaped enemy</li>
+<li>Protect a location</li>
+<li>Disable a machine</li>
+<li>Retrieve an artifact</li>
+<li>Escape a dangerous area</li>
+<li>Survive a certain number of rounds</li>
 </ul>
-
 </div>
 </div>
-
-
 <!-- ENEMIES -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmEnemies')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmEnemies')">
 👹 5. Spawning and Managing Enemies
 </button>
-
 <div class="gm-guide-content" id="gmEnemies">
-
 <p>
 Select a map location before adding enemies. New enemies will be placed at
 the selected location.
 </p>
-
 <div class="gm-step">
 <strong>Generate Villain:</strong> Creates a villain sheet with a name, species,
 origin, threat level, class, score, and rank.
 </div>
-
 <div class="gm-step">
 <strong>Add Villain:</strong> Adds the generated villain to the Enemy Manager.
 </div>
-
 <div class="gm-step">
 <strong>Add Minion:</strong> Creates a weaker enemy with lower health and energy.
 </div>
-
 <div class="gm-step">
 <strong>Add Elite:</strong> Creates a stronger enemy that can protect a villain
 or lead minions.
 </div>
-
 <p>Recommended encounters:</p>
-
 <div class="gm-checklist">
-<strong>Small encounter</strong><br>
-1 villain or elite<br>
+<strong>Small encounter</strong><br/>
+1 villain or elite<br/>
 1–2 minions
 </div>
-
 <div class="gm-checklist">
-<strong>Major encounter</strong><br>
-1 villain<br>
-2 elites<br>
+<strong>Major encounter</strong><br/>
+1 villain<br/>
+2 elites<br/>
 2–4 minions
 </div>
-
 <div class="gm-checklist">
-<strong>Boss encounter</strong><br>
-1 powerful villain<br>
-2–3 elites<br>
+<strong>Boss encounter</strong><br/>
+1 powerful villain<br/>
+2–3 elites<br/>
 4–6 minions
 </div>
-
 <p>
 Use the Enemy Manager to damage, heal, move, or remove enemies.
 </p>
-
 </div>
 </div>
-
-
 <!-- PLAYERS -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmPlayers')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmPlayers')">
 ❤️ 6. Managing Player Characters
 </button>
-
 <div class="gm-guide-content" id="gmPlayers">
-
 <p>The Player Manager tracks:</p>
-
 <ul>
-    <li>Health</li>
-    <li>Maximum health</li>
-    <li>Energy</li>
-    <li>Shield</li>
-    <li>Status</li>
-    <li>Injuries</li>
-    <li>Current location</li>
+<li>Health</li>
+<li>Maximum health</li>
+<li>Energy</li>
+<li>Shield</li>
+<li>Status</li>
+<li>Injuries</li>
+<li>Current location</li>
 </ul>
-
 <p>Suggested health conditions:</p>
-
 <div class="gm-step">
 <strong>61–100 Health:</strong> Ready
 </div>
-
 <div class="gm-step">
 <strong>31–60 Health:</strong> Minor Injury
 </div>
-
 <div class="gm-step">
 <strong>1–30 Health:</strong> Serious Injury
 </div>
-
 <div class="gm-step">
 <strong>0 Health:</strong> Knocked Out
 </div>
-
 <p>
 The GM decides when a condition, injury, shield, or special effect should
 change.
 </p>
-
 </div>
 </div>
-
-
 <!-- COMBAT PREPARATION -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmCombatStart')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmCombatStart')">
 ⚔ 7. Preparing Combat
 </button>
-
 <div class="gm-guide-content" id="gmCombatStart">
-
 <p>Before starting combat, confirm that:</p>
-
 <div class="gm-checklist">
-✅ At least one hero is in the Player Manager.<br>
-✅ At least one enemy is in the Enemy Manager.<br>
-✅ Everyone is at the correct map location.<br>
-✅ The correct mission is active.<br>
+✅ At least one hero is in the Player Manager.<br/>
+✅ At least one enemy is in the Enemy Manager.<br/>
+✅ Everyone is at the correct map location.<br/>
+✅ The correct mission is active.<br/>
 ✅ Health and energy values are correct.
 </div>
-
 <div class="gm-step">
 <strong>Step 1:</strong> Press <strong>🔄 Refresh Fighters</strong>.
 </div>
-
 <div class="gm-step">
 <strong>Step 2:</strong> Confirm heroes appear in the Attacker list and enemies
 appear in the Target list.
 </div>
-
 <div class="gm-step">
 <strong>Step 3:</strong> Press <strong>▶ Start Turns</strong>.
 </div>
-
 <p>
 The Turn Tracker will show the current round, current fighter, and upcoming
 fighters.
 </p>
-
 </div>
 </div>
-
-
 <!-- PLAYER TURN -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmPlayerTurn')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmPlayerTurn')">
 🎯 8. Running a Player Turn
 </button>
-
 <div class="gm-guide-content" id="gmPlayerTurn">
-
 <div class="gm-step">
 <strong>Step 1:</strong> Ask the player what they want their hero to do.
 </div>
-
 <div class="gm-step">
 <strong>Step 2:</strong> Select the hero in the Attacker dropdown.
 </div>
-
 <div class="gm-step">
 <strong>Step 3:</strong> Select the enemy or target.
 </div>
-
 <div class="gm-step">
 <strong>Step 4:</strong> Choose the player's action.
 </div>
-
 <p><strong>Attack:</strong> Normal damage with normal accuracy.</p>
-
 <p><strong>Defend:</strong> Adds defensive protection or shield.</p>
-
 <p><strong>Heal:</strong> Restores health.</p>
-
 <p><strong>Heavy Attack:</strong> Higher damage with lower accuracy.</p>
-
 <p><strong>Power Attack:</strong> Strong power-based attack that may use energy.</p>
-
 <div class="gm-step">
 <strong>Step 5:</strong> Press <strong>✅ GM Approve Action</strong>.
 </div>
-
 <div class="gm-step">
 <strong>Step 6:</strong> Read the result in the Combat Log.
 </div>
-
 <div class="gm-step">
 <strong>Step 7:</strong> Press <strong>⏭ End Turn</strong>.
 </div>
-
 </div>
 </div>
-
-
 <!-- ENEMY TURN -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmEnemyTurn')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmEnemyTurn')">
 🎲 9. Running an Enemy Turn
 </button>
-
 <div class="gm-guide-content" id="gmEnemyTurn">
-
 <p>
 When an enemy's turn begins, select the enemy and the hero it will target.
 </p>
-
 <div class="gm-step">
 Press <strong>👹 Enemy Attack</strong> for a standard enemy attack.
 </div>
-
 <div class="gm-step">
 Press <strong>🎲 Enemy AI Turn</strong> to allow the game to choose an action.
 </div>
-
 <div class="gm-step">
 Read the result in the Combat Log and update the story.
 </div>
-
 <div class="gm-step">
 Press <strong>⏭ End Turn</strong> when the enemy is finished.
 </div>
-
 <p>
 Use <strong>Reset Turns</strong> only when combat ends or the turn order needs
 to be completely restarted.
 </p>
-
 </div>
 </div>
-
-
 <!-- ENDING COMBAT -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmEndCombat')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmEndCombat')">
 🏁 10. Ending Combat
 </button>
-
 <div class="gm-guide-content" id="gmEndCombat">
-
 <p>Combat can end when:</p>
-
 <ul>
-    <li>All enemies are defeated or removed</li>
-    <li>All heroes are knocked out</li>
-    <li>The heroes escape</li>
-    <li>The enemies surrender</li>
-    <li>The mission objective is completed</li>
-    <li>The GM decides the encounter has ended</li>
+<li>All enemies are defeated or removed</li>
+<li>All heroes are knocked out</li>
+<li>The heroes escape</li>
+<li>The enemies surrender</li>
+<li>The mission objective is completed</li>
+<li>The GM decides the encounter has ended</li>
 </ul>
-
 <p>
 Not every mission requires defeating every enemy. The objective may be more
 important than the fight.
 </p>
-
 </div>
 </div>
-
-
 <!-- REWARDS -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmRewards')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmRewards')">
 🎁 11. Rewards, Inventory, and Shops
 </button>
-
 <div class="gm-guide-content" id="gmRewards">
-
 <div class="gm-step">
 Use <strong>Give 100 Credits</strong> to award money or test the shop.
 </div>
-
 <div class="gm-step">
 Use <strong>Generate Loot</strong> to create a random reward.
 </div>
-
 <div class="gm-step">
 Use <strong>Refresh Shop</strong> to generate new shop items.
 </div>
-
 <div class="gm-step">
 Select an item and press <strong>Buy Selected Item</strong> to purchase it.
 </div>
-
 <p>Possible rewards include:</p>
-
 <ul>
-    <li>Credits</li>
-    <li>Weapons</li>
-    <li>Armor</li>
-    <li>Artifacts</li>
-    <li>Consumables</li>
-    <li>Power upgrades</li>
-    <li>Reputation</li>
-    <li>Bonus stat points</li>
+<li>Credits</li>
+<li>Weapons</li>
+<li>Armor</li>
+<li>Artifacts</li>
+<li>Consumables</li>
+<li>Power upgrades</li>
+<li>Reputation</li>
+<li>Bonus stat points</li>
 </ul>
-
 </div>
 </div>
-
-
 <!-- SAVING -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmSaving')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmSaving')">
 💾 12. Saving the Campaign
 </button>
-
 <div class="gm-guide-content" id="gmSaving">
-
 <div class="gm-step">
 Press <strong>💾 Save Campaign</strong> at the end of every game session.
 </div>
-
 <p>The campaign save stores local game information such as:</p>
-
 <ul>
-    <li>World players</li>
-    <li>Map characters</li>
-    <li>Managed players</li>
-    <li>Enemies</li>
-    <li>Inventory</li>
-    <li>Credits</li>
-    <li>World turn</li>
-    <li>Active events</li>
-    <li>Equipped gear</li>
-    <li>Combat information</li>
+<li>World players</li>
+<li>Map characters</li>
+<li>Managed players</li>
+<li>Enemies</li>
+<li>Inventory</li>
+<li>Credits</li>
+<li>World turn</li>
+<li>Active events</li>
+<li>Equipped gear</li>
+<li>Combat information</li>
 </ul>
-
 <div class="gm-step">
 Press <strong>📂 Load Campaign</strong> when returning to a saved campaign on
 the same browser and device.
 </div>
-
 <div class="gm-warning">
 <strong>Reset Campaign</strong> erases the local campaign. Only use it when
 starting completely over.
 </div>
-
 </div>
 </div>
-
-
 <!-- SESSION ORDER -->
-
 <div class="gm-guide-section">
-
-<button
-    class="gm-guide-button"
-    onclick="toggleGMGuide('gmSessionOrder')"
->
+<button class="gm-guide-button" onclick="toggleGMGuide('gmSessionOrder')">
 ✅ 13. Complete Session Checklist
 </button>
-
 <div class="gm-guide-content" id="gmSessionOrder">
-
 <div class="gm-checklist">
-<strong>Before the game</strong><br>
-1. Open the website.<br>
-2. Wait for Multiplayer Connected.<br>
-3. Open the GM Portal.<br>
-4. Load the campaign or create a world.<br>
-5. Choose Team or Solo mode.<br>
+<strong>Before the game</strong><br/>
+1. Open the website.<br/>
+2. Wait for Multiplayer Connected.<br/>
+3. Open the GM Portal.<br/>
+4. Load the campaign or create a world.<br/>
+5. Choose Team or Solo mode.<br/>
 6. Select the starting location.
 </div>
-
 <div class="gm-checklist">
-<strong>When players join</strong><br>
-7. Give players the world code.<br>
-8. Accept their join requests.<br>
-9. Confirm they appear in Accepted Multiplayer Players.<br>
+<strong>When players join</strong><br/>
+7. Give players the world code.<br/>
+8. Accept their join requests.<br/>
+9. Confirm they appear in Accepted Multiplayer Players.<br/>
 10. Confirm their health and starting location.
 </div>
-
 <div class="gm-checklist">
-<strong>Before a mission</strong><br>
-11. Select a map location.<br>
-12. Generate a mission.<br>
-13. Explain the mission to the players.<br>
-14. Spawn enemies.<br>
+<strong>Before a mission</strong><br/>
+11. Select a map location.<br/>
+12. Generate a mission.<br/>
+13. Explain the mission to the players.<br/>
+14. Spawn enemies.<br/>
 15. Confirm everyone is at the correct location.
 </div>
-
 <div class="gm-checklist">
-<strong>During combat</strong><br>
-16. Refresh fighters.<br>
-17. Start turns.<br>
-18. Select the attacker and target.<br>
-19. Choose and approve actions.<br>
-20. Run enemy turns.<br>
-21. End each turn.<br>
+<strong>During combat</strong><br/>
+16. Refresh fighters.<br/>
+17. Start turns.<br/>
+18. Select the attacker and target.<br/>
+19. Choose and approve actions.<br/>
+20. Run enemy turns.<br/>
+21. End each turn.<br/>
 22. Continue until the encounter ends.
 </div>
-
 <div class="gm-checklist">
-<strong>After the mission</strong><br>
-23. Remove defeated enemies.<br>
-24. Give credits and loot.<br>
-25. Update injuries and health.<br>
-26. Advance the world turn.<br>
+<strong>After the mission</strong><br/>
+23. Remove defeated enemies.<br/>
+24. Give credits and loot.<br/>
+25. Update injuries and health.<br/>
+26. Advance the world turn.<br/>
 27. Save the campaign.
 </div>
-
 </div>
 </div>
-
-
 <!-- CURRENT LIMITATION -->
-
 <div class="gm-warning">
-<strong>Current Multiplayer Development Note:</strong><br><br>
+<strong>Current Multiplayer Development Note:</strong><br/><br/>
 
 Accepted online players are stored in Firebase, while some older map,
 combat, inventory, and campaign systems still use local browser data.
@@ -2412,47 +1858,39 @@ The upcoming multiplayer updates will automatically connect accepted players
 to the Player Manager, map markers, movement system, combat system, and turn
 order.
 </div>
-
 </div>
-
 <div class="card manualSection" id="combatGuide">
 <h2>Combat</h2>
 <div class="rulebook-item">
-Attack = normal damage.<br>
-Heavy Attack = stronger damage but less accurate.<br>
-Power Attack = costs energy but hits harder.<br>
-Defend = adds shield.<br>
+Attack = normal damage.<br/>
+Heavy Attack = stronger damage but less accurate.<br/>
+Power Attack = costs energy but hits harder.<br/>
+Defend = adds shield.<br/>
 Heal = restores health.
 </div>
 </div>
-
 <div class="card manualSection" id="inventoryGuide">
 <h2>Inventory</h2>
 <div class="rulebook-item">
 Loot items can be equipped as weapons, armor, or artifacts. Gear can improve future combat systems.
 </div>
 </div>
-
 <div class="card manualSection" id="shopGuide">
 <h2>Shop</h2>
 <div class="rulebook-item">
 Use Nexus City Shop to buy generated items with credits.
 </div>
 </div>
-
 <div class="card manualSection" id="saveGuide">
 <h2>Campaign Save</h2>
 <div class="rulebook-item">
 Campaign Save stores players, enemies, inventory, credits, world turn, active missions, and map characters.
 </div>
 </div>
-
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-    
 <script>
 
 /* =========================================================
@@ -9173,7 +8611,6 @@ function resetTurns(){turnOrder=[];currentTurnIndex=0;combatRound=1;combatActive
 })();
 
 </script>
-
 <script id="nesScript">
 /* Enemy Studio — augments the existing enemy manager and Firebase world, without replacing combat. */
 (function(){
@@ -9441,7 +8878,6 @@ window.nxcNextRound=async function(){
 document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if($('nxcEnemy')&&document.visibilityState==='visible')refresh()},2500)});
 })();
 </script>
-
 <script id="nexusCombatBroadcastV8">
 /* V8: Host-published, read-only combat snapshot for connected players.
    This does not claim to be authoritative synchronized action resolution. */
@@ -9781,5 +9217,17 @@ const orig=window.nxcAutoEnemyTurn;if(typeof orig==='function')window.nxcAutoEne
  const result=orig.apply(this,arguments);window.nexusActiveEnemyAttackType=null;if(solo){if(mission&&!mission.finished&&Math.random()<.15){const fields=[['rescued','rescue'],['protected','protect'],['contained','contain']].filter(x=>mission[x[0]]>0);if(fields.length){const f=fields[Math.floor(Math.random()*fields.length)];mission[f[0]]=Math.max(0,mission[f[0]]-1);mission.enemySabotage=(mission.enemySabotage||0)+1;log('👹 Enemy sabotages '+f[0]+'! One effort lost.')}}log('🤖 Automatic enemy turn resolved.');render();if(host)sync()}return result};
 })();
 </script>
-</body>
-</html>    
+<dialog aria-label="Navigate Sections" class="n23-modal" id="n23MenuDialog"><div class="n23-modal-head"><h2>Navigate Sections</h2><button aria-label="Close popup" onclick="n23Close('n23MenuDialog')" type="button">✕ Close</button></div><div class="n23-modal-body" id="n23MenuDialogBody"></div></dialog><dialog aria-label="Choose Your Action" class="n23-modal" id="n23ActionDialog"><div class="n23-modal-head"><h2>Choose Your Action</h2><button aria-label="Close popup" onclick="n23Close('n23ActionDialog')" type="button">✕ Close</button></div><div class="n23-modal-body" id="n23ActionDialogBody"></div></dialog><script id="nexusV23UX">(function(){'use strict';
+function el(id){return document.getElementById(id)}
+function show(d){if(!d)return;if(typeof d.showModal==='function'){if(!d.open)d.showModal()}else d.setAttribute('open','')}
+window.n23Close=function(id){var d=el(id);if(d){if(typeof d.close==='function')d.close();else d.removeAttribute('open')}};
+function currentPortal(){return el('gmPortal')&&getComputedStyle(el('gmPortal')).display!=='none'?'gmPortal':'playerPortal'}
+function expand(card){if(!card)return;card.classList.remove('n23-collapsed');var b=card.querySelector('.n23-card-title>.n23-collapse');if(b){b.setAttribute('aria-expanded','true');b.textContent='Close'}}
+function go(card){window.n23Close('n23MenuDialog');expand(card);card.scrollIntoView({behavior:'smooth',block:'start'})}
+window.n23OpenMenu=function(){var body=el('n23MenuDialogBody');if(!body)return;body.replaceChildren();var grid=document.createElement('div');grid.className='n23-grid';var portal=el(currentPortal());Array.from(portal.querySelectorAll(':scope > .n23-card')).forEach(function(card){var title=card.querySelector('.n23-card-title h2,.n23-card-title h3');if(!title)return;var b=document.createElement('button');b.type='button';b.textContent=title.textContent.trim();b.addEventListener('click',function(){go(card)});grid.appendChild(b)});body.appendChild(grid);show(el('n23MenuDialog'))};
+window.n23GoCombat=function(){var c=Array.from(el('gmPortal').querySelectorAll(':scope > .n23-card')).find(function(card){return /Combat Arena/i.test(card.querySelector('.n23-card-title')?.textContent||'')});if(c)go(c)};
+window.n23OpenActions=function(){var actions=el('nexusSoloActions');if(!actions||getComputedStyle(actions).display==='none'){var card=el('nexusSoloMode');if(card)go(card);return}var body=el('n23ActionDialogBody');body.replaceChildren();var info=document.createElement('p');info.className='n23-note';info.textContent='Choose an action for the current hero. The action is performed immediately and uses one turn.';body.appendChild(info);var select=el('nexusAttackIntensity');if(select){var settings=document.createElement('div');settings.className='n23-action-settings';var label=document.createElement('label');label.textContent='Attack intensity';label.setAttribute('for','n23Intensity');var copy=select.cloneNode(true);copy.id='n23Intensity';copy.value=select.value;copy.addEventListener('change',function(){select.value=copy.value});settings.append(label,copy);body.appendChild(settings)}var grid=document.createElement('div');grid.className='n23-action-choices';Array.from(actions.querySelectorAll('button.n23-original-actions')).forEach(function(source){var b=document.createElement('button');b.type='button';b.textContent=source.textContent.trim();b.addEventListener('click',function(){var intensity=el('n23Intensity');if(intensity&&select)select.value=intensity.value;window.n23Close('n23ActionDialog');source.click()});grid.appendChild(b)});body.appendChild(grid);show(el('n23ActionDialog'))};
+document.addEventListener('click',function(e){var b=e.target.closest('.n23-collapse');if(!b)return;var card=b.closest('.n23-card');if(!card)return;var collapsed=card.classList.toggle('n23-collapsed');b.textContent=collapsed?'Open':'Close';b.setAttribute('aria-expanded',String(!collapsed))});
+['n23MenuDialog','n23ActionDialog'].forEach(function(id){var d=el(id);if(d)d.addEventListener('click',function(e){if(e.target===d)window.n23Close(id)})});
+})();</script></body>
+</html> 
