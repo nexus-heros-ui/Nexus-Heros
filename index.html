@@ -5626,7 +5626,7 @@ function ensureSharedWorldUI(){
             </div>
             <div class="shared-world-panel">
                 <h3>👹 Nearby Threats</h3>
-                <div id="playerNearbyThreats">No nearby threats.</div>
+                <div id="playerNearbyThreats">No nearby threats.</div><div id="nexusLiveCombat" class="game-panel" aria-live="polite">Combat status will appear here when the GM starts an encounter.</div>
             </div>
             <div class="shared-world-panel">
                 <h3>⚔ Submit an Action</h3>
@@ -5733,7 +5733,8 @@ function connectSharedWorld(worldCode, role="player", playerId=null){
         const active=document.getElementById("activeEvents");
         if(active) active.innerText=activeEventsCount;
         if(world.currentMission) sharedWorldMission=world.currentMission;
-        if(world.combatState) sharedWorldCombat=world.combatState;
+        sharedWorldCombat=world.combatState||null;
+        if(typeof window.nexusRenderLiveCombat==="function")window.nexusRenderLiveCombat(sharedWorldCombat);
         if(typeof window.nxcReceiveWorldCrisis==="function") window.nxcReceiveWorldCrisis(world.nexusCrisis||null);
         renderSharedWorldPanels();
     },error=>console.error("World listener failed:",error)));
@@ -9010,6 +9011,7 @@ function nexusCombatDamage(target,damage){
     target.shield=shield-absorbed;
     target.health=Math.max(0,(Number(target.health)||0)-(damage-absorbed));
     if(target.health===0)target.status='Defeated';
+    if(typeof window.nexusQueueCombatSync==='function')window.nexusQueueCombatSync();
     return absorbed;
 }
 function playerChooseAction(action){
@@ -9066,6 +9068,7 @@ function nexusShowTurn(){
     if(!combatActive||!turnOrder.length){el.textContent='No turn order started.';return;}
     const entry=turnOrder[currentTurnIndex];
     el.textContent='Round '+combatRound+' — '+(entry?.name||'Unknown')+' is up ('+(currentTurnIndex+1)+'/'+turnOrder.length+').';
+    if(typeof window.nexusQueueCombatSync==='function')window.nexusQueueCombatSync();
 }
 function startTurns(){
     turnOrder=[...managedPlayers,...enemies].filter(c=>c.health>0);
@@ -9428,6 +9431,44 @@ window.nxcNextRound=async function(){
 };
 
 document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if($('nxcEnemy')&&document.visibilityState==='visible')refresh()},2500)});
+})();
+</script>
+
+<script id="nexusCombatBroadcastV8">
+/* V8: Host-published, read-only combat snapshot for connected players.
+   This does not claim to be authoritative synchronized action resolution. */
+(function(){
+ let timer=null,version=0;
+ function snapshot(){
+  const roster=(typeof managedPlayers!=='undefined'?managedPlayers:[]).map(p=>({name:String(p.name||'Hero'),hp:Math.max(0,Number(p.health)||0),shield:Math.max(0,Number(p.shield)||0),effects:(p.nxcEffects||[]).map(x=>String(x.name||'')).slice(0,8)}));
+  const foes=(typeof enemies!=='undefined'?enemies:[]).map(e=>({name:String(e.name||'Enemy'),hp:Math.max(0,Number(e.health)||0),shield:Math.max(0,Number(e.shield)||0),effects:(e.nxcEffects||[]).map(x=>String(x.name||'')).slice(0,8)}));
+  const active=typeof combatActive!=='undefined'&&!!combatActive;
+  const actor=active&&typeof turnOrder!=='undefined'?turnOrder[currentTurnIndex]:null;
+  return {active,round:typeof combatRound!=='undefined'?combatRound:0,turn:actor?String(actor.name||''):null,heroes:roster,enemies:foes,updatedAt:Date.now()};
+ }
+ window.nexusRenderLiveCombat=function(state){
+  const el=document.getElementById('nexusLiveCombat');if(!el)return;
+  el.replaceChildren();
+  if(!state){el.textContent='No shared combat snapshot yet.';return;}
+  const title=document.createElement('strong');title.textContent=state.active?'⚔ Live Combat — Round '+state.round+' | Turn: '+(state.turn||'—'):'⚔ Combat not active';el.appendChild(title);
+  for(const [label,arr] of [['Heroes',state.heroes],['Enemies',state.enemies]]){
+   const h=document.createElement('div');h.style.marginTop='8px';h.textContent=label+':';el.appendChild(h);
+   for(const p of (Array.isArray(arr)?arr:[])){
+    const line=document.createElement('div');line.textContent=(p.name||'?')+' — '+p.hp+' HP / '+p.shield+' shield'+(p.effects?.length?' | '+p.effects.join(', '):'');el.appendChild(line);
+   }
+  }
+ };
+ window.nexusQueueCombatSync=function(){
+  if(typeof sharedWorldRole==='undefined'||sharedWorldRole!=='gm')return;
+  if(typeof getSharedWorldRef!=='function'||!getSharedWorldRef())return;
+  const id=++version;
+  if(timer)clearTimeout(timer);
+  timer=setTimeout(async()=>{
+   if(id!==version)return;
+   try{const ref=getSharedWorldRef();if(ref)await ref.update({combatState:snapshot()});}
+   catch(err){console.warn('Combat snapshot sync failed:',err);}
+  },120);
+ };
 })();
 </script>
 </body>
