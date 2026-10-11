@@ -9049,7 +9049,7 @@ function gmApprovePlayerAction(){
     if(combatActive)endCurrentTurn();
 }
 function combatEnemyAttack(){
-    if(combatActive){if(typeof nxcAutoEnemyTurn==='function')return nxcAutoEnemyTurn();return;}
+    if(combatActive){nexusCombatLog('Enemy actions resolve automatically when their turn begins.');return;}
     const livingEnemies=enemies.filter(e=>e.health>0);
     const livingHeroes=managedPlayers.filter(p=>p.health>0);
     if(!livingEnemies.length||!livingHeroes.length){alert('Add a living enemy and hero first.');return;}
@@ -9072,6 +9072,7 @@ function startTurns(){
     if(!turnOrder.length){alert('Add fighters before starting turns.');return;}
     currentTurnIndex=0;combatRound=1;combatActive=true;nexusShowTurn();
     nexusCombatLog('▶ Combat begins: '+turnOrder.map(c=>c.name).join(', '));
+    if(typeof nxcScheduleEnemyTurn==='function')nxcScheduleEnemyTurn();
 }
 function endCurrentTurn(){
     if(!combatActive||!turnOrder.length){alert('Start turns first.');return;}
@@ -9079,11 +9080,13 @@ function endCurrentTurn(){
     if(currentTurnIndex>=turnOrder.length){
         currentTurnIndex=0;combatRound++;
         if(typeof nxcCombatRoundTick==='function')nxcCombatRoundTick();
+        if(typeof nxcAutoCrisisRound==='function')nxcAutoCrisisRound();
     }
     let guard=0;
     while(turnOrder[currentTurnIndex]?.health<=0&&guard++<turnOrder.length){currentTurnIndex=(currentTurnIndex+1)%turnOrder.length;}
     if(turnOrder.every(c=>c.health<=0)){resetTurns();return;}
     nexusShowTurn();
+    if(typeof nxcScheduleEnemyTurn==='function')nxcScheduleEnemyTurn();
 }
 function resetTurns(){turnOrder=[];currentTurnIndex=0;combatRound=1;combatActive=false;nexusShowTurn();}
 
@@ -9278,19 +9281,44 @@ function performEnemyAttack(e,p){
 window.nxcEnemyAttack=function(){
  if(!combatActive)return log('Start combat turns before enemy attacks.');
  const e=enemy(),p=hero();if(!e||!p)return log('Select an enemy and hero.');
- return log('Use Automatic Enemy Turn to follow turn order.');
+ return log('Use Resolve Enemy Turn (automatic in combat) to follow turn order.');
 };
 window.nxcCombatRoundTick=function(){
  if(typeof managedPlayers!=='undefined')managedPlayers.forEach(statusTick);
  if(typeof enemies!=='undefined')enemies.forEach(e=>{if(e.nxcCooldowns)Object.keys(e.nxcCooldowns).forEach(k=>e.nxcCooldowns[k]=Math.max(0,e.nxcCooldowns[k]-1))});
  if(typeof updatePlayerManager==='function')updatePlayerManager();
+ if(typeof updateEnemyManager==='function')updateEnemyManager();
+};
+// V7: enemy turns resolve without a GM click; a single queued task prevents recursion.
+let nxcEnemyTurnQueued=false;
+window.nxcScheduleEnemyTurn=function(){
+ if(nxcEnemyTurnQueued||typeof combatActive==='undefined'||!combatActive||!turnOrder.length)return;
+ const actor=turnOrder[currentTurnIndex];
+ if(typeof enemies==='undefined'||!enemies.includes(actor))return;
+ // Only the GM/host runs enemy AI. Other connected clients must not independently roll attacks.
+ if(typeof sharedWorldRole!=='undefined'&&sharedWorldRole==='player')return;
+ nxcEnemyTurnQueued=true;
+ setTimeout(()=>{
+   nxcEnemyTurnQueued=false;
+   if(!combatActive||!turnOrder.length||!enemies.includes(turnOrder[currentTurnIndex]))return;
+   if(turnOrder[currentTurnIndex].health<=0){endCurrentTurn();return;}
+   try{window.nxcAutoEnemyTurn()}catch(err){log('Automatic enemy turn failed: '+err.message)}
+ },350);
+};
+// During active combat the crisis advances once per full combat round, not through a second clock.
+let nxcInternalCrisisAdvance=false;
+window.nxcAutoCrisisRound=function(){
+ if(!crisis)return;
+ if(typeof sharedWorldRole!=='undefined'&&sharedWorldRole==='player')return;
+ nxcInternalCrisisAdvance=true;
+ Promise.resolve(window.nxcNextRound()).finally(()=>{nxcInternalCrisisAdvance=false});
 };
 window.nxcAutoEnemyTurn=function(){
  if(typeof combatActive==='undefined'||!combatActive||!turnOrder.length)return log('Start combat turns first.');
  const actor=turnOrder[currentTurnIndex];
  if(!enemies.includes(actor))return log('It is a hero turn. Choose a hero action.');
  const heroes=managedPlayers.filter(p=>p.health>0);
- if(!heroes.length)return log('No living heroes remain.');
+ if(!heroes.length){log('No living heroes remain. Combat ends.');resetTurns();return;}
  const target=enemyChoice(actor,heroes);
  if(performEnemyAttack(actor,target))endCurrentTurn();
 };
@@ -9373,6 +9401,7 @@ window.nxcHeroAction=async function(action){
  refresh();if(typeof combatActive!=='undefined'&&combatActive)endCurrentTurn();
 };
 window.nxcNextRound=async function(){
+ if(combatActive && !nxcInternalCrisisAdvance)return log('Crisis rounds advance automatically with combat rounds.');
  if(typeof sharedWorldRole!=='undefined'&&sharedWorldRole==='player')return log('Only the GM can advance a crisis round.');
  const ref=world();
  if(ref){
